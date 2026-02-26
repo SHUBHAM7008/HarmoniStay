@@ -42,13 +42,13 @@ public class BillController {
     }
 
     @PutMapping("/{id}")
-    public Bill updateBill(@PathVariable String id, @RequestBody Bill bill) {
-        bill.setId(id);
-        return billService.updateBill(bill);
+    public Bill updateBill(@PathVariable String id, @RequestParam String transactionId) {
+        return billService.updateBill(id,transactionId);
     }
 
     @DeleteMapping("/{id}")
     public void deleteBill(@PathVariable String id) {
         billService.deleteBill(id);
     }
+
 }

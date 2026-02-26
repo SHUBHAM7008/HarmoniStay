@@ -22,6 +22,16 @@ public class Bill {
 
     private String flatNumber;
 
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    private String transactionId;
+
     public Bill() {}
 
     // Getters and Setters
@@ -96,5 +106,20 @@ public class Bill {
 
     public void setFlatNumber(String flatNumber) {
         this.flatNumber = flatNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Bill{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", flatId='" + flatId + '\'' +
+                ", amount=" + amount +
+                ", status='" + status + '\'' +
+                ", billMonth='" + billMonth + '\'' +
+                ", description='" + description + '\'' +
+                ", userEmail='" + userEmail + '\'' +
+                ", flatNumber='" + flatNumber + '\'' +
+                '}';
     }
 }

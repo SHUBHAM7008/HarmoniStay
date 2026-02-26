@@ -1,0 +1,85 @@
+[{
+  "_id": {
+    "$oid": "68f395fe4dcb11514ddfe57b"
+  },
+  "flatNumber": "A-109",
+  "wing": "2",
+  "floor": 2,
+  "area": 1212,
+  "type": "PENTHOUSE",
+  "status": "OCCUPIED",
+  "ownershipHistory": [],
+  "createdAt": {
+    "$date": "2025-10-18T13:28:30.091Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-18T13:28:30.091Z"
+  },
+  "_class": "com.example.HarmoniStay.Backend.model.Flat"
+},
+{
+  "_id": {
+    "$oid": "68f3976f4dcb11514ddfe57c"
+  },
+  "flatNumber": "A-108",
+  "wing": "9",
+  "floor": 1,
+  "area": 1200,
+  "type": "BHK1",
+  "owner": {
+    "$ref": "members",
+    "$id": {
+      "$oid": "68f329ac5831caeed8ceb94d"
+    }
+  },
+  "status": "OCCUPIED",
+  "ownershipHistory": [],
+  "createdAt": {
+    "$date": "2025-10-18T13:34:39.856Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-18T13:36:01.085Z"
+  },
+  "_class": "com.example.HarmoniStay.Backend.model.Flat"
+},
+{
+  "_id": {
+    "$oid": "68f399814dcb11514ddfe57d"
+  },
+  "flatNumber": "A-111",
+  "wing": "1",
+  "floor": 2,
+  "area": 1200,
+  "type": "BHK1",
+  "status": "OCCUPIED",
+  "ownershipHistory": [],
+  "createdAt": {
+    "$date": "2025-10-18T13:43:29.860Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-18T13:43:29.860Z"
+  },
+  "_class": "com.example.HarmoniStay.Backend.model.Flat"
+},
+{
+  "_id": {
+    "$oid": "68f656243cda6cf634d337b1"
+  },
+  "flatNumber": "B-101",
+  "wing": "B",
+  "floor": 44,
+  "area": 1200,
+  "amount": {
+    "$numberLong": "10198"
+  },
+  "type": "BHK1",
+  "status": "OCCUPIED",
+  "ownershipHistory": [],
+  "createdAt": {
+    "$date": "2025-10-20T15:32:52.666Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-20T15:32:52.666Z"
+  },
+  "_class": "com.example.HarmoniStay.Backend.model.Flat"
+}]
