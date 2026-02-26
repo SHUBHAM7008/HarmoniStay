@@ -1,0 +1,114 @@
+[{
+  "_id": {
+    "$oid": "68f329ac5831caeed8ceb94d"
+  },
+  "email": "mary.smith@example.com",
+  "password": "Shubham",
+  "firstName": "Maryji",
+  "lastName": "Smith",
+  "phone": "9359074915",
+  "role": "MEMBER",
+  "status": "ACTIVE",
+  "flatId": "A-109",
+  "profileImage": "https://randomuser.me/api/portraits/women/2.jpg",
+  "emergencyContact": {
+    "name": "Peter Smith",
+    "phone": "9123456781",
+    "relation": "Husband"
+  },
+  "familyMembers": [
+    {
+      "name": "Lucy Smith",
+      "age": 3,
+      "relation": "Daughter"
+    }
+  ],
+  "dateOfJoining": "2023-02-01T10:00:00Z",
+  "resetPasswordToken": "",
+  "createdAt": "2023-02-01T09:00:00Z",
+  "_class": "com.example.HarmoniStay.Backend.model.Member"
+},
+{
+  "_id": {
+    "$oid": "68f329ac5831caeed8ceb94e"
+  },
+  "email": "robert.jones@example.com",
+  "password": "hashedpassword3",
+  "firstName": "Robert",
+  "lastName": "Jones",
+  "phone": "9359074915",
+  "role": "MEMBER",
+  "status": "ACTIVE",
+  "flatId": "A-108",
+  "profileImage": "https://randomuser.me/api/portraits/men/3.jpg",
+  "emergencyContact": {
+    "name": "Emma Jones",
+    "phone": "9123456782",
+    "relation": "Spouse"
+  },
+  "familyMembers": [],
+  "dateOfJoining": "2023-02-15T10:00:00Z",
+  "resetPasswordToken": "",
+  "resetPasswordExpires": null,
+  "createdAt": "2023-02-15T09:00:00Z",
+  "updated": "2023-09-01T09:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "68f329ac5831caeed8ceb94f"
+  },
+  "email": "linda.wilson@example.com",
+  "password": "hashedpassword4",
+  "firstName": "Linda",
+  "lastName": "Wilson",
+  "phone": "9359074915",
+  "role": "MEMBER",
+  "status": "ACTIVE",
+  "flatId": "A-111",
+  "profileImage": "https://randomuser.me/api/portraits/women/4.jpg",
+  "emergencyContact": {
+    "name": "Mark Wilson",
+    "phone": "9123456783",
+    "relation": "Husband"
+  },
+  "familyMembers": [
+    {
+      "name": "James Wilson",
+      "age": 2,
+      "relation": "Son"
+    }
+  ],
+  "dateOfJoining": "2023-03-01T10:00:00Z",
+  "resetPasswordToken": "",
+  "resetPasswordExpires": null,
+  "createdAt": "2023-03-01T09:00:00Z",
+  "updated": "2023-09-01T09:00:00Z"
+},
+{
+  "_id": {
+    "$oid": "690325102dd2ddbd8069c4f4"
+  },
+  "email": "ssakhare2004@gmail.com",
+  "password": "Shubham",
+  "firstName": "Shubham",
+  "lastName": "Sakhare",
+  "phone": "9359074915",
+  "role": "MEMBER",
+  "status": "ACTIVE",
+  "flatId": "B-101",
+  "profileImage": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOH2aZnIHWjMQj2lQUOWIL2f4Hljgab0ecZQ&s",
+  "emergencyContact": {
+    "name": "Shubham Sakhare",
+    "phone": "9359074915",
+    "relation": "Myself"
+  },
+  "familyMembers": [
+    {
+      "name": "Siddhu",
+      "age": 20,
+      "relation": "Brother"
+    }
+  ],
+  "dateOfJoining": "2025-11-01",
+  "_class": "com.example.HarmoniStay.Backend.model.Member"
+}]

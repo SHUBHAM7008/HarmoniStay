@@ -1,0 +1,292 @@
+[{
+  "_id": {
+    "$oid": "68fb05adffe5f1f5907cd3ec"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 2000,
+  "status": "UNPAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb061affe5f1f5907cd3ef"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 2000,
+  "status": "UNPAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb069bffe5f1f5907cd3f1"
+  },
+  "userId": "68f329ac5831caeed8ceb94e",
+  "flatId": "68f3976f4dcb11514ddfe57c",
+  "amount": 2000,
+  "status": "PAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "transactionId": "pay_RY8LKHr42T8Sy4",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb069cffe5f1f5907cd3f2"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 2000,
+  "status": "UNPAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb071cffe5f1f5907cd3f4"
+  },
+  "userId": "68f329ac5831caeed8ceb94e",
+  "flatId": "68f3976f4dcb11514ddfe57c",
+  "amount": 2000,
+  "status": "PAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "transactionId": "pay_RY8QzsFsNljbRs",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb071dffe5f1f5907cd3f5"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 2000,
+  "status": "UNPAID",
+  "billMonth": "2025-06",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "68fb0736ffe5f1f5907cd3f8"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 12000,
+  "status": "UNPAID",
+  "billMonth": "2025-01",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "690066c81fa21250e10cad8f"
+  },
+  "userId": "68f329ac5831caeed8ceb94d",
+  "flatId": "68f395fe4dcb11514ddfe57b",
+  "amount": 1000,
+  "status": "PAID",
+  "billMonth": "2025-09",
+  "description": "desc",
+  "userEmail": "mary.smith@example.com",
+  "flatNumber": "A-109",
+  "transactionId": "pay_RZgwIIsEUfzYtB",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "690066c91fa21250e10cad90"
+  },
+  "userId": "68f329ac5831caeed8ceb94e",
+  "flatId": "68f3976f4dcb11514ddfe57c",
+  "amount": 1000,
+  "status": "PAID",
+  "billMonth": "2025-09",
+  "description": "desc",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "transactionId": "pay_RZGaaNceyxEv3v",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "690066ca1fa21250e10cad91"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-09",
+  "description": "desc",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901e71a1c969f7fc7da4ba3"
+  },
+  "userId": "68f329ac5831caeed8ceb94d",
+  "flatId": "68f395fe4dcb11514ddfe57b",
+  "amount": 20000,
+  "status": "PAID",
+  "billMonth": "2026-01",
+  "description": "gvtdy",
+  "userEmail": "mary.smith@example.com",
+  "flatNumber": "A-109",
+  "transactionId": "pay_RZFYCLAGp62BEj",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901e71d1c969f7fc7da4ba4"
+  },
+  "userId": "68f329ac5831caeed8ceb94e",
+  "flatId": "68f3976f4dcb11514ddfe57c",
+  "amount": 20000,
+  "status": "PAID",
+  "billMonth": "2026-01",
+  "description": "gvtdy",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "transactionId": "pay_RZedxylD9qra7D",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901e7211c969f7fc7da4ba5"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 20000,
+  "status": "UNPAID",
+  "billMonth": "2026-01",
+  "description": "gvtdy",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901f4b6191be1e5672a30b6"
+  },
+  "userId": "68f329ac5831caeed8ceb94d",
+  "flatId": "68f395fe4dcb11514ddfe57b",
+  "amount": 1000,
+  "status": "PAID",
+  "billMonth": "2025-10",
+  "description": "Monthly maintenance bill",
+  "userEmail": "mary.smith@example.com",
+  "flatNumber": "A-109",
+  "transactionId": "pay_RZGWwqDqB4OF4j",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901f4b6191be1e5672a30b7"
+  },
+  "userId": "68f329ac5831caeed8ceb94e",
+  "flatId": "68f3976f4dcb11514ddfe57c",
+  "amount": 1000,
+  "status": "PAID",
+  "billMonth": "2025-10",
+  "description": "Monthly maintenance bill",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "transactionId": "pay_RZcjhL4Vpxec2O",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "6901f4b7191be1e5672a30b8"
+  },
+  "userId": "68f329ac5831caeed8ceb94f",
+  "flatId": "68f399814dcb11514ddfe57d",
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-10",
+  "description": "Monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "69032c94bea8891858a0e30d"
+  },
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-10",
+  "description": "Auto-generated monthly maintenance bill",
+  "userEmail": "ssakhare2004@gmail.com",
+  "flatNumber": "B-101",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "69097a9491a2bdd41d4719fe"
+  },
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-11",
+  "description": "Auto-generated monthly maintenance bill",
+  "userEmail": "mary.smith@example.com",
+  "flatNumber": "A-109",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "69097a9491a2bdd41d4719ff"
+  },
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-11",
+  "description": "Auto-generated monthly maintenance bill",
+  "userEmail": "robert.jones@example.com",
+  "flatNumber": "A-108",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "69097a9491a2bdd41d471a00"
+  },
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-11",
+  "description": "Auto-generated monthly maintenance bill",
+  "userEmail": "linda.wilson@example.com",
+  "flatNumber": "A-111",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+},
+{
+  "_id": {
+    "$oid": "69097a9491a2bdd41d471a01"
+  },
+  "amount": 1000,
+  "status": "UNPAID",
+  "billMonth": "2025-11",
+  "description": "Auto-generated monthly maintenance bill",
+  "userEmail": "ssakhare2004@gmail.com",
+  "flatNumber": "B-101",
+  "_class": "com.example.HarmoniStay.Backend.model.Bill"
+}]

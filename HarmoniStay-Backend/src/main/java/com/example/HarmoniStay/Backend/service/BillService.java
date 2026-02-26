@@ -47,7 +47,7 @@ public class BillService {
 
         return billRepository.save(bill);
     }
-    
+
 
     // Add new bill
     public Bill addBill(Bill bill) {
@@ -75,9 +75,20 @@ public class BillService {
     }
 
     // Update bill
-    public Bill updateBill(Bill bill) {
-        return billRepository.save(bill);
+    public Bill updateBill(String id ,String transactionId) {
+        // 1. Fetch existing bill from DB
+        Bill existingBill = billRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bill not found"));
+
+        // 2. Update only non-null fields
+        existingBill.setStatus("PAID");
+        existingBill.setTransactionId(transactionId);
+
+        // 3. Save updated bill
+        System.out.print("Updated bill :"+existingBill);
+        return billRepository.save(existingBill);
     }
+
 
     // Delete bill
     public void deleteBill(String id) {

@@ -10,4 +10,7 @@ import java.util.List;
 public interface BillRepository extends MongoRepository<Bill, String> {
     List<Bill> findByUserId(String userId); // get bills for a member
     List<Bill> findByFlatId(String flatId); // get bills for a flat
+    boolean existsByFlatNumberAndBillMonth(String flatNumber, String billMonth);
+
+    List<Bill> findByBillMonthAndStatus(String billMonth, String status);
 }

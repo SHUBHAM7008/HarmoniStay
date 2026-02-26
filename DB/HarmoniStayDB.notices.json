@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "68fb0849ffe5f1f5907cd3f9"
+  },
+  "title": "Water supply",
+  "description": "udya pani yenar nahi tr pani zapun vapara  ",
+  "date": {
+    "$date": "2025-10-24T05:02:01.104Z"
+  },
+  "createdBy": "Admin",
+  "_class": "com.example.HarmoniStay.Backend.model.Notice"
+},
+{
+  "_id": {
+    "$oid": "68fdad7daca3af2bb0e611d0"
+  },
+  "title": "Test",
+  "description": "testing on 26/10",
+  "date": {
+    "$date": "2025-10-26T05:11:25.227Z"
+  },
+  "createdBy": "Admin",
+  "_class": "com.example.HarmoniStay.Backend.model.Notice"
+},
+{
+  "_id": {
+    "$oid": "6901ebab9591548a10f18e9e"
+  },
+  "title": "Test",
+  "description": "Twillio Test Demo",
+  "date": {
+    "$date": "2025-10-29T10:25:47.148Z"
+  },
+  "createdBy": "Admin",
+  "_class": "com.example.HarmoniStay.Backend.model.Notice"
+},
+{
+  "_id": {
+    "$oid": "6901edd3191be1e5672a30b4"
+  },
+  "title": "Test 2",
+  "description": "Twillio Test 2",
+  "date": {
+    "$date": "2025-10-29T10:34:59.467Z"
+  },
+  "createdBy": "Admin",
+  "_class": "com.example.HarmoniStay.Backend.model.Notice"
+},
+{
+  "_id": {
+    "$oid": "6901edd5191be1e5672a30b5"
+  },
+  "title": "Test 2",
+  "description": "Twillio Test 2",
+  "date": {
+    "$date": "2025-10-29T10:35:01.696Z"
+  },
+  "createdBy": "Admin",
+  "_class": "com.example.HarmoniStay.Backend.model.Notice"
+}]

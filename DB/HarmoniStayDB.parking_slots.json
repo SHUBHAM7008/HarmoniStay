@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "68fdd6ee9aa8e3c955aac61a"
+  },
+  "slotNumber": "106",
+  "flatId": "A-109",
+  "vehicleNumber": "MH12Aj4321",
+  "vehicleType": "FOUR_WHEELER",
+  "monthlyCharge": 1232,
+  "paymentStatus": "Unpaid",
+  "paymentMonth": "October",
+  "createdAt": {
+    "$date": "2025-10-26T08:08:14.104Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-26T08:08:14.104Z"
+  },
+  "_class": "com.example.HarmoniStay.Backend.model.ParkingSlot"
+}]
