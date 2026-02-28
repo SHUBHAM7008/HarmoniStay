@@ -1,8 +1,10 @@
 package com.example.HarmoniStay.Backend.service;
 
 import com.example.HarmoniStay.Backend.model.Bill;
+import com.example.HarmoniStay.Backend.model.Flat;
 import com.example.HarmoniStay.Backend.model.Member;
 import com.example.HarmoniStay.Backend.repository.BillRepository;
+import com.example.HarmoniStay.Backend.repository.FlatRepository;
 import com.example.HarmoniStay.Backend.repository.MemberRepository;
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -35,6 +37,9 @@ public class MonthlyBillScheduler {
     @Autowired
     private BillRepository billRepository;
 
+    @Autowired
+    private FlatRepository flatRepository;
+
     // Format like 2025-10
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
 
@@ -54,15 +59,18 @@ public class MonthlyBillScheduler {
             if (exists) continue;
 
             Bill bill = new Bill();
+            bill.setUserId(member.getId());
             bill.setUserEmail(member.getEmail());
             bill.setFlatNumber(member.getFlatId());
+            flatRepository.findByFlatNumber(member.getFlatId())
+                    .ifPresent(flat -> bill.setFlatId(flat.getId()));
             bill.setAmount(1000.00); // Set your default maintenance charge here
             bill.setStatus("UNPAID");
             bill.setBillMonth(currentMonth);
             bill.setDescription("Auto-generated monthly maintenance bill");
 
             billRepository.save(bill);
-            sendSMS(member.getPhone(), " Maintence Bill is assigned for "+currentMonth);
+            sendSMS(member.getPhone(), " Maintenance Bill is assigned for " + currentMonth);
         }
 
         System.out.println("Monthly bills generated successfully for " + currentMonth);
@@ -80,7 +88,9 @@ public class MonthlyBillScheduler {
 
         List<Bill> unpaidBills = billRepository.findByBillMonthAndStatus(currentMonth, "UNPAID");
         for (Bill bill : unpaidBills) {
-            Member member = memberRepository.findById(bill.getUserId()).orElse(null);
+            Member member = bill.getUserId() != null
+                    ? memberRepository.findById(bill.getUserId()).orElse(null)
+                    : memberRepository.findByEmail(bill.getUserEmail()).orElse(null);
             if (member == null || member.getPhone() == null) continue;
 
             String message = String.format(

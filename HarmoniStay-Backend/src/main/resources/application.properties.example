@@ -7,14 +7,10 @@ spring.data.mongodb.database=HarmoniStayDB
 
 server.port=8888
 
+# Set these as environment variables or create application-local.properties
 razorpay.key_id=${RAZORPAY_KEY_ID}
 razorpay.key_secret=${RAZORPAY_KEY_SECRET}
 
 twilio.account.sid=${TWILIO_ACCOUNT_SID}
 twilio.auth.token=${TWILIO_AUTH_TOKEN}
 twilio.phone.number=${TWILIO_PHONE_NUMBER}
-
-
-
-
-
