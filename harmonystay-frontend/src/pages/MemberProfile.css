@@ -1,0 +1,147 @@
+.member-profile {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+  color: #2c3e50;
+  animation: fadeIn 0.4s ease;
+}
+
+.profile-header {
+  text-align: center;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  color: #007bff;
+  margin-bottom: 0.5rem;
+}
+
+.profile-role {
+  color: #777;
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+}
+
+.profile-section {
+  margin-top: 2rem;
+  background-color: #f8faff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.03);
+}
+
+.profile-section h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #1d3557;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.8rem 1.5rem;
+}
+
+.profile-grid p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.sub-section {
+  margin-top: 1.5rem;
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #eee;
+}
+
+.sub-section h4 {
+  margin-bottom: 0.6rem;
+  color: #0a3d62;
+}
+
+.ownership-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.ownership-table th,
+.ownership-table td {
+  border: 1px solid #ddd;
+  padding: 0.6rem;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.ownership-table th {
+  background-color: #007bff;
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-loading {
+  text-align: center;
+  color: #777;
+  padding: 2rem;
+}
+.member-profile-container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card {
+  width: 75%;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  padding: 2rem;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.profile-icon {
+  color: #3498db;
+  margin-bottom: 0.5rem;
+}
+
+.role {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.family-list {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.family-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  border-left: 4px solid #3498db;
+}

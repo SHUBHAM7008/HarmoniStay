@@ -1,0 +1,337 @@
+/* ==========================================
+   Warm & Approachable Theme - Admin Bills
+   Colors: Coral/Orange with Warm Neutrals
+   ========================================== */
+
+:root {
+  /* Primary Warm Colors */
+  --primary-coral: #FF6B6B;
+  --primary-orange: #FF8E53;
+  --primary-peach: #FFB088;
+  
+  /* Accent Colors */
+  --accent-gold: #FFD93D;
+  --accent-warm: #FFA07A;
+  --accent-success: #10B981;
+  --accent-danger: #EF4444;
+  
+  /* Neutral Warm Tones */
+  --warm-white: #FFF9F5;
+  --warm-cream: #FFF5EE;
+  --warm-beige: #F5E6D3;
+  --warm-gray: #E8DDD0;
+  
+  /* Text Colors */
+  --text-dark: #4A3F35;
+  --text-medium: #6B5D52;
+  --text-light: #8B7D72;
+  
+  /* Shadows - Soft & Warm */
+  --shadow-sm: 0 2px 8px rgba(255, 107, 107, 0.08);
+  --shadow-md: 0 4px 16px rgba(255, 107, 107, 0.12);
+  --shadow-lg: 0 8px 24px rgba(255, 107, 107, 0.15);
+  
+  /* Border Radius - Friendly & Rounded */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+}
+
+.admin-bills-container {
+  padding: 2rem;
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--warm-gray);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.admin-bills-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-coral) 0%, var(--primary-orange) 50%, var(--accent-gold) 100%);
+}
+
+.admin-bills-container h2 {
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary-coral) 0%, var(--primary-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.admin-bills-container h2::before {
+  content: '';
+  width: 4px;
+  height: 28px;
+  background: linear-gradient(180deg, var(--primary-coral) 0%, var(--primary-orange) 100%);
+  border-radius: 2px;
+}
+
+.admin-bills-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-coral) 0%, var(--primary-orange) 100%);
+  border-radius: 2px;
+}
+
+/* Bills Table */
+.bills-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--warm-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.bills-table th,
+.bills-table td {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--warm-beige);
+}
+
+.bills-table th {
+  background: linear-gradient(135deg, var(--primary-coral) 0%, var(--primary-orange) 100%);
+  color: #FFFFFF;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--primary-orange);
+}
+
+.bills-table th:first-child {
+  border-top-left-radius: var(--radius-md);
+}
+
+.bills-table th:last-child {
+  border-top-right-radius: var(--radius-md);
+}
+
+.bills-table tbody tr {
+  transition: all 0.3s ease;
+  background: #FFFFFF;
+}
+
+.bills-table tbody tr:nth-child(even) {
+  background: var(--warm-white);
+}
+
+.bills-table tbody tr:hover {
+  background: linear-gradient(135deg, #FFE5E5 0%, #FFF0E8 100%);
+  transform: scale(1.01);
+  box-shadow: var(--shadow-sm);
+}
+
+.bills-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.bills-table td {
+  color: var(--text-medium);
+  font-weight: 500;
+}
+
+/* Status Badges */
+.status {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-sm);
+}
+
+.status.paid {
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  color: #065F46;
+  border: 2px solid var(--accent-success);
+}
+
+.status.pending {
+  background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+  color: #991B1B;
+  border: 2px solid var(--accent-danger);
+}
+
+/* Pay Button */
+.pay-btn {
+  background: linear-gradient(135deg, var(--primary-coral) 0%, var(--primary-orange) 100%);
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 24px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pay-btn:hover {
+  background: linear-gradient(135deg, #FF5252 0%, #FF7043 100%);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.pay-btn:active {
+  transform: translateY(0);
+}
+
+/* Paid Label */
+.paid-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
+  color: #065F46;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--accent-success);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.paid-label::before {
+  content: '✓';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: var(--accent-success);
+  color: #FFFFFF;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 20px;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .admin-bills-container {
+    padding: 1.5rem;
+  }
+
+  .admin-bills-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .bills-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .bills-table th,
+  .bills-table td {
+    padding: 0.9rem 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .pay-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .status,
+  .paid-label {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty State */
+.bills-table tbody:empty::after {
+  content: 'No bills available';
+  display: block;
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-light);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* Loading State */
+.bills-table.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Hover effect for entire row */
+.bills-table tbody tr {
+  cursor: pointer;
+}
+
+/* Amount styling */
+.bills-table td.amount {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--primary-coral);
+}
+
+/* Date styling */
+.bills-table td.date {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.notify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #ed6565 0%, #e43434 100%);
+  color: #f5f0f0;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--accent-success);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+.notify-btn:hover {
+  background-color: darkorange;
+}

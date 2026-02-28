@@ -1,0 +1,54 @@
+.member-parking-container {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.table-wrapper {
+  overflow-x: auto; /* enables horizontal scroll if table is too wide */
+}
+
+.parking-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px; /* ensures table fits properly */
+}
+
+.parking-table th,
+.parking-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap; /* prevents cell text from wrapping */
+}
+
+.parking-table th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+.pay-btn {
+  padding: 6px 12px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.pay-btn:hover {
+  background-color: #2563eb;
+}
+
+.payment-status.paid {
+  color: #0f9d58;
+  font-weight: bold;
+}
+
+.payment-status.unpaid {
+  color: #d93025;
+  font-weight: bold;
+}
