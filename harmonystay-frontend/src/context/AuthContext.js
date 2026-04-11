@@ -28,6 +28,9 @@ export const AuthProvider = ({ children }) => {
       if (role === "admin") {
         url = "http://localhost:8888/api/auth/admin/login";
         body = { email, password };
+      } else if (role === "accountant") {
+        url = "http://localhost:8888/api/auth/accountant/login";
+        body = { email, password };
       } else if (role === "member") {
         url = "http://localhost:8888/api/auth/member/login";
         body = { flatId: email, password }; // for members, login via flatNo
@@ -45,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Login API Response:", data);
 
       if (response.ok && data.status === "success") {
-        // ✅ if backend returns admin or member object
+        // ✅ if backend returns admin, member, or accountant object
         const loggedUser = data.admin || data.user;
         
         if (loggedUser) {

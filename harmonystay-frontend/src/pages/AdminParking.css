@@ -1,8 +1,5 @@
 .admin-parking-container {
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .table-wrapper {
@@ -17,24 +14,25 @@
 
 .parking-table th,
 .parking-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 8px;
   text-align: center;
-  white-space: nowrap; /* prevents text wrapping */
+  white-space: nowrap;
 }
 
 .parking-table th {
-  background-color: #f0f0f0;
+  background: var(--primary);
+  color: #fff;
   font-weight: 600;
 }
 
 .payment-status.paid {
-  color: #0f9d58;
+  color: var(--success);
   font-weight: bold;
 }
 
 .payment-status.unpaid {
-  color: #d93025;
+  color: var(--danger);
   font-weight: bold;
 }
 
@@ -42,19 +40,19 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #f97316;
+  background: var(--primary);
   color: white;
   padding: 12px 20px;
   border: none;
   border-radius: 50px;
   cursor: pointer;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: var(--card-shadow);
   transition: 0.3s;
 }
 
 .create-slot-btn:hover {
-  background-color: #ea580c;
+  background: var(--primary-light);
 }
 
 .add-slot-form {
@@ -72,12 +70,12 @@
   padding: 8px;
   flex: 1 1 200px;
   border-radius: 4px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
 }
 
 .add-slot-form button {
   padding: 10px 20px;
-  background-color: #10b981;
+  background: var(--success);
   color: white;
   border: none;
   border-radius: 6px;
@@ -86,5 +84,5 @@
 }
 
 .add-slot-form button:hover {
-  background-color: #059669;
+  opacity: 0.9;
 }

@@ -37,6 +37,23 @@ public class AuthController {
         return response;
     }
 
+    // ✅ Accountant Login
+    @PostMapping("/accountant/login")
+    public Map<String, Object> accountantLogin(@RequestBody Map<String, String> data) {
+        String email = data.get("email");
+        String password = data.get("password");
+        Member accountant = authService.loginAccountant(email, password);
+        Map<String, Object> response = new HashMap<>();
+        if (accountant != null) {
+            response.put("status", "success");
+            response.put("user", accountant);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Invalid accountant credentials");
+        }
+        return response;
+    }
+
     // ✅ Member Login
     @PostMapping("/member/login")
     public Map<String, Object> memberLogin(@RequestBody Map<String, String> data) {

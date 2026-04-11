@@ -4,7 +4,11 @@ import { AuthContext } from "../context/AuthContext";
 import MemberProfile from "./MemberProfile";
 import MemberBills from "./MemberBills";
 import MemberParking from "./MemberParking";
-import { FaUserCircle, FaSignOutAlt, FaHome, FaBell, FaCar, FaWrench } from "react-icons/fa";
+import MemberComplaints from "./MemberComplaints";
+import MemberMeetings from "./MemberMeetings";
+import MemberFacilities from "./MemberFacilities";
+import MemberDocuments from "./MemberDocuments";
+import { FaUserCircle, FaSignOutAlt, FaHome, FaBell, FaCar, FaWrench, FaExclamationCircle, FaCalendarAlt, FaSwimmingPool, FaFileAlt } from "react-icons/fa";
 import "./MemberDashboard.css";
 
 const MemberDashboard = () => {
@@ -55,6 +59,18 @@ const MemberDashboard = () => {
           <li className={activeMenu === "parking" ? "active" : ""} onClick={() => setActiveMenu("parking")}>
             <FaCar /> Parking
           </li>
+          <li className={activeMenu === "complaints" ? "active" : ""} onClick={() => setActiveMenu("complaints")}>
+            <FaExclamationCircle /> Complaints
+          </li>
+          <li className={activeMenu === "meetings" ? "active" : ""} onClick={() => setActiveMenu("meetings")}>
+            <FaCalendarAlt /> Meetings
+          </li>
+          <li className={activeMenu === "facilities" ? "active" : ""} onClick={() => setActiveMenu("facilities")}>
+            <FaSwimmingPool /> Facilities
+          </li>
+          <li className={activeMenu === "documents" ? "active" : ""} onClick={() => setActiveMenu("documents")}>
+            <FaFileAlt /> Documents
+          </li>
           <li className={activeMenu === "notice" ? "active" : ""} onClick={() => setActiveMenu("notice")}>
             <FaBell /> Notices
           </li>
@@ -86,6 +102,30 @@ const MemberDashboard = () => {
         {activeMenu === "parking" && (
           <div className="dashboard-card">
             <MemberParking />
+          </div>
+        )}
+
+        {activeMenu === "complaints" && (
+          <div className="dashboard-card">
+            <MemberComplaints />
+          </div>
+        )}
+
+        {activeMenu === "meetings" && (
+          <div className="dashboard-card">
+            <MemberMeetings />
+          </div>
+        )}
+
+        {activeMenu === "facilities" && (
+          <div className="dashboard-card">
+            <MemberFacilities />
+          </div>
+        )}
+
+        {activeMenu === "documents" && (
+          <div className="dashboard-card">
+            <MemberDocuments />
           </div>
         )}
 
