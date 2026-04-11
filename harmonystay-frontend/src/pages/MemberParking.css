@@ -1,8 +1,5 @@
 .member-parking-container {
   padding: 20px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .table-wrapper {
@@ -17,20 +14,21 @@
 
 .parking-table th,
 .parking-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 8px;
   text-align: center;
-  white-space: nowrap; /* prevents cell text from wrapping */
+  white-space: nowrap;
 }
 
 .parking-table th {
-  background-color: #f0f0f0;
+  background: var(--primary);
+  color: #fff;
   font-weight: 600;
 }
 
 .pay-btn {
   padding: 6px 12px;
-  background-color: #3b82f6;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -40,15 +38,15 @@
 }
 
 .pay-btn:hover {
-  background-color: #2563eb;
+  background: var(--primary-light);
 }
 
 .payment-status.paid {
-  color: #0f9d58;
+  color: var(--success);
   font-weight: bold;
 }
 
 .payment-status.unpaid {
-  color: #d93025;
+  color: var(--danger);
   font-weight: bold;
 }

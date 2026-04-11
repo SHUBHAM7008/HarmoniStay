@@ -12,6 +12,8 @@ const DualLoginPage = () => {
   const [memberPassword, setMemberPassword] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
+  const [accountantEmail, setAccountantEmail] = useState('');
+  const [accountantPassword, setAccountantPassword] = useState('');
   const [error, setError] = useState('');
 
   // Member login (mock)
@@ -29,36 +31,49 @@ const DualLoginPage = () => {
   };
 
   // Admin login (backend API)
- const handleAdminSubmit = async (e) => {
-  e.preventDefault();
-  setError('');
+  const handleAdminSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    const success = await login(adminEmail, adminPassword, 'admin');
+    if (success) {
+      navigate('/admin/dashboard');
+    } else {
+      setError('Invalid admin credentials');
+    }
+  };
 
-  const success = await login(adminEmail, adminPassword, 'admin');
-console.log(success);
-  if (success) {
-    // Login successful
-    navigate('/admin/dashboard');
-  } else {
-    // Login failed
-    setError('Invalid admin credentials');
-  }
-};
-
+  const handleAccountantSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    const success = await login(accountantEmail, accountantPassword, 'accountant');
+    if (success) {
+      navigate('/accountant/dashboard');
+    } else {
+      setError('Invalid accountant credentials');
+    }
+  };
 
   return (
     <div className="login-container">
+      <div className="login-card">
       <div className="tabs">
         <button
           className={activeTab === 'member' ? 'active' : ''}
           onClick={() => { setActiveTab('member'); setError(''); }}
         >
-          Member Login
+          Member
         </button>
         <button
           className={activeTab === 'admin' ? 'active' : ''}
           onClick={() => { setActiveTab('admin'); setError(''); }}
         >
-          Admin Login
+          Admin
+        </button>
+        <button
+          className={activeTab === 'accountant' ? 'active' : ''}
+          onClick={() => { setActiveTab('accountant'); setError(''); }}
+        >
+          Accountant
         </button>
       </div>
 
@@ -105,7 +120,29 @@ console.log(success);
           </form>
         )}
 
+        {activeTab === 'accountant' && (
+          <form className="login-form" onSubmit={handleAccountantSubmit}>
+            <h2>Accountant Login</h2>
+            <input
+              type="email"
+              placeholder="Email"
+              value={accountantEmail}
+              onChange={e => setAccountantEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={accountantPassword}
+              onChange={e => setAccountantPassword(e.target.value)}
+              required
+            />
+            <button type="submit">Login</button>
+          </form>
+        )}
+
         {error && <p className="error">{error}</p>}
+      </div>
       </div>
     </div>
   );

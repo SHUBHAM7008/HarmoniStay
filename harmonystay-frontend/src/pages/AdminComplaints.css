@@ -1,0 +1,13 @@
+.admin-complaints-container { padding: 1.5rem; }
+.filter-select { margin-bottom: 1rem; padding: 0.5rem 1rem; border-radius: 8px; }
+.complaints-table-wrap { overflow-x: auto; }
+.complaints-table { width: 100%; border-collapse: collapse; }
+.complaints-table th, .complaints-table td { padding: 0.75rem; border: 1px solid var(--border-color); text-align: left; }
+.complaints-table th { background: var(--primary); color: #fff; }
+.complaints-table input { width: 100%; padding: 0.4rem; }
+.badge { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
+.badge.PENDING { background: #ffc107; }
+.badge.IN_PROGRESS { background: #17a2b8; color: #fff; }
+.badge.RESOLVED { background: #28a745; color: #fff; }
+.complaints-table button { margin-right: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 6px; border: none; cursor: pointer; }
+.complaints-table button.resolve { background: var(--success); color: #fff; }

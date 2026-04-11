@@ -25,10 +25,19 @@ public class AuthService {
         return null;
     }
 
-    // ✅ Return Member object or null
+    // ✅ Return Member object or null (flat number login)
     public Member loginMember(String flatNo, String password) {
         Member member = memberRepo.findByFlatId(flatNo).orElse(null);
         if (member != null && member.getPassword().equals(password)) {
+            return member;
+        }
+        return null;
+    }
+
+    // ✅ Accountant login (email + password from members with role ACCOUNTANT)
+    public Member loginAccountant(String email, String password) {
+        Member member = memberRepo.findByEmail(email).orElse(null);
+        if (member != null && "ACCOUNTANT".equalsIgnoreCase(member.getRole()) && member.getPassword().equals(password)) {
             return member;
         }
         return null;

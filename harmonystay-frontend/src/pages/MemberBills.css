@@ -3,17 +3,11 @@
 .member-bills-container {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .member-bills-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #197de2;
 }
 
 /* Summary Section */
@@ -44,14 +38,14 @@
 .filter-section input {
   padding: 8px 12px;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   outline: none;
   transition: 0.2s;
 }
 
 .filter-section input:focus {
-  border-color: #197de2;
-  box-shadow: 0 0 5px rgba(25,125,226,0.3);
+  border-color: var(--primary);
+  box-shadow: 0 0 5px rgba(0,51,102,0.2);
 }
 
 /* Export Buttons */
@@ -85,13 +79,13 @@
 
 .bills-table th,
 .bills-table td {
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-color);
   padding: 10px 12px;
   text-align: center;
 }
 
 .bills-table th {
-  background-color: #197de2;
+  background: var(--primary);
   color: white;
   font-weight: 600;
   text-transform: uppercase;
@@ -125,7 +119,7 @@
 /* Pay Button */
 .pay-btn {
   padding: 6px 12px;
-  background-color: #197de2;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -135,11 +129,10 @@
 }
 
 .pay-btn:hover {
-  background-color: #105bb5;
+  background: var(--primary-light);
 }
 
-/* Paid Label */
 .paid-label {
-  color: #28a745;
+  color: var(--success);
   font-weight: 600;
 }

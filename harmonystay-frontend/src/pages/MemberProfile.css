@@ -1,12 +1,11 @@
 .member-profile {
-  background: #ffffff;
-  border-radius: 16px;
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
   padding: 2rem 2.5rem;
   margin: 2rem auto;
   max-width: 900px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  font-family: 'Poppins', sans-serif;
-  color: #2c3e50;
+  box-shadow: var(--card-shadow);
+  color: var(--text-dark);
   animation: fadeIn 0.4s ease;
 }
 
@@ -38,7 +37,7 @@
 .profile-section h3 {
   margin-bottom: 1rem;
   font-size: 1.2rem;
-  color: #1d3557;
+  color: var(--primary);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -65,7 +64,7 @@
 
 .sub-section h4 {
   margin-bottom: 0.6rem;
-  color: #0a3d62;
+  color: var(--primary-dark);
 }
 
 .ownership-table {
@@ -83,7 +82,7 @@
 }
 
 .ownership-table th {
-  background-color: #007bff;
+  background: var(--primary);
   color: white;
 }
 
@@ -105,9 +104,9 @@
 
 .profile-card {
   width: 75%;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+  background: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
   padding: 2rem;
 }
 
@@ -143,5 +142,5 @@
   background: #f8f9fa;
   border-radius: 8px;
   padding: 0.8rem 1rem;
-  border-left: 4px solid #3498db;
+  border-left: 4px solid var(--primary);
 }

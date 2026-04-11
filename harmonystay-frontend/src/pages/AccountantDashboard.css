@@ -1,0 +1,36 @@
+.accountant-dashboard { display: flex; min-height: 100vh; }
+.accountant-dashboard .sidebar { width: 220px; background: #003366; color: #fff; padding: 1.5rem; }
+.accountant-dashboard .role { font-size: 0.9rem; opacity: 0.9; margin-bottom: 1rem; }
+.accountant-dashboard .menu-list { list-style: none; padding: 0; }
+.accountant-dashboard .menu-list li {
+  padding: 0.6rem 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  transition: background 0.2s;
+}
+.accountant-dashboard .menu-list li:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.accountant-dashboard .menu-list li.active {
+  background: rgba(255, 255, 255, 0.25);
+}
+.accountant-dashboard .logout-btn { margin-top: 2rem; padding: 0.6rem 1rem; background: rgba(255,255,255,0.2); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+.accountant-dashboard .main-panel { flex: 1; padding: 2rem; background: #f5f5f5; }
+.accountant-dashboard .summary-cards { display: flex; gap: 1rem; margin: 1.5rem 0; flex-wrap: wrap; }
+.accountant-dashboard .card { background: #fff; padding: 1.5rem; border-radius: 12px; min-width: 180px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.accountant-dashboard .card h4 { margin: 0 0 0.5rem 0; color: #555; font-size: 0.9rem; }
+.accountant-dashboard .card p { margin: 0; font-size: 1.4rem; font-weight: bold; color: #003366; }
+.accountant-dashboard .bills-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.accountant-dashboard .bills-table th, .accountant-dashboard .bills-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+.accountant-dashboard .bills-table th { background: #003366; color: #fff; }
+.accountant-dashboard .badge { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
+.accountant-dashboard .badge.PAID { background: #28a745; color: #fff; }
+.accountant-dashboard .badge.UNPAID { background: #dc3545; color: #fff; }
+
+.accountant-dashboard .monthly-reports { display: flex; flex-direction: column; gap: 1.5rem; }
+.accountant-dashboard .report-month-card { background: #fff; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.accountant-dashboard .report-month-card h4 { margin: 0 0 0.75rem 0; color: #003366; }
