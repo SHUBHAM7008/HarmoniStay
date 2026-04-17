@@ -1,48 +1,55 @@
 package com.example.HarmoniStay.Backend.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "flats")
+@Entity
+@Table(name = "flats")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Flat {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String flatNumber;
     private String wing;
     private int floor;
-    private double area; // in sqft
+    private double area;
     private Long amount;
+
     public enum FlatType { BHK1, BHK2, BHK3, BHK4, PENTHOUSE }
+    @Enumerated(EnumType.STRING)
     private FlatType type;
 
-    @DBRef
-    private Member owner; // Reference to Users collection
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "owner_id")
+    private Member owner;
 
-    @DBRef
-    private Member tenant; // Reference to Users collection
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tenant_id")
+    private Member tenant;
 
     public enum Status { OCCUPIED, VACANT, UNDER_RENOVATION }
+    @Enumerated(EnumType.STRING)
     private Status status;
 
-    private List<OwnershipHistory> ownershipHistory;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "flat_ownership_history", joinColumns = @JoinColumn(name = "flat_id"))
+    private List<OwnershipHistory> ownershipHistory = new ArrayList<>();
 
-    private Date createdAt;
-    private Date updatedAt;
-
-    // Nested Class for ownership history
-    public static class OwnershipHistory {
+    @Embeddable
+    public static class OwnershipHistory implements java.io.Serializable {
         private String previousOwnerId;
         private String newOwnerId;
+        @Temporal(TemporalType.TIMESTAMP)
         private Date transferDate;
         private String remarks;
 
-        // Getters and setters
         public String getPreviousOwnerId() { return previousOwnerId; }
         public void setPreviousOwnerId(String previousOwnerId) { this.previousOwnerId = previousOwnerId; }
 
@@ -56,7 +63,11 @@ public class Flat {
         public void setRemarks(String remarks) { this.remarks = remarks; }
     }
 
-    // Getters and setters for Flat fields
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date updatedAt;
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -85,7 +96,9 @@ public class Flat {
     public void setStatus(Status status) { this.status = status; }
 
     public List<OwnershipHistory> getOwnershipHistory() { return ownershipHistory; }
-    public void setOwnershipHistory(List<OwnershipHistory> ownershipHistory) { this.ownershipHistory = ownershipHistory; }
+    public void setOwnershipHistory(List<OwnershipHistory> ownershipHistory) {
+        this.ownershipHistory = ownershipHistory != null ? ownershipHistory : new ArrayList<>();
+    }
 
     public Date getCreatedAt() { return createdAt; }
     public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
@@ -93,13 +106,8 @@ public class Flat {
     public Date getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
 
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
-    }
+    public Long getAmount() { return amount; }
+    public void setAmount(Long amount) { this.amount = amount; }
 
     @Override
     public String toString() {
@@ -111,12 +119,7 @@ public class Flat {
                 ", area=" + area +
                 ", amount=" + amount +
                 ", type=" + type +
-                ", owner=" + owner +
-                ", tenant=" + tenant +
                 ", status=" + status +
-                ", ownershipHistory=" + ownershipHistory +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

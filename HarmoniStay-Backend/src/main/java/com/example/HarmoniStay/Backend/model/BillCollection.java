@@ -1,62 +1,69 @@
 package com.example.HarmoniStay.Backend.model;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+
 import java.util.Date;
 
-@Document(collection = "bill_collections")
+@Entity
+@Table(name = "bill_collections")
 public class BillCollection {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @DBRef
-    private Bill billId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "bill_id")
+    private Bill bill;
 
-    @DBRef
-    private Member userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
-    @DBRef
-    private Flat flatId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "flat_id")
+    private Flat flat;
 
     private Double amount;
-    private String paymentMethod; // CASH, CHEQUE, ONLINE, UPI, CARD
+    private String paymentMethod;
     private String transactionId;
-
     private String razorpayOrderId;
     private String razorpayPaymentId;
     private String razorpaySignature;
-
-    private String status; // PENDING, SUCCESS, FAILED, REFUNDED
+    private String status;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date paymentDate;
     private String receiptNumber;
     private String receiptUrl;
     private String remarks;
 
-    @DBRef
-    private Member processedBy; // Admin user who processed payment
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "processed_by_id")
+    private Member processedBy;
 
-    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-
-    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    // Getters & Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
-    public Bill getBillId() { return billId; }
-    public void setBillId(Bill billId) { this.billId = billId; }
+    @JsonProperty("billId")
+    public Bill getBillId() { return bill; }
+    @JsonProperty("billId")
+    public void setBillId(Bill bill) { this.bill = bill; }
 
-    public Member getUserId() { return userId; }
-    public void setUserId(Member userId) { this.userId = userId; }
+    @JsonProperty("userId")
+    public Member getUserId() { return member; }
+    @JsonProperty("userId")
+    public void setUserId(Member member) { this.member = member; }
 
-    public Flat getFlatId() { return flatId; }
-    public void setFlatId(Flat flatId) { this.flatId = flatId; }
+    @JsonProperty("flatId")
+    public Flat getFlatId() { return flat; }
+    @JsonProperty("flatId")
+    public void setFlatId(Flat flat) { this.flat = flat; }
 
     public Double getAmount() { return amount; }
     public void setAmount(Double amount) { this.amount = amount; }
@@ -91,7 +98,9 @@ public class BillCollection {
     public String getRemarks() { return remarks; }
     public void setRemarks(String remarks) { this.remarks = remarks; }
 
+    @JsonProperty("processedBy")
     public Member getProcessedBy() { return processedBy; }
+    @JsonProperty("processedBy")
     public void setProcessedBy(Member processedBy) { this.processedBy = processedBy; }
 
     public Date getCreatedAt() { return createdAt; }

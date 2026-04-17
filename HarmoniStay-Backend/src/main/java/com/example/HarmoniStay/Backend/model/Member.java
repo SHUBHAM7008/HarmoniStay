@@ -1,178 +1,102 @@
-    package com.example.HarmoniStay.Backend.model;
+package com.example.HarmoniStay.Backend.model;
 
-    import org.springframework.data.annotation.CreatedDate;
-    import org.springframework.data.annotation.LastModifiedDate;
-    import org.springframework.data.annotation.Id;
-    import org.springframework.data.mongodb.core.mapping.Document;
-    import java.util.Date;
-    import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
 
-    @Document(collection = "members")
-    public class Member {
+import java.util.ArrayList;
+import java.util.List;
 
-        @Id
-        private String id;
+@Entity
+@Table(name = "members")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Member {
 
-        private String email;
-        private String password;
-        private String firstName;
-        private String lastName;
-        private String phone;
-        private String role;
-        private String status;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
-        private String flatId; // ✅ Flat reference
+    private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String phone;
+    private String role;
+    private String status;
 
-        private String profileImage;
+    @Column(name = "flat_id")
+    private String flatId;
 
-        private EmergencyContact emergencyContact;
-        private List<FamilyMember> familyMembers;
+    private String profileImage;
 
-        private String dateOfJoining;
-        private String resetPasswordToken;
-        private String resetPasswordExpires;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "name", column = @Column(name = "emergency_contact_name")),
+            @AttributeOverride(name = "phone", column = @Column(name = "emergency_contact_phone")),
+            @AttributeOverride(name = "relation", column = @Column(name = "emergency_contact_relation"))
+    })
+    private EmergencyContact emergencyContact;
 
-        @CreatedDate
-        private String createdAt;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "member_family_members", joinColumns = @JoinColumn(name = "member_id"))
+    private List<FamilyMember> familyMembers = new ArrayList<>();
 
-        @LastModifiedDate
-        private String updatedAt;
+    private String dateOfJoining;
+    private String resetPasswordToken;
+    private String resetPasswordExpires;
 
-        // constructors, getters, setters
+    private String createdAt;
+    private String updatedAt;
 
-        public String getId() {
-            return id;
-        }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-        public void setId(String id) {
-            this.id = id;
-        }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-        public String getEmail() {
-            return email;
-        }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-        public void setEmail(String email) {
-            this.email = email;
-        }
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
 
-        public String getPassword() {
-            return password;
-        }
+    public String getLastName() { return lastName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
 
-        public void setPassword(String password) {
-            this.password = password;
-        }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-        public String getFirstName() {
-            return firstName;
-        }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-        public void setFirstName(String firstName) {
-            this.firstName = firstName;
-        }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-        public String getLastName() {
-            return lastName;
-        }
+    public String getFlatId() { return flatId; }
+    public void setFlatId(String flatId) { this.flatId = flatId; }
 
-        public void setLastName(String lastName) {
-            this.lastName = lastName;
-        }
+    public String getProfileImage() { return profileImage; }
+    public void setProfileImage(String profileImage) { this.profileImage = profileImage; }
 
-        public String getPhone() {
-            return phone;
-        }
+    public EmergencyContact getEmergencyContact() { return emergencyContact; }
+    public void setEmergencyContact(EmergencyContact emergencyContact) { this.emergencyContact = emergencyContact; }
 
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public void setRole(String role) {
-            this.role = role;
-        }
-
-        public String getStatus() {
-            return status;
-        }
-
-        public void setStatus(String status) {
-            this.status = status;
-        }
-
-        public String getFlatId() {
-            return flatId;
-        }
-
-        public void setFlatId(String flatId) {
-            this.flatId = flatId;
-        }
-
-        public String getProfileImage() {
-            return profileImage;
-        }
-
-        public void setProfileImage(String profileImage) {
-            this.profileImage = profileImage;
-        }
-
-        public EmergencyContact getEmergencyContact() {
-            return emergencyContact;
-        }
-
-        public void setEmergencyContact(EmergencyContact emergencyContact) {
-            this.emergencyContact = emergencyContact;
-        }
-
-        public List<FamilyMember> getFamilyMembers() {
-            return familyMembers;
-        }
-
-        public void setFamilyMembers(List<FamilyMember> familyMembers) {
-            this.familyMembers = familyMembers;
-        }
-
-        public String getDateOfJoining() {
-            return dateOfJoining;
-        }
-
-        public void setDateOfJoining(String dateOfJoining) {
-            this.dateOfJoining = dateOfJoining;
-        }
-
-        public String getResetPasswordToken() {
-            return resetPasswordToken;
-        }
-
-        public void setResetPasswordToken(String resetPasswordToken) {
-            this.resetPasswordToken = resetPasswordToken;
-        }
-
-        public String getResetPasswordExpires() {
-            return resetPasswordExpires;
-        }
-
-        public void setResetPasswordExpires(String resetPasswordExpires) {
-            this.resetPasswordExpires = resetPasswordExpires;
-        }
-
-        public String getCreatedAt() {
-            return createdAt;
-        }
-
-        public void setCreatedAt(String createdAt) {
-            this.createdAt = createdAt;
-        }
-
-        public String getUpdatedAt() {
-            return updatedAt;
-        }
-
-        public void setUpdatedAt(String updatedAt) {
-            this.updatedAt = updatedAt;
-        }
+    public List<FamilyMember> getFamilyMembers() { return familyMembers; }
+    public void setFamilyMembers(List<FamilyMember> familyMembers) {
+        this.familyMembers = familyMembers != null ? familyMembers : new ArrayList<>();
     }
+
+    public String getDateOfJoining() { return dateOfJoining; }
+    public void setDateOfJoining(String dateOfJoining) { this.dateOfJoining = dateOfJoining; }
+
+    public String getResetPasswordToken() { return resetPasswordToken; }
+    public void setResetPasswordToken(String resetPasswordToken) { this.resetPasswordToken = resetPasswordToken; }
+
+    public String getResetPasswordExpires() { return resetPasswordExpires; }
+    public void setResetPasswordExpires(String resetPasswordExpires) { this.resetPasswordExpires = resetPasswordExpires; }
+
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+
+    public String getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(String updatedAt) { this.updatedAt = updatedAt; }
+}

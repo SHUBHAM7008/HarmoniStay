@@ -1,23 +1,26 @@
 package com.example.HarmoniStay.Backend.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Document(collection = "visitors")
+@Entity
+@Table(name = "visitors")
 public class Visitor {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String visitorName;
     private String phone;
-    private String flatId;          // flat visiting
+    private String flatId;
     private String purpose;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date entryTime;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date exitTime;
-    private String loggedBy;        // security/admin
+    private String loggedBy;
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

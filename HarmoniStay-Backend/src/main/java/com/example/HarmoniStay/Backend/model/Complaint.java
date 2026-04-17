@@ -1,24 +1,29 @@
 package com.example.HarmoniStay.Backend.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-@Document(collection = "complaints")
+@Entity
+@Table(name = "complaints")
 public class Complaint {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String userId;       // member who lodged
+    private String userId;
     private String flatId;
-    private String category;     // MAINTENANCE, ELECTRICITY, WATER, SECURITY, OTHER
+    private String category;
     private String title;
+    @Column(length = 4000)
     private String description;
-    private String status;       // PENDING, IN_PROGRESS, RESOLVED
-    private String adminFeedback; // admin response when resolved
+    private String status;
+    @Column(length = 2000)
+    private String adminFeedback;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
     public String getId() { return id; }

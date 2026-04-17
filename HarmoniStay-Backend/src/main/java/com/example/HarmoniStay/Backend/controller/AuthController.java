@@ -1,7 +1,7 @@
 package com.example.HarmoniStay.Backend.controller;
 
+import com.example.HarmoniStay.Backend.model.Accountant;
 import com.example.HarmoniStay.Backend.model.Admin;
-import com.example.HarmoniStay.Backend.model.Flat;
 import com.example.HarmoniStay.Backend.model.Member;
 import com.example.HarmoniStay.Backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class AuthController {
     public Map<String, Object> accountantLogin(@RequestBody Map<String, String> data) {
         String email = data.get("email");
         String password = data.get("password");
-        Member accountant = authService.loginAccountant(email, password);
+        Accountant accountant = authService.loginAccountant(email, password);
         Map<String, Object> response = new HashMap<>();
         if (accountant != null) {
             response.put("status", "success");
@@ -60,7 +60,6 @@ public class AuthController {
         //Map<String, String> flatMap = (Map<String, String>) data.get("Flat");
         String flatNo = data.get("flatId");
         String password = (String) data.get("password");
-        System.out.print(flatNo+password);
         Member member = authService.loginMember(flatNo, password);
 
         Map<String, Object> response = new HashMap<>();

@@ -139,10 +139,9 @@ const AddMember = () => {
             <div className="form-group">
               <label>Role</label>
               <select name="role" value={member.role} onChange={handleChange}>
-                <option value="ADMIN">Admin</option>
                 <option value="MEMBER">Member</option>
-                <option value="ACCOUNTANT">Accountant</option>
               </select>
+              <small className="form-hint">Accountants are created from Admin → Accountants.</small>
             </div>
 
             <div className="form-group">

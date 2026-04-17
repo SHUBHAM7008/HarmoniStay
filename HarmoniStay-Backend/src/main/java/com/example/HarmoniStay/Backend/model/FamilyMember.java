@@ -1,5 +1,8 @@
 package com.example.HarmoniStay.Backend.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class FamilyMember {
     private String name;
     private int age;
@@ -13,7 +16,6 @@ public class FamilyMember {
         this.relation = relation;
     }
 
-    // Getters and Setters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
