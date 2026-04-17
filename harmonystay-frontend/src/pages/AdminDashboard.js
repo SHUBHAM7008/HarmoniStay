@@ -19,6 +19,7 @@ import {
   FaSearch,
   FaMoon,
   FaSun,
+  FaCalculator,
 } from "react-icons/fa";
 
 import AdminMembers from "./AdminMembers";
@@ -34,6 +35,7 @@ import AdminDocuments from "./AdminDocuments";
 import AdminVisitors from "./AdminVisitors";
 import AdminReports from "./AdminReports";
 import AdminDashboardHome from "./AdminDashboardHome";
+import AdminAccountants from "./AdminAccountants";
 
 import "./AdminDashboard.css";
 
@@ -62,6 +64,7 @@ const AdminDashboard = () => {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: FaHome },
     { id: "members", label: "Members", icon: FaUsers },
+    { id: "accountants", label: "Accountants", icon: FaCalculator },
     { id: "flats", label: "Flats", icon: FaWrench },
     { id: "maintenance", label: "Maintenance", icon: FaFileInvoiceDollar },
     { id: "assignbills", label: "Assign bills", icon: FaFileInvoiceDollar },
@@ -156,6 +159,7 @@ const AdminDashboard = () => {
             <AdminDashboardHome user={user} onNavigate={setActiveMenu} />
           )}
           {activeMenu === "members" && <AdminMembers />}
+          {activeMenu === "accountants" && <AdminAccountants />}
           {activeMenu === "flats" && <CreateFlat />}
           {activeMenu === "maintenance" && <AdminBills />}
           {activeMenu === "assignbills" && <AssignMonthlyBill />}

@@ -1,16 +1,25 @@
 spring.application.name=HarmoniStay-Backend
-# For cloud MongoDB: spring.data.mongodb.uri=${MONGODB_URI}
+spring.profiles.active=local
 
-spring.data.mongodb.host=localhost
-spring.data.mongodb.port=27017
-spring.data.mongodb.database=HarmoniStayDB
+# PostgreSQL — copy to application-local.properties and set secrets
+spring.datasource.url=jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:HarmoniStayDB}
+spring.datasource.username=${DB_USER:postgres}
+spring.datasource.password=${DB_PASSWORD:}
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.open-in-view=false
 
 server.port=8888
 
-# Set these as environment variables or create application-local.properties
-razorpay.key_id=${RAZORPAY_KEY_ID}
-razorpay.key_secret=${RAZORPAY_KEY_SECRET}
+razorpay.key_id=${RAZORPAY_KEY_ID:}
+razorpay.key_secret=${RAZORPAY_KEY_SECRET:}
 
-twilio.account.sid=${TWILIO_ACCOUNT_SID}
-twilio.auth.token=${TWILIO_AUTH_TOKEN}
-twilio.phone.number=${TWILIO_PHONE_NUMBER}
+twilio.account.sid=${TWILIO_ACCOUNT_SID:}
+twilio.auth.token=${TWILIO_AUTH_TOKEN:}
+twilio.phone.number=${TWILIO_PHONE_NUMBER:}
+
+# Private society document storage. Keep this outside public/static folders.
+harmonistay.documents.storage-path=${DOCUMENT_STORAGE_PATH:uploads/documents}
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=12MB

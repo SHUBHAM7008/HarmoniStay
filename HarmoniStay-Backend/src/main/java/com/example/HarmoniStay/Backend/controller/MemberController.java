@@ -6,6 +6,7 @@ import com.example.HarmoniStay.Backend.service.FlatService;
 import com.example.HarmoniStay.Backend.service.MemberService;
 import com.example.HarmoniStay.Backend.service.OTPService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +35,15 @@ public class MemberController {
 
     // POST /api/members
     @PostMapping
-    public Member addMember(@RequestBody Member member) {
+    public ResponseEntity<?> addMember(@RequestBody Member member) {
+        if (member.getRole() != null && "ACCOUNTANT".equalsIgnoreCase(member.getRole())) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Accountants are managed separately. Use Admin → Accountants to create an accountant."));
+        }
+        if (member.getRole() != null && "ADMIN".equalsIgnoreCase(member.getRole())) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "message", "Admins cannot be created as members. Use the admins table / admin setup."));
+        }
         Member savedMember = memberService.addMember(member);
 
         // Update flat status
@@ -43,7 +52,7 @@ public class MemberController {
             flatService.updateFlatStatus(member.getFlatId(), Flat.Status.OCCUPIED);
         }
 
-        return savedMember;
+        return ResponseEntity.ok(savedMember);
     }
 
 
@@ -60,8 +69,12 @@ public class MemberController {
 
     // PUT /api/members/{id}
     @PutMapping("/{id}")
-    public Member updateMember(@PathVariable String id, @RequestBody Member updatedMember) {
-        return memberService.updateMember(id, updatedMember);
+    public ResponseEntity<?> updateMember(@PathVariable String id, @RequestBody Member updatedMember) {
+        try {
+            return ResponseEntity.ok(memberService.updateMember(id, updatedMember));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @Autowired

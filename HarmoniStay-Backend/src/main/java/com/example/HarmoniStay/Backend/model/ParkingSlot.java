@@ -1,26 +1,29 @@
 package com.example.HarmoniStay.Backend.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+
 import java.util.Date;
 
-@Document(collection = "parking_slots")
+@Entity
+@Table(name = "parking_slots")
 public class ParkingSlot {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String slotNumber;
     private String flatId;
     private String vehicleNumber;
-    private String vehicleType; // TWO_WHEELER, FOUR_WHEELER, VISITOR
+    private String vehicleType;
     private double monthlyCharge;
-    private String status; // ALLOTTED, VACANT, RESERVED
-    private String paymentStatus; // Paid / UnPaid
-    private String paymentMonth;  // October 2025
+    private String status;
+    private String paymentStatus;
+    private String paymentMonth;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    // Getters and Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
@@ -60,14 +63,6 @@ public class ParkingSlot {
                 "id='" + id + '\'' +
                 ", slotNumber='" + slotNumber + '\'' +
                 ", flatId='" + flatId + '\'' +
-                ", vehicleNumber='" + vehicleNumber + '\'' +
-                ", vehicleType='" + vehicleType + '\'' +
-                ", monthlyCharge=" + monthlyCharge +
-                ", status='" + status + '\'' +
-                ", paymentStatus='" + paymentStatus + '\'' +
-                ", paymentMonth='" + paymentMonth + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
                 '}';
     }
 }

@@ -18,6 +18,9 @@ public class MemberService {
     }
 
     public Member addMember(Member member) {
+        if (member.getRole() != null && "ACCOUNTANT".equalsIgnoreCase(member.getRole())) {
+            throw new IllegalArgumentException("Accountants are not stored as members");
+        }
         return memberRepository.save(member);
     }
 
@@ -38,7 +41,12 @@ public class MemberService {
         if (updatedMember.getLastName() != null) existing.setLastName(updatedMember.getLastName());
         if (updatedMember.getEmail() != null) existing.setEmail(updatedMember.getEmail());
         if (updatedMember.getPhone() != null) existing.setPhone(updatedMember.getPhone());
-        if (updatedMember.getRole() != null) existing.setRole(updatedMember.getRole());
+        if (updatedMember.getRole() != null) {
+            if ("ACCOUNTANT".equalsIgnoreCase(updatedMember.getRole())) {
+                throw new IllegalArgumentException("Cannot set member role to ACCOUNTANT");
+            }
+            existing.setRole(updatedMember.getRole());
+        }
         if (updatedMember.getStatus() != null) existing.setStatus(updatedMember.getStatus());
         if (updatedMember.getFlatId() != null) existing.setFlatId(updatedMember.getFlatId());
         if (updatedMember.getProfileImage() != null) existing.setProfileImage(updatedMember.getProfileImage());

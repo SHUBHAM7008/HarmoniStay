@@ -54,7 +54,8 @@ code {
 .assign-flat-container,
 .create-flat-container,
 .admin-parking-container,
-.admin-members-container {
+.admin-members-container,
+.admin-accountants-container {
   background: var(--card-bg);
   border-radius: var(--card-radius);
   padding: 2rem;

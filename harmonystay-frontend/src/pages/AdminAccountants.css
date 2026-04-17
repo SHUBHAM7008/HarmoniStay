@@ -1,0 +1,103 @@
+.admin-accountants-container h2 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.admin-accountants-intro {
+  color: var(--text-medium);
+  margin-bottom: 1.5rem;
+  max-width: 720px;
+}
+
+.accountant-form {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accountant-form h3 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+.accountant-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.accountant-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 180px;
+  flex: 1;
+}
+
+.accountant-form input {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.accountant-form button[type="submit"] {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.accountant-form button[type="submit"]:hover {
+  background: var(--primary-light);
+}
+
+.acct-msg.success {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.acct-msg.error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.accountants-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.accountants-table th,
+.accountants-table td {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.accountants-table th {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-del {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-del:hover {
+  opacity: 0.9;
+}

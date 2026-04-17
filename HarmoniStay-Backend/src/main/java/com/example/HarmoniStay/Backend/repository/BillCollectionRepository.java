@@ -1,7 +1,7 @@
 package com.example.HarmoniStay.Backend.repository;
 
 import com.example.HarmoniStay.Backend.model.BillCollection;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BillCollectionRepository extends MongoRepository<BillCollection, String> {
+public interface BillCollectionRepository extends JpaRepository<BillCollection, String> {
 }
