@@ -44,8 +44,18 @@ public class Member {
     private String resetPasswordToken;
     private String resetPasswordExpires;
 
+    /** Intentionally left NULL on insert until explicit audit is added. */
+    @Column(nullable = true)
     private String createdAt;
+
+    @Column(nullable = true)
     private String updatedAt;
+
+    @PrePersist
+    void clearAuditFieldsOnInsert() {
+        this.createdAt = null;
+        this.updatedAt = null;
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

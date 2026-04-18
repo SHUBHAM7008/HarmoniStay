@@ -21,6 +21,9 @@ public class MemberService {
         if (member.getRole() != null && "ACCOUNTANT".equalsIgnoreCase(member.getRole())) {
             throw new IllegalArgumentException("Accountants are not stored as members");
         }
+        member.setId(null);
+        member.setCreatedAt(null);
+        member.setUpdatedAt(null);
         return memberRepository.save(member);
     }
 
