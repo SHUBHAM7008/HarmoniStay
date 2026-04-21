@@ -32,7 +32,13 @@ public class MeetingController {
     }
 
     @PostMapping
-    public Meeting create(@RequestBody Meeting meeting) {
+    public Meeting create(
+            @RequestBody Meeting meeting,
+            @RequestHeader(value = "X-User-Email", required = false) String loggedUserEmail
+    ) {
+        if (loggedUserEmail != null && !loggedUserEmail.isBlank()) {
+            meeting.setCreatedBy(loggedUserEmail.trim());
+        }
         return meetingService.createMeeting(meeting);
     }
 

@@ -3,6 +3,7 @@ package com.example.HarmoniStay.Backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,17 +45,24 @@ public class Member {
     private String resetPasswordToken;
     private String resetPasswordExpires;
 
-    /** Intentionally left NULL on insert until explicit audit is added. */
+    /** ISO-8601 UTC (e.g. 2026-04-11T12:30:00.123Z). Set on insert. */
     @Column(nullable = true)
     private String createdAt;
 
+    /** ISO-8601 UTC. Set on insert and on every update. */
     @Column(nullable = true)
     private String updatedAt;
 
     @PrePersist
-    void clearAuditFieldsOnInsert() {
-        this.createdAt = null;
-        this.updatedAt = null;
+    void onMemberInsert() {
+        String now = Instant.now().toString();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    void onMemberUpdate() {
+        this.updatedAt = Instant.now().toString();
     }
 
     public String getId() { return id; }

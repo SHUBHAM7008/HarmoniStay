@@ -2,9 +2,10 @@ spring.application.name=HarmoniStay-Backend
 spring.profiles.active=local
 
 # PostgreSQL — copy to application-local.properties and set secrets
-spring.datasource.url=jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:HarmoniStayDB}
-spring.datasource.username=${DB_USER:postgres}
-spring.datasource.password=${DB_PASSWORD:}
+spring.datasource.url=https://vdczljgvpmylrscejlkm.supabase.co
+# postgresql://postgres:[YOUR-PASSWORD]@db.vdczljgvpmylrscejlkm.supabase.co:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=supershubham
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.jpa.hibernate.ddl-auto=update
@@ -18,6 +19,7 @@ razorpay.key_secret=${RAZORPAY_KEY_SECRET:}
 twilio.account.sid=${TWILIO_ACCOUNT_SID:}
 twilio.auth.token=${TWILIO_AUTH_TOKEN:}
 twilio.phone.number=${TWILIO_PHONE_NUMBER:}
+google.calendar.access-token=${GOOGLE_CALENDAR_ACCESS_TOKEN:}
 
 # Private society document storage. Keep this outside public/static folders.
 harmonistay.documents.storage-path=${DOCUMENT_STORAGE_PATH:uploads/documents}
