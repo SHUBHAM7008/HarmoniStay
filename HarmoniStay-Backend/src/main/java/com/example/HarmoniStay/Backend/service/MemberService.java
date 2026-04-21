@@ -22,8 +22,6 @@ public class MemberService {
             throw new IllegalArgumentException("Accountants are not stored as members");
         }
         member.setId(null);
-        member.setCreatedAt(null);
-        member.setUpdatedAt(null);
         return memberRepository.save(member);
     }
 
@@ -56,7 +54,6 @@ public class MemberService {
         if (updatedMember.getDateOfJoining() != null) existing.setDateOfJoining(updatedMember.getDateOfJoining());
         if (updatedMember.getEmergencyContact() != null) existing.setEmergencyContact(updatedMember.getEmergencyContact());
         if (updatedMember.getFamilyMembers() != null) existing.setFamilyMembers(updatedMember.getFamilyMembers());
-        if (updatedMember.getUpdatedAt() != null) existing.setUpdatedAt(updatedMember.getUpdatedAt());
         return memberRepository.save(existing);
     }
 }

@@ -76,23 +76,29 @@ public class MonthlyBillScheduler {
      * Monthly maintenance bills: 1st of each month at 00:05 (Asia/Kolkata).
      * (Minute 5 avoids collision with other midnight jobs; cron is server TZ unless zone set.)
      */
-    @Scheduled(cron = "0 * * * * ?", zone = "Asia/Kolkata")
+    @Scheduled(cron = "0 5 0 1 * ?", zone = "Asia/Kolkata")
     public void generateMonthlyBills() {
         log.info("Monthly bill generator started");
         String currentMonth = LocalDate.now().format(MONTH_FMT);
         List<Member> members = memberRepository.findAll();
+        log.info("Monthly bill generator evaluating {} members for {}", members.size(), currentMonth);
 
         for (Member member : members) {
             if (member.getFlatId() == null || member.getFlatId().isBlank()) {
+                log.debug("Skip member {}: flatId missing", member.getId());
                 continue;
             }
             if ("ACCOUNTANT".equalsIgnoreCase(member.getRole())) {
+                log.debug("Skip member {}: role ACCOUNTANT", member.getId());
                 continue;
             }
 
             try {
+                log.info("Processing member {} (flat {}, phone {})",
+                        member.getId(), member.getFlatId(), member.getPhone());
                 boolean exists = billRepository.existsByFlatNumberAndBillMonth(member.getFlatId(), currentMonth);
                 if (exists) {
+                    log.info("Skip member {}: bill already exists for {}", member.getId(), currentMonth);
                     continue;
                 }
 
@@ -107,8 +113,11 @@ public class MonthlyBillScheduler {
                 bill.setBillMonth(currentMonth);
                 bill.setDescription("Auto-generated monthly maintenance bill");
                 billRepository.save(bill);
+                log.info("Bill created for member {} (billMonth {}, amount {})",
+                        member.getId(), currentMonth, bill.getAmount());
 
                 String sms = "HarmonyStay: Maintenance bill assigned for " + currentMonth + ". Please pay via the app.";
+                log.info("Attempting assignment SMS for member {} to phone {}", member.getId(), member.getPhone());
                 sendSmsSafe(member.getPhone(), sms);
             } catch (Exception e) {
                 log.error("Failed to generate bill for member {}: {}", member.getId(), e.getMessage());
@@ -136,6 +145,7 @@ public class MonthlyBillScheduler {
         List<Bill> unpaidBills;
         try {
             unpaidBills = billRepository.findByBillMonthAndStatus(currentMonth, "UNPAID");
+            log.info("Loaded {} unpaid bills for reminders in {}", unpaidBills.size(), currentMonth);
         } catch (Exception e) {
             log.error("Failed to load unpaid bills: {}", e.getMessage());
             return;
@@ -143,12 +153,15 @@ public class MonthlyBillScheduler {
 
         for (Bill bill : unpaidBills) {
             try {
+                log.info("Processing reminder for bill {} (userId {}, email {}, amount {})",
+                        bill.getId(), bill.getUserId(), bill.getUserEmail(), bill.getAmount());
                 Member member = bill.getUserId() != null
                         ? memberRepository.findById(bill.getUserId()).orElse(null)
                         : (bill.getUserEmail() != null
                                 ? memberRepository.findByEmail(bill.getUserEmail()).orElse(null)
                                 : null);
                 if (member == null || !StringUtils.hasText(member.getPhone())) {
+                    log.warn("Skip reminder for bill {}: member/phone missing", bill.getId());
                     continue;
                 }
 
@@ -158,6 +171,8 @@ public class MonthlyBillScheduler {
                         currentMonth,
                         bill.getAmount()
                 );
+                log.info("Attempting reminder SMS for bill {} to member {} phone {}",
+                        bill.getId(), member.getId(), member.getPhone());
                 sendSmsSafe(member.getPhone(), message);
             } catch (Exception e) {
                 log.warn("Reminder failed for bill {}: {}", bill.getId(), e.getMessage());
@@ -166,33 +181,40 @@ public class MonthlyBillScheduler {
     }
 
     private void sendSmsSafe(String rawPhone, String body) {
+        log.info("SMS step 1: entered sendSmsSafe (rawPhone={})", rawPhone);
         if (!StringUtils.hasText(rawPhone)) {
+            log.warn("SMS step 2: skip - phone missing/blank");
             return;
         }
         if (!twilioConfigured()) {
-            log.debug("Skipping SMS (Twilio not configured): {}", body);
+            log.warn("SMS step 2: skip - Twilio not configured (sidSet={}, tokenSet={}, fromSet={})",
+                    StringUtils.hasText(accountSid), StringUtils.hasText(authToken), StringUtils.hasText(fromPhone));
             return;
         }
+        log.info("SMS step 2: Twilio config present, initializing client if needed");
         ensureTwilio();
         if (!twilioInitialized.get()) {
+            log.error("SMS step 3: Twilio initialization not ready, aborting send");
             return;
         }
         try {
             String digits = rawPhone.replaceAll("\\D", "");
+            log.info("SMS step 4: normalized phone digits={}", digits);
             if (digits.length() < 10) {
                 log.warn("Invalid phone, skip SMS: {}", rawPhone);
                 return;
             }
             String to = digits.length() > 10 && digits.startsWith("91") ? "+" + digits : "+91" + digits;
+            log.info("SMS step 5: resolved destination={}, from={}", to, fromPhone.trim());
 
-            Message.creator(
+            Message twilioMessage = Message.creator(
                     new PhoneNumber(to),
                     new PhoneNumber(fromPhone.trim()),
                     body
             ).create();
-            log.info("SMS sent to {}", to);
+            log.info("SMS step 6: sent successfully to {} with sid={}", to, twilioMessage.getSid());
         } catch (Exception e) {
-            log.error("SMS failed: {}", e.getMessage());
+            log.error("SMS step 6: send failed - {} ({})", e.getMessage(), e.getClass().getSimpleName());
         }
     }
 }

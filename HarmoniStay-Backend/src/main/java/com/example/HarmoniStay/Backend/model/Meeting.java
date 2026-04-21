@@ -19,6 +19,7 @@ public class Meeting {
     @Temporal(TemporalType.TIMESTAMP)
     private Date scheduledDate;
     private String venue;
+    private String meetingLink;
     @Column(length = 8000)
     private String minutes;
     private String createdBy;
@@ -42,6 +43,9 @@ public class Meeting {
 
     public String getVenue() { return venue; }
     public void setVenue(String venue) { this.venue = venue; }
+
+    public String getMeetingLink() { return meetingLink; }
+    public void setMeetingLink(String meetingLink) { this.meetingLink = meetingLink; }
 
     public String getMinutes() { return minutes; }
     public void setMinutes(String minutes) { this.minutes = minutes; }
