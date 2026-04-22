@@ -99,6 +99,15 @@ public class MeetingService {
         return meetingRepository.findByType(type);
     }
 
+    public List<Meeting> getMemberMeetingsFeed() {
+        List<Meeting> upcoming = meetingRepository.findTop5ByScheduledDateGreaterThanEqualOrderByScheduledDateAsc(new Date());
+        if (upcoming != null && !upcoming.isEmpty()) {
+            return upcoming;
+        }
+        // Fallback: if no upcoming meetings exist, show latest past meetings.
+        return meetingRepository.findTop5ByOrderByScheduledDateDesc();
+    }
+
     public Optional<Meeting> getById(String id) {
         return meetingRepository.findById(id);
     }

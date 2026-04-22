@@ -57,10 +57,18 @@ public class AuthController {
     // ✅ Member Login
     @PostMapping("/member/login")
     public Map<String, Object> memberLogin(@RequestBody Map<String, String> data) {
-        //Map<String, String> flatMap = (Map<String, String>) data.get("Flat");
-        String flatNo = data.get("flatId");
+        String identifier = data.get("flatId");
+        if (identifier == null || identifier.isBlank()) {
+            identifier = data.get("flatNo");
+        }
+        if (identifier == null || identifier.isBlank()) {
+            identifier = data.get("flatNumber");
+        }
+        if (identifier == null || identifier.isBlank()) {
+            identifier = data.get("email");
+        }
         String password = (String) data.get("password");
-        Member member = authService.loginMember(flatNo, password);
+        Member member = authService.loginMember(identifier, password);
 
         Map<String, Object> response = new HashMap<>();
         if (member != null) {
@@ -69,6 +77,23 @@ public class AuthController {
         } else {
             response.put("status", "error");
             response.put("message", "Invalid credentials");
+        }
+        return response;
+    }
+
+    // ✅ Security Login
+    @PostMapping("/security/login")
+    public Map<String, Object> securityLogin(@RequestBody Map<String, String> data) {
+        String email = data.get("email");
+        String password = data.get("password");
+        Member security = authService.loginSecurity(email, password);
+        Map<String, Object> response = new HashMap<>();
+        if (security != null) {
+            response.put("status", "success");
+            response.put("user", security);
+        } else {
+            response.put("status", "error");
+            response.put("message", "Invalid security credentials");
         }
         return response;
     }

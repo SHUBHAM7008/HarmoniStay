@@ -6,6 +6,7 @@ import DualLoginPage from './pages/DualLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import MemberDashboard from './pages/MemberDashboard';
 import AccountantDashboard from './pages/AccountantDashboard';
+import SecurityDashboard from './pages/SecurityDashboard';
 import AdminMembers from './pages/AdminMembers';
 import AdminMemberDetails from './pages/AdminMemberDetails';
 import AssignFlat from './pages/AssignFlat';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/member/dashboard" element={<MemberDashboard />} />
           <Route path="/accountant/dashboard" element={<AccountantDashboard />} />
+          <Route path="/security/dashboard" element={<SecurityDashboard />} />
           <Route path="/admin/members" element={<AdminMembers />} />
           <Route path="/admin/member/:id" element={<AdminMemberDetails />} />
            <Route path="/admin/assignflat" element={<AssignFlat />} />

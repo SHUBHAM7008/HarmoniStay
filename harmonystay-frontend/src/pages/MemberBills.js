@@ -16,6 +16,21 @@ const MemberBills = () => {
   const [filterMonth, setFilterMonth] = useState("");
   const [filterYear, setFilterYear] = useState("");
 
+  const toComparableDate = (bill) => {
+    if (bill?.createdDate) return new Date(bill.createdDate);
+    if (bill?.billMonth) {
+      const parsed = new Date(`${bill.billMonth}-01`);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+    return new Date(0);
+  };
+
+  const formatDate = (value) => {
+    if (!value) return "-";
+    const d = new Date(value);
+    return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString();
+  };
+
   useEffect(() => {
     if (!user) return;
 
@@ -23,8 +38,8 @@ const MemberBills = () => {
       try {
        const res = await axios.get(`http://localhost:8888/api/bills/user/${user.id}`);
 
-        // Sort by billMonth descending (latest first)
-        const sortedBills = res.data.sort((a, b) => new Date(b.billMonth) - new Date(a.billMonth));
+        // Bill history latest first
+        const sortedBills = [...res.data].sort((a, b) => toComparableDate(b) - toComparableDate(a));
 
         // Set state
         setBills(sortedBills);
@@ -46,7 +61,8 @@ const MemberBills = () => {
     let filtered = bills.filter((bill) => {
       const matchesSearch = search
         ? bill.billMonth.toLowerCase().includes(search.toLowerCase()) ||
-          bill.status.toLowerCase().includes(search.toLowerCase())
+          bill.status.toLowerCase().includes(search.toLowerCase()) ||
+          (bill.transactionId || "").toLowerCase().includes(search.toLowerCase())
         : true;
       const matchesMonth = filterMonth ? bill.billMonth.toLowerCase().includes(filterMonth.toLowerCase()) : true;
       const matchesYear = filterYear ? bill.billMonth.includes(filterYear) : true;
@@ -233,7 +249,7 @@ const generateReceipt = (user, billMonth, amount, paymentId) => {
 
   return (
     <div className="member-bills-container">
-      <h2>My Bills</h2>
+      <h2>Bill History</h2>
 
       {/* Summary */}
       <div className="bill-summary">
@@ -273,51 +289,55 @@ const generateReceipt = (user, billMonth, amount, paymentId) => {
       {filteredBills.length === 0 ? (
         <p>No bills found.</p>
       ) : (
-        <table className="bills-table">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Amount (₹)</th>
-              <th>Status</th>
-              <th>Due Date</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-  {filteredBills.map((bill) => (
-    <tr key={bill.id || bill._id}>
-      <td>{bill.billMonth}</td>
-      <td>{bill.amount}</td>
-      <td>
-        <span
-          className={`status ${
-            bill.status.toLowerCase() === "paid" ? "paid" : "pending"
-          }`}
-        >
-          {bill.status}
-        </span>
-      </td>
-      <td>
-        {bill.dueDate ? new Date(bill.dueDate).toLocaleDateString() : "-"}
-      </td>
-      <td>
-        {/* Show Pay Now only for unpaid or pending bills */}
-        {bill.status.toLowerCase() === "unpaid" || bill.status.toLowerCase() === "pending" ? (
-          <button
-            className="pay-btn"
-            onClick={() => handlePayNow(bill.id || bill._id, bill.amount, bill.billMonth)}
-          >
-            Pay Now
-          </button>
-        ) : (
-          <span className="paid-label">Paid</span>
-        )}
-      </td>
-    </tr>
-  ))}
-</tbody>
-
-        </table>
+        <div className="table-wrap">
+          <table className="bills-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Bill Month</th>
+                <th>Created Date</th>
+                <th>Due Date</th>
+                <th>Amount (₹)</th>
+                <th>Status</th>
+                <th>Payment Ref</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredBills.map((bill, index) => (
+                <tr key={bill.id || bill._id}>
+                  <td>{index + 1}</td>
+                  <td>{bill.billMonth || "-"}</td>
+                  <td>{formatDate(bill.createdDate)}</td>
+                  <td>{formatDate(bill.dueDate)}</td>
+                  <td>{bill.amount}</td>
+                  <td>
+                    <span
+                      className={`status ${
+                        bill.status.toLowerCase() === "paid" ? "paid" : "pending"
+                      }`}
+                    >
+                      {bill.status}
+                    </span>
+                  </td>
+                  <td className="payment-ref">{bill.transactionId || "-"}</td>
+                  <td>
+                    {bill.status.toLowerCase() === "unpaid" || bill.status.toLowerCase() === "pending" ? (
+                      <button
+                        className="pay-btn"
+                        onClick={() => handlePayNow(bill.id || bill._id, bill.amount, bill.billMonth)}
+                      >
+                        Pay Now
+                      </button>
+                    ) : (
+                      <span className="paid-label">Paid</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

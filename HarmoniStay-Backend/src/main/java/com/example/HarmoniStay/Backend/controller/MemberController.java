@@ -1,5 +1,6 @@
 package com.example.HarmoniStay.Backend.controller;
 import com.example.HarmoniStay.Backend.model.Flat;
+import com.example.HarmoniStay.Backend.model.FlatOwnershipHistory;
 import com.example.HarmoniStay.Backend.model.Member;
 import com.example.HarmoniStay.Backend.repository.MemberRepository;
 import com.example.HarmoniStay.Backend.service.FlatService;
@@ -65,6 +66,11 @@ public class MemberController {
     @GetMapping("/{email}")
     public Optional<Member> getMemberById(@PathVariable String email) {
         return memberService.getMemberByEmail(email);
+    }
+
+    @GetMapping("/{memberId}/ownership-history")
+    public List<FlatOwnershipHistory> getMemberOwnershipHistory(@PathVariable String memberId) {
+        return flatService.getOwnershipHistoryByMember(memberId);
     }
 
     // PUT /api/members/{id}

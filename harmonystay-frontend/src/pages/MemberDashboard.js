@@ -8,6 +8,7 @@ import MemberComplaints from "./MemberComplaints";
 import MemberMeetings from "./MemberMeetings";
 import MemberFacilities from "./MemberFacilities";
 import MemberDocuments from "./MemberDocuments";
+import { FaBolt, FaFileInvoiceDollar, FaShieldAlt, FaTools, FaThLarge } from "react-icons/fa";
 import { FaUserCircle, FaSignOutAlt, FaHome, FaBell, FaCar, FaWrench, FaExclamationCircle, FaCalendarAlt, FaSwimmingPool, FaFileAlt } from "react-icons/fa";
 import "./MemberDashboard.css";
 
@@ -15,7 +16,18 @@ const MemberDashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const [notices, setNotices] = useState([]);
   const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [pendingVisitorRequest, setPendingVisitorRequest] = useState(null);
+  const [responding, setResponding] = useState(false);
   const navigate = useNavigate();
+
+  const getCategoryIcon = (value) => {
+    const key = String(value || "").toLowerCase();
+    if (key === "plumbing") return <FaTools />;
+    if (key === "electrical") return <FaBolt />;
+    if (key === "security") return <FaShieldAlt />;
+    if (key === "billing") return <FaFileInvoiceDollar />;
+    return <FaThLarge />;
+  };
 
   useEffect(() => {
     if (!user || user.role !== "member") navigate("/");
@@ -34,6 +46,48 @@ const MemberDashboard = () => {
     fetchNotices();
   }, []);
 
+  useEffect(() => {
+    if (!user?.id || user.role !== "member") return undefined;
+
+    const fetchPendingRequests = async () => {
+      try {
+        const res = await fetch(`http://localhost:8888/api/visitor-requests/member/${user.id}/pending`);
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setPendingVisitorRequest(data[0]);
+        } else {
+          setPendingVisitorRequest(null);
+        }
+      } catch (err) {
+        console.error("Error fetching visitor requests:", err);
+      }
+    };
+
+    fetchPendingRequests();
+    const intervalId = setInterval(fetchPendingRequests, 10000);
+    return () => clearInterval(intervalId);
+  }, [user]);
+
+  const respondVisitorRequest = async (status) => {
+    if (!pendingVisitorRequest || !user?.id) return;
+    setResponding(true);
+    try {
+      await fetch(
+        `http://localhost:8888/api/visitor-requests/${pendingVisitorRequest.id}/respond?memberId=${user.id}&status=${status}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ responseNote: status === "ACCEPTED" ? "Allowed" : "Not allowed" }),
+        }
+      );
+      setPendingVisitorRequest(null);
+    } catch (err) {
+      console.error("Failed responding request:", err);
+    } finally {
+      setResponding(false);
+    }
+  };
+
   if (!user) return <div className="text-center p-6 text-gray-500">Loading...</div>;
 
   const handleLogout = () => {
@@ -43,6 +97,35 @@ const MemberDashboard = () => {
 
   return (
     <div className="member-dashboard">
+      {pendingVisitorRequest && (
+        <div className="visitor-modal-overlay">
+          <div className="visitor-modal" role="dialog" aria-modal="true">
+            <h3>Visitor Request</h3>
+            <p><strong>Member:</strong> {pendingVisitorRequest.memberName}</p>
+            <p><strong>Purpose:</strong> {pendingVisitorRequest.purpose}</p>
+            <div className="visitor-category">
+              {getCategoryIcon(pendingVisitorRequest.category)}
+              <span>{pendingVisitorRequest.category || "etc"}</span>
+            </div>
+            <div className="visitor-modal-actions">
+              <button
+                disabled={responding}
+                className="accept-btn"
+                onClick={() => respondVisitorRequest("ACCEPTED")}
+              >
+                Accept
+              </button>
+              <button
+                disabled={responding}
+                className="reject-btn"
+                onClick={() => respondVisitorRequest("REJECTED")}
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">

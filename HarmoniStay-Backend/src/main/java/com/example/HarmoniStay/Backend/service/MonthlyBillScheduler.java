@@ -180,6 +180,49 @@ public class MonthlyBillScheduler {
         }
     }
 
+    /**
+     * Overdue reminders: daily at 09:30 IST.
+     * Sends SMS once for bills unpaid after due date.
+     */
+    @Scheduled(cron = "0 30 9 * * ?", zone = "Asia/Kolkata")
+    public void sendOverdueDueDateAlerts() {
+        LocalDate today = LocalDate.now();
+        List<Bill> overdueBills;
+        try {
+            overdueBills = billRepository.findPendingOverdueBillsForSms("UNPAID", today);
+            log.info("Loaded {} overdue unpaid bills for due-date alerts (today={})", overdueBills.size(), today);
+        } catch (Exception e) {
+            log.error("Failed loading overdue due-date alerts: {}", e.getMessage());
+            return;
+        }
+
+        for (Bill bill : overdueBills) {
+            try {
+                Member member = bill.getUserId() != null
+                        ? memberRepository.findById(bill.getUserId()).orElse(null)
+                        : (bill.getUserEmail() != null
+                        ? memberRepository.findByEmail(bill.getUserEmail()).orElse(null)
+                        : null);
+                if (member == null || !StringUtils.hasText(member.getPhone())) {
+                    log.warn("Skip overdue alert for bill {}: member/phone missing", bill.getId());
+                    continue;
+                }
+
+                String message = String.format(
+                        "HarmonyStay: Your bill for flat %s was due on %s and is still unpaid. Please pay immediately.",
+                        bill.getFlatNumber() != null ? bill.getFlatNumber() : "N/A",
+                        bill.getDueDate() != null ? bill.getDueDate().toString() : "N/A"
+                );
+                sendSmsSafe(member.getPhone(), message);
+                bill.setOverdueSmsSent(true);
+                billRepository.save(bill);
+                log.info("Overdue due-date SMS sent for bill {} to member {}", bill.getId(), member.getId());
+            } catch (Exception e) {
+                log.warn("Overdue due-date SMS failed for bill {}: {}", bill.getId(), e.getMessage());
+            }
+        }
+    }
+
     private void sendSmsSafe(String rawPhone, String body) {
         log.info("SMS step 1: entered sendSmsSafe (rawPhone={})", rawPhone);
         if (!StringUtils.hasText(rawPhone)) {

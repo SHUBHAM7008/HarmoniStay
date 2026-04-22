@@ -135,3 +135,69 @@
   color: var(--text-light);
   font-size: 0.85rem;
 }
+
+.visitor-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visitor-modal {
+  width: min(460px, 92vw);
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.25);
+}
+
+.visitor-modal h3 {
+  margin: 0 0 10px 0;
+  color: #111827;
+}
+
+.visitor-modal p {
+  margin: 6px 0;
+  color: #374151;
+}
+
+.visitor-category {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.visitor-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.visitor-modal-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.visitor-modal-actions .accept-btn {
+  background: #16a34a;
+}
+
+.visitor-modal-actions .reject-btn {
+  background: #dc2626;
+}

@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FlatRepository extends JpaRepository<Flat, String> {
     Optional<Flat> findByFlatNumber(String flatNumber);
+    Optional<Flat> findByOwnerId(String ownerId);
 }

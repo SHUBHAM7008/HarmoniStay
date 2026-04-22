@@ -3,6 +3,7 @@ import com.example.HarmoniStay.Backend.model.Member;
 import com.example.HarmoniStay.Backend.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,16 +14,28 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
+    @Autowired
+    private FlatService flatService;
+
     public List<Member> getAllMembers() {
         return memberRepository.findAll();
     }
 
+    @Transactional
     public Member addMember(Member member) {
         if (member.getRole() != null && "ACCOUNTANT".equalsIgnoreCase(member.getRole())) {
             throw new IllegalArgumentException("Accountants are not stored as members");
         }
         member.setId(null);
-        return memberRepository.save(member);
+        Member saved = memberRepository.save(member);
+        if (saved.getFlatId() != null && !saved.getFlatId().isBlank()) {
+            try {
+                flatService.assignFlatToMember(saved.getFlatId(), saved.getId());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to auto-assign flat while creating member", e);
+            }
+        }
+        return saved;
     }
 
     public void deleteMember(String id) {
@@ -33,9 +46,11 @@ public class MemberService {
         return memberRepository.findByEmail(id);
     }
 
+    @Transactional
     public Member updateMember(String id, Member updatedMember) {
         Member existing = memberRepository.findByEmail(id)
                 .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+        String previousFlatId = existing.getFlatId();
 
         // Update only if the new value is not null
         if (updatedMember.getFirstName() != null) existing.setFirstName(updatedMember.getFirstName());
@@ -54,7 +69,24 @@ public class MemberService {
         if (updatedMember.getDateOfJoining() != null) existing.setDateOfJoining(updatedMember.getDateOfJoining());
         if (updatedMember.getEmergencyContact() != null) existing.setEmergencyContact(updatedMember.getEmergencyContact());
         if (updatedMember.getFamilyMembers() != null) existing.setFamilyMembers(updatedMember.getFamilyMembers());
-        return memberRepository.save(existing);
+        Member saved = memberRepository.save(existing);
+
+        String currentFlatId = saved.getFlatId();
+        boolean flatChanged = currentFlatId != null && !currentFlatId.isBlank() &&
+                (previousFlatId == null || !previousFlatId.equals(currentFlatId));
+
+        if (flatChanged) {
+            try {
+                flatService.assignFlatToMember(currentFlatId, saved.getId());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to auto-assign flat while updating member", e);
+            }
+        } else if ((currentFlatId == null || currentFlatId.isBlank()) &&
+                previousFlatId != null && !previousFlatId.isBlank()) {
+            flatService.clearOwnershipForMember(saved.getId());
+        }
+
+        return saved;
     }
 }
 

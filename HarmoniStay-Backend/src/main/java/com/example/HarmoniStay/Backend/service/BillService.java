@@ -44,6 +44,9 @@ public class BillService {
 
         bill.setUserId(member.getId());
         bill.setFlatId(flat.getId()); // store
+        if (bill.getStatus() == null || bill.getStatus().isBlank()) {
+            bill.setStatus("UNPAID");
+        }
 
         return billRepository.save(bill);
     }
@@ -51,6 +54,9 @@ public class BillService {
 
     // Add new bill
     public Bill addBill(Bill bill) {
+        if (bill.getStatus() == null || bill.getStatus().isBlank()) {
+            bill.setStatus("UNPAID");
+        }
         return billRepository.save(bill);
     }
 
@@ -83,6 +89,7 @@ public class BillService {
         // 2. Update only non-null fields
         existingBill.setStatus("PAID");
         existingBill.setTransactionId(transactionId);
+        existingBill.setOverdueSmsSent(true);
 
         // 3. Save updated bill
         System.out.print("Updated bill :"+existingBill);

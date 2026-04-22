@@ -3,9 +3,7 @@ package com.example.HarmoniStay.Backend.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "flats")
@@ -38,31 +36,6 @@ public class Flat {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "flat_ownership_history", joinColumns = @JoinColumn(name = "flat_id"))
-    private List<OwnershipHistory> ownershipHistory = new ArrayList<>();
-
-    @Embeddable
-    public static class OwnershipHistory implements java.io.Serializable {
-        private String previousOwnerId;
-        private String newOwnerId;
-        @Temporal(TemporalType.TIMESTAMP)
-        private Date transferDate;
-        private String remarks;
-
-        public String getPreviousOwnerId() { return previousOwnerId; }
-        public void setPreviousOwnerId(String previousOwnerId) { this.previousOwnerId = previousOwnerId; }
-
-        public String getNewOwnerId() { return newOwnerId; }
-        public void setNewOwnerId(String newOwnerId) { this.newOwnerId = newOwnerId; }
-
-        public Date getTransferDate() { return transferDate; }
-        public void setTransferDate(Date transferDate) { this.transferDate = transferDate; }
-
-        public String getRemarks() { return remarks; }
-        public void setRemarks(String remarks) { this.remarks = remarks; }
-    }
-
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
@@ -94,11 +67,6 @@ public class Flat {
 
     public Status getStatus() { return status; }
     public void setStatus(Status status) { this.status = status; }
-
-    public List<OwnershipHistory> getOwnershipHistory() { return ownershipHistory; }
-    public void setOwnershipHistory(List<OwnershipHistory> ownershipHistory) {
-        this.ownershipHistory = ownershipHistory != null ? ownershipHistory : new ArrayList<>();
-    }
 
     public Date getCreatedAt() { return createdAt; }
     public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }

@@ -1,6 +1,7 @@
 package com.example.HarmoniStay.Backend.controller;
 
 import com.example.HarmoniStay.Backend.model.Flat;
+import com.example.HarmoniStay.Backend.model.FlatOwnershipHistory;
 import com.example.HarmoniStay.Backend.model.Member;
 import com.example.HarmoniStay.Backend.service.FlatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class FlatController {
     @GetMapping("/{id}")
     public Flat getByFlatId(@PathVariable String id) {
         return flatService.getFlatbyId(id);
+    }
+
+    @GetMapping("/{flatId}/ownership-history")
+    public List<FlatOwnershipHistory> getFlatOwnershipHistory(@PathVariable String flatId) {
+        return flatService.getOwnershipHistoryByFlat(flatId);
     }
 
 

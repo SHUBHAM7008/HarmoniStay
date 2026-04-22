@@ -34,6 +34,9 @@ export const AuthProvider = ({ children }) => {
       } else if (role === "member") {
         url = "http://localhost:8888/api/auth/member/login";
         body = { flatId: email, password }; // for members, login via flatNo
+      } else if (role === "security") {
+        url = "http://localhost:8888/api/auth/security/login";
+        body = { email, password };
       } else {
         return false;
       }

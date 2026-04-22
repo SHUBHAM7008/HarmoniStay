@@ -26,6 +26,11 @@ public class MeetingController {
         return meetingService.getMeetingsByType(type);
     }
 
+    @GetMapping("/member-feed")
+    public List<Meeting> getMemberFeed() {
+        return meetingService.getMemberMeetingsFeed();
+    }
+
     @GetMapping("/{id}")
     public Optional<Meeting> getById(@PathVariable String id) {
         return meetingService.getById(id);

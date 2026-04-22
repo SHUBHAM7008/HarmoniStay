@@ -14,14 +14,16 @@ const DualLoginPage = () => {
   const [adminPassword, setAdminPassword] = useState('');
   const [accountantEmail, setAccountantEmail] = useState('');
   const [accountantPassword, setAccountantPassword] = useState('');
+  const [securityEmail, setSecurityEmail] = useState('');
+  const [securityPassword, setSecurityPassword] = useState('');
   const [error, setError] = useState('');
 
   // Member login (mock)
-  const handleMemberSubmit = (e) => {
+  const handleMemberSubmit = async (e) => {
     e.preventDefault();
-    const success = login(memberFlatNo, memberPassword, 'member');
+    const success = await login(memberFlatNo, memberPassword, 'member');
     
-    if (!success) { console.log("hiiiiii");
+    if (!success) {
       setError('Invalid member credentials');
     }
     else {
@@ -53,6 +55,17 @@ const DualLoginPage = () => {
     }
   };
 
+  const handleSecuritySubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    const success = await login(securityEmail, securityPassword, 'security');
+    if (success) {
+      navigate('/security/dashboard');
+    } else {
+      setError('Invalid security credentials');
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -74,6 +87,12 @@ const DualLoginPage = () => {
           onClick={() => { setActiveTab('accountant'); setError(''); }}
         >
           Accountant
+        </button>
+        <button
+          className={activeTab === 'security' ? 'active' : ''}
+          onClick={() => { setActiveTab('security'); setError(''); }}
+        >
+          Security
         </button>
       </div>
 
@@ -135,6 +154,27 @@ const DualLoginPage = () => {
               placeholder="Password"
               value={accountantPassword}
               onChange={e => setAccountantPassword(e.target.value)}
+              required
+            />
+            <button type="submit">Login</button>
+          </form>
+        )}
+
+        {activeTab === 'security' && (
+          <form className="login-form" onSubmit={handleSecuritySubmit}>
+            <h2>Security Login</h2>
+            <input
+              type="email"
+              placeholder="Email"
+              value={securityEmail}
+              onChange={e => setSecurityEmail(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={securityPassword}
+              onChange={e => setSecurityPassword(e.target.value)}
               required
             />
             <button type="submit">Login</button>

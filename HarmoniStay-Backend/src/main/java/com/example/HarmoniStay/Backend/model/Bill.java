@@ -2,6 +2,8 @@ package com.example.HarmoniStay.Backend.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "bills")
 public class Bill {
@@ -28,8 +30,28 @@ public class Bill {
     private String flatNumber;
 
     private String transactionId;
+    private LocalDate createdDate;
+    private LocalDate dueDate;
+    // Keep nullable for safe schema migration on existing rows.
+    private Boolean overdueSmsSent;
 
     public Bill() {}
+
+    @PrePersist
+    void onCreate() {
+        if (this.createdDate == null) {
+            this.createdDate = LocalDate.now();
+        }
+        if (this.dueDate == null) {
+            this.dueDate = this.createdDate.plusDays(4);
+        }
+        if (this.status == null || this.status.isBlank()) {
+            this.status = "UNPAID";
+        }
+        if (this.overdueSmsSent == null) {
+            this.overdueSmsSent = false;
+        }
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
@@ -60,6 +82,15 @@ public class Bill {
 
     public String getTransactionId() { return transactionId; }
     public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+
+    public LocalDate getCreatedDate() { return createdDate; }
+    public void setCreatedDate(LocalDate createdDate) { this.createdDate = createdDate; }
+
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
+
+    public boolean isOverdueSmsSent() { return Boolean.TRUE.equals(overdueSmsSent); }
+    public void setOverdueSmsSent(Boolean overdueSmsSent) { this.overdueSmsSent = overdueSmsSent; }
 
     @Override
     public String toString() {
