@@ -643,6 +643,104 @@
   color: var(--secondary);
 }
 
+.panel--operations {
+  display: grid;
+  gap: 1rem;
+}
+
+.operations-board__top,
+.operations-board__toolbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+}
+
+.operations-board__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.operations-board__tabs button,
+.operations-board__link {
+  padding: 0.78rem 1rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.operations-board__tabs button {
+  background: rgba(23, 50, 77, 0.08);
+  color: var(--text-medium);
+}
+
+.operations-board__tabs button.is-active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #fff;
+}
+
+.operations-board__toolbar input {
+  flex: 1;
+  min-width: 240px;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--text-dark);
+}
+
+.operations-board__link {
+  background: rgba(210, 155, 67, 0.16);
+  color: var(--primary-dark);
+}
+
+.operations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.operations-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.05rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(23, 50, 77, 0.08);
+}
+
+.operations-list__metric {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 92px;
+  padding: 0.42rem 0.8rem;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.operations-list__metric--warn {
+  background: rgba(207, 139, 34, 0.16);
+  color: var(--warning);
+}
+
+.operations-list__metric--issue {
+  background: rgba(191, 90, 61, 0.14);
+  color: var(--danger);
+}
+
+.operations-list__metric--ok {
+  background: rgba(46, 125, 87, 0.14);
+  color: var(--success);
+}
+
 .admin-dashboard--dark .admin-sidebar {
   background: linear-gradient(180deg, rgba(6, 15, 24, 0.96) 0%, rgba(11, 25, 40, 0.94) 100%);
 }
@@ -693,6 +791,19 @@
 .admin-dashboard--dark .sparkline,
 .admin-dashboard--dark .activity-list li {
   border-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-dashboard--dark .operations-board__tabs button,
+.admin-dashboard--dark .operations-board__toolbar input,
+.admin-dashboard--dark .operations-board__link,
+.admin-dashboard--dark .operations-list li {
+  background: rgba(11, 27, 41, 0.76);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #eef3f7;
+}
+
+.admin-dashboard--dark .operations-board__tabs button.is-active {
+  background: linear-gradient(135deg, rgba(210, 155, 67, 0.26) 0%, rgba(70, 165, 172, 0.24) 100%);
 }
 
 @media (max-width: 1160px) {
@@ -752,6 +863,12 @@
 
   .quick-actions {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .operations-board__top,
+  .operations-board__toolbar {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 

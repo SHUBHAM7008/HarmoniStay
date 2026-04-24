@@ -6,6 +6,7 @@ import {
   FaBell,
   FaBolt,
   FaCalendarCheck,
+  FaExclamationCircle,
   FaFileInvoiceDollar,
   FaRupeeSign,
   FaSwimmingPool,
@@ -46,6 +47,14 @@ const formatChartLabel = (monthKey) => {
   return String(monthKey).replace(/_/g, " ");
 };
 
+const formatLabel = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
 const AdminDashboardHome = ({ user, onNavigate }) => {
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
@@ -56,6 +65,8 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
   const [facilities, setFacilities] = useState([]);
   const [notices, setNotices] = useState([]);
   const [bills, setBills] = useState([]);
+  const [actionView, setActionView] = useState("dues");
+  const [actionSearch, setActionSearch] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -172,13 +183,13 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
     [bills]
   );
 
-  const recentNotices = useMemo(
+  const sortedNotices = useMemo(
     () =>
-      [...notices]
-        .sort((left, right) => new Date(right.date || 0) - new Date(left.date || 0))
-        .slice(0, 3),
+      [...notices].sort((left, right) => new Date(right.date || 0) - new Date(left.date || 0)),
     [notices]
   );
+
+  const recentNotices = useMemo(() => sortedNotices.slice(0, 3), [sortedNotices]);
 
   const recentBookings = useMemo(
     () =>
@@ -190,6 +201,64 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
         .slice(0, 5),
     [facilities]
   );
+
+  const pendingBills = useMemo(
+    () =>
+      [...bills]
+        .filter((item) => String(item.status || "").toUpperCase() !== "PAID")
+        .sort((left, right) => (Number(right.amount) || 0) - (Number(left.amount) || 0)),
+    [bills]
+  );
+
+  const complaintQueue = useMemo(
+    () =>
+      [...complaints]
+        .filter((item) => String(item.status || "").toUpperCase() !== "RESOLVED")
+        .sort((left, right) => new Date(right.createdAt || 0) - new Date(left.createdAt || 0)),
+    [complaints]
+  );
+
+  const bookingQueue = useMemo(
+    () =>
+      [...facilities]
+        .filter((item) => String(item.status || "").toUpperCase() === "BOOKED")
+        .sort((left, right) => new Date(left.bookingDate || 0) - new Date(right.bookingDate || 0)),
+    [facilities]
+  );
+
+  const filteredActionItems = useMemo(() => {
+    const query = actionSearch.trim().toLowerCase();
+    const source =
+      actionView === "dues"
+        ? pendingBills
+        : actionView === "complaints"
+          ? complaintQueue
+          : bookingQueue;
+
+    if (!query) {
+      return source.slice(0, 6);
+    }
+
+    return source
+      .filter((item) => {
+        if (actionView === "dues") {
+          return `${item.flatNumber} ${item.billMonth} ${item.amount}`
+            .toLowerCase()
+            .includes(query);
+        }
+
+        if (actionView === "complaints") {
+          return `${item.title} ${item.category} ${item.flatId}`
+            .toLowerCase()
+            .includes(query);
+        }
+
+        return `${item.name} ${item.flatId} ${item.timeSlot}`
+          .toLowerCase()
+          .includes(query);
+      })
+      .slice(0, 6);
+  }, [actionSearch, actionView, pendingBills, complaintQueue, bookingQueue]);
 
   const collected = summary?.collected ?? 0;
   const dues = summary?.dues ?? 0;
@@ -264,7 +333,9 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
                 </div>
               ))
             ) : (
-              <p className="sparkline__empty">Monthly collection will appear here once payments are recorded.</p>
+              <p className="sparkline__empty">
+                Monthly collection will appear here once payments are recorded.
+              </p>
             )}
           </div>
         </div>
@@ -301,6 +372,136 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
       </section>
 
       <section className="admin-home__row">
+        <div className="panel panel--operations">
+          <div className="operations-board__top">
+            <div>
+              <p className="balance-card__eyebrow">Action center</p>
+              <h3 className="panel__title">Operations board</h3>
+            </div>
+            <div className="operations-board__tabs">
+              <button
+                type="button"
+                className={actionView === "dues" ? "is-active" : ""}
+                onClick={() => setActionView("dues")}
+              >
+                Dues ({pendingBills.length})
+              </button>
+              <button
+                type="button"
+                className={actionView === "complaints" ? "is-active" : ""}
+                onClick={() => setActionView("complaints")}
+              >
+                Complaints ({complaintQueue.length})
+              </button>
+              <button
+                type="button"
+                className={actionView === "bookings" ? "is-active" : ""}
+                onClick={() => setActionView("bookings")}
+              >
+                Bookings ({bookingQueue.length})
+              </button>
+            </div>
+          </div>
+
+          <div className="operations-board__toolbar">
+            <input
+              type="search"
+              value={actionSearch}
+              onChange={(event) => setActionSearch(event.target.value)}
+              placeholder={
+                actionView === "dues"
+                  ? "Search by flat or month"
+                  : actionView === "complaints"
+                    ? "Search by issue or category"
+                    : "Search by facility or flat"
+              }
+            />
+            <button
+              type="button"
+              className="operations-board__link"
+              onClick={() =>
+                onNavigate(
+                  actionView === "dues"
+                    ? "maintenance"
+                    : actionView === "complaints"
+                      ? "complaints"
+                      : "facilities"
+                )
+              }
+            >
+              Open full section
+            </button>
+          </div>
+
+          {filteredActionItems.length === 0 ? (
+            <p className="panel__empty">
+              {actionView === "dues"
+                ? "No pending dues matched the current search."
+                : actionView === "complaints"
+                  ? "No active complaints matched the current search."
+                  : "No bookings matched the current search."}
+            </p>
+          ) : (
+            <ul className="operations-list">
+              {filteredActionItems.map((item) => (
+                <li key={item.id}>
+                  {actionView === "dues" && (
+                    <>
+                      <div>
+                        <strong>Flat {item.flatNumber || "Not assigned"}</strong>
+                        <span className="activity-list__meta">
+                          {item.billMonth || "Billing period unavailable"} | Due{" "}
+                          {item.dueDate
+                            ? new Date(item.dueDate).toLocaleDateString("en-IN")
+                            : "not set"}
+                        </span>
+                      </div>
+                      <span className="operations-list__metric operations-list__metric--warn">
+                        {formatINR(item.amount)}
+                      </span>
+                    </>
+                  )}
+
+                  {actionView === "complaints" && (
+                    <>
+                      <div>
+                        <strong>{item.title || "Complaint"}</strong>
+                        <span className="activity-list__meta">
+                          Flat {item.flatId || "N/A"} | {formatLabel(item.category)} |{" "}
+                          {formatLabel(item.status)}
+                        </span>
+                      </div>
+                      <span className="operations-list__metric operations-list__metric--issue">
+                        <FaExclamationCircle aria-hidden />
+                        Active
+                      </span>
+                    </>
+                  )}
+
+                  {actionView === "bookings" && (
+                    <>
+                      <div>
+                        <strong>{formatLabel(item.name) || "Facility"}</strong>
+                        <span className="activity-list__meta">
+                          {item.bookingDate
+                            ? new Date(item.bookingDate).toLocaleDateString("en-IN")
+                            : "Date unavailable"}{" "}
+                          | {item.timeSlot || "Slot pending"} | Flat {item.flatId || "N/A"}
+                        </span>
+                      </div>
+                      <span className="operations-list__metric operations-list__metric--ok">
+                        Booked
+                      </span>
+                    </>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+
+      <section className="admin-home__row">
         <div className="panel panel--chart">
           <h3 className="panel__title">Monthly collection</h3>
           <div className="bar-chart">
@@ -317,7 +518,9 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
                 </div>
               ))
             ) : (
-              <p className="panel__empty">Record bill payments to unlock monthly trend reporting.</p>
+              <p className="panel__empty">
+                Record bill payments to unlock monthly trend reporting.
+              </p>
             )}
           </div>
         </div>
@@ -337,7 +540,9 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
               <li key={bill.id}>
                 <div>
                   <strong>Flat {bill.flatNumber || "Not assigned"}</strong>
-                  <span className="activity-list__meta">{bill.billMonth || "Billing period unavailable"}</span>
+                  <span className="activity-list__meta">
+                    {bill.billMonth || "Billing period unavailable"}
+                  </span>
                 </div>
                 <span className="activity-list__amt activity-list__amt--pos">
                   +{formatINR(bill.amount)}
@@ -361,7 +566,9 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
                 <div>
                   <strong>{notice.title}</strong>
                   <span className="activity-list__meta">
-                    {notice.date ? new Date(notice.date).toLocaleDateString("en-IN") : "Date unavailable"}
+                    {notice.date
+                      ? new Date(notice.date).toLocaleDateString("en-IN")
+                      : "Date unavailable"}
                   </span>
                 </div>
               </li>

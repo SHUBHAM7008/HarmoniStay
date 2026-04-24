@@ -61,6 +61,8 @@ const MemberDashboard = () => {
   const [bills, setBills] = useState([]);
   const [overviewLoading, setOverviewLoading] = useState(true);
   const [activeMenu, setActiveMenu] = useState("dashboard");
+  const [workbenchView, setWorkbenchView] = useState("dues");
+  const [noticeQuery, setNoticeQuery] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -121,9 +123,11 @@ const MemberDashboard = () => {
   const activeSection =
     menuItems.find((item) => item.id === activeMenu) || menuItems[0];
 
-  const latestNotices = [...notices]
-    .sort((left, right) => new Date(right.date || 0) - new Date(left.date || 0))
-    .slice(0, 3);
+  const sortedNotices = [...notices].sort(
+    (left, right) => new Date(right.date || 0) - new Date(left.date || 0)
+  );
+
+  const latestNotices = sortedNotices.slice(0, 3);
 
   const pendingBills = bills.filter(
     (bill) => String(bill.status || "").toUpperCase() !== "PAID"
@@ -134,9 +138,18 @@ const MemberDashboard = () => {
     0
   );
 
-  const nextDueBill = [...pendingBills].sort(
-    (left, right) => new Date(left.dueDate || 0) - new Date(right.dueDate || 0)
-  )[0];
+  const dueSoonBills = [...pendingBills]
+    .sort((left, right) => new Date(left.dueDate || 0) - new Date(right.dueDate || 0))
+    .slice(0, 5);
+
+  const nextDueBill = dueSoonBills[0];
+  const paidBillCount = bills.filter(
+    (bill) => String(bill.status || "").toUpperCase() === "PAID"
+  ).length;
+
+  const filteredWorkbenchNotices = sortedNotices.filter((notice) =>
+    `${notice.title} ${notice.description}`.toLowerCase().includes(noticeQuery.trim().toLowerCase())
+  );
 
   return (
     <div className="member-dashboard member-dashboard--modern">
@@ -294,7 +307,9 @@ const MemberDashboard = () => {
 
                   <ul className="member-checklist">
                     <li>
-                      <strong>{pendingBills.length > 0 ? "Review pending dues" : "Bills are up to date"}</strong>
+                      <strong>
+                        {pendingBills.length > 0 ? "Review pending dues" : "Bills are up to date"}
+                      </strong>
                       <span>
                         {pendingBills.length > 0
                           ? `${pendingBills.length} maintenance item(s) still need payment.`
@@ -311,9 +326,127 @@ const MemberDashboard = () => {
                     </li>
                     <li>
                       <strong>Keep profile details accurate</strong>
-                      <span>Review your flat information and security settings in the profile section.</span>
+                      <span>
+                        Review your flat information and security settings in the profile section.
+                      </span>
                     </li>
                   </ul>
+                </article>
+              </section>
+
+              <section className="member-workbench">
+                <article className="member-panel member-panel--workbench">
+                  <div className="member-workbench__top">
+                    <div>
+                      <p className="member-panel__eyebrow">Resident workbench</p>
+                      <h3>Quick tools</h3>
+                    </div>
+                    <div className="member-workbench__tabs">
+                      <button
+                        type="button"
+                        className={workbenchView === "dues" ? "is-active" : ""}
+                        onClick={() => setWorkbenchView("dues")}
+                      >
+                        Due tracker
+                      </button>
+                      <button
+                        type="button"
+                        className={workbenchView === "notices" ? "is-active" : ""}
+                        onClick={() => setWorkbenchView("notices")}
+                      >
+                        Notice search
+                      </button>
+                    </div>
+                  </div>
+
+                  {workbenchView === "dues" ? (
+                    <>
+                      <div className="member-workbench__summary">
+                        <article>
+                          <span>Pending items</span>
+                          <strong>{pendingBills.length}</strong>
+                        </article>
+                        <article>
+                          <span>Amount due</span>
+                          <strong>{formatINR(totalDue)}</strong>
+                        </article>
+                        <article>
+                          <span>Paid history</span>
+                          <strong>{paidBillCount}</strong>
+                        </article>
+                      </div>
+
+                      {dueSoonBills.length === 0 ? (
+                        <p className="member-panel__empty">
+                          No unpaid bills are visible right now.
+                        </p>
+                      ) : (
+                        <ul className="member-task-list">
+                          {dueSoonBills.map((bill) => (
+                            <li key={bill.id || bill._id}>
+                              <div>
+                                <strong>{bill.billMonth || "Billing period unavailable"}</strong>
+                                <span>
+                                  Due{" "}
+                                  {bill.dueDate
+                                    ? new Date(bill.dueDate).toLocaleDateString("en-IN")
+                                    : "not scheduled"}
+                                </span>
+                              </div>
+                              <em>{formatINR(bill.amount)}</em>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <button
+                        type="button"
+                        className="member-workbench__cta"
+                        onClick={() => setActiveMenu("maintenance")}
+                      >
+                        Open maintenance bills
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="member-workbench__search">
+                        <input
+                          type="search"
+                          value={noticeQuery}
+                          onChange={(event) => setNoticeQuery(event.target.value)}
+                          placeholder="Search notices by title or description"
+                        />
+                      </div>
+
+                      {filteredWorkbenchNotices.length === 0 ? (
+                        <p className="member-panel__empty">
+                          No notices matched your search.
+                        </p>
+                      ) : (
+                        <ul className="member-notice-list member-notice-list--workbench">
+                          {filteredWorkbenchNotices.slice(0, 5).map((notice) => (
+                            <li key={notice.id}>
+                              <strong>{notice.title}</strong>
+                              <p>{notice.description}</p>
+                              <span>
+                                {notice.date
+                                  ? new Date(notice.date).toLocaleDateString("en-IN")
+                                  : "Date unavailable"}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      <button
+                        type="button"
+                        className="member-workbench__cta"
+                        onClick={() => setActiveMenu("notice")}
+                      >
+                        Open full notice board
+                      </button>
+                    </>
+                  )}
                 </article>
               </section>
             </div>
@@ -339,19 +472,17 @@ const MemberDashboard = () => {
                 <p className="member-panel__empty">No notices are available at the moment.</p>
               ) : (
                 <ul className="member-notice-list member-notice-list--full">
-                  {[...notices]
-                    .sort((left, right) => new Date(right.date || 0) - new Date(left.date || 0))
-                    .map((notice) => (
-                      <li key={notice.id}>
-                        <strong>{notice.title}</strong>
-                        <p>{notice.description}</p>
-                        <span>
-                          {notice.date
-                            ? new Date(notice.date).toLocaleString("en-IN")
-                            : "Date unavailable"}
-                        </span>
-                      </li>
-                    ))}
+                  {sortedNotices.map((notice) => (
+                    <li key={notice.id}>
+                      <strong>{notice.title}</strong>
+                      <p>{notice.description}</p>
+                      <span>
+                        {notice.date
+                          ? new Date(notice.date).toLocaleString("en-IN")
+                          : "Date unavailable"}
+                      </span>
+                    </li>
+                  ))}
                 </ul>
               )}
             </section>

@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   FaChartBar,
+  FaDownload,
   FaFileInvoiceDollar,
   FaRegClock,
+  FaSearch,
   FaSignOutAlt,
   FaWallet,
 } from "react-icons/fa";
@@ -31,6 +33,9 @@ const AccountantDashboard = () => {
   const [bills, setBills] = useState([]);
   const [monthlyData, setMonthlyData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [billSearch, setBillSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [selectedReportMonth, setSelectedReportMonth] = useState("");
 
   useEffect(() => {
     if (!user || user.role !== "accountant") {
@@ -61,6 +66,20 @@ const AccountantDashboard = () => {
     loadData();
   }, [user, navigate]);
 
+  const reportMonths = useMemo(() => {
+    if (!monthlyData || typeof monthlyData !== "object") {
+      return [];
+    }
+
+    return Object.keys(monthlyData).sort().reverse();
+  }, [monthlyData]);
+
+  useEffect(() => {
+    if (!selectedReportMonth && reportMonths.length > 0) {
+      setSelectedReportMonth(reportMonths[0]);
+    }
+  }, [reportMonths, selectedReportMonth]);
+
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -86,12 +105,32 @@ const AccountantDashboard = () => {
       ]
     : [];
 
+  const visibleBills = useMemo(() => {
+    const query = billSearch.trim().toLowerCase();
+
+    return [...bills]
+      .sort((left, right) => new Date(right.dueDate || 0) - new Date(left.dueDate || 0))
+      .filter((bill) => {
+        const matchesStatus =
+          statusFilter === "ALL" ||
+          String(bill.status || "").toUpperCase() === statusFilter;
+
+        const matchesSearch = query
+          ? `${bill.billMonth} ${bill.flatNumber} ${bill.amount} ${bill.status}`
+              .toLowerCase()
+              .includes(query)
+          : true;
+
+        return matchesStatus && matchesSearch;
+      });
+  }, [bills, billSearch, statusFilter]);
+
   const outstandingBills = useMemo(
     () =>
-      [...bills]
+      visibleBills
         .filter((bill) => String(bill.status || "").toUpperCase() !== "PAID")
         .slice(0, 5),
-    [bills]
+    [visibleBills]
   );
 
   const chartBars = useMemo(() => {
@@ -116,6 +155,40 @@ const AccountantDashboard = () => {
       height: maxValue ? Math.round((row.collected / maxValue) * 100) : 0,
     }));
   }, [monthlyData]);
+
+  const activeReportMonth = selectedReportMonth || reportMonths[0] || "";
+  const activeReportItems = activeReportMonth ? monthlyData?.[activeReportMonth] || [] : [];
+  const reportCollected = activeReportItems
+    .filter((item) => String(item.status || "").toUpperCase() === "PAID")
+    .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  const reportPending = activeReportItems.filter(
+    (item) => String(item.status || "").toUpperCase() !== "PAID"
+  ).length;
+
+  const exportVisibleBills = () => {
+    const rows = [
+      ["Month", "Flat", "Amount", "Status", "Due Date"],
+      ...visibleBills.map((bill) => [
+        bill.billMonth || "",
+        bill.flatNumber || "",
+        bill.amount || "",
+        bill.status || "",
+        bill.dueDate ? new Date(bill.dueDate).toLocaleDateString("en-IN") : "",
+      ]),
+    ];
+
+    const csv = rows
+      .map((row) =>
+        row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "accountant-visible-bills.csv";
+    link.click();
+  };
 
   if (!user || loading) {
     return <div className="accountant-loading">Loading dashboard...</div>;
@@ -189,10 +262,45 @@ const AccountantDashboard = () => {
               <section className="accountant-shell__panel accountant-shell__panel--wide">
                 <div className="accountant-shell__panel-header">
                   <div>
-                    <p className="accountant-shell__panel-eyebrow">Recent activity</p>
-                    <h3>Recent bills</h3>
+                    <p className="accountant-shell__panel-eyebrow">Bill toolkit</p>
+                    <h3>Search and export bills</h3>
                   </div>
                 </div>
+
+                <div className="accountant-shell__controls">
+                  <label className="accountant-shell__search">
+                    <FaSearch aria-hidden />
+                    <input
+                      type="search"
+                      value={billSearch}
+                      onChange={(event) => setBillSearch(event.target.value)}
+                      placeholder="Search by month, flat, amount, or status"
+                    />
+                  </label>
+
+                  <select
+                    value={statusFilter}
+                    onChange={(event) => setStatusFilter(event.target.value)}
+                  >
+                    <option value="ALL">All statuses</option>
+                    <option value="PAID">Paid</option>
+                    <option value="UNPAID">Unpaid</option>
+                    <option value="PENDING">Pending</option>
+                  </select>
+
+                  <button
+                    type="button"
+                    className="accountant-shell__export"
+                    onClick={exportVisibleBills}
+                  >
+                    <FaDownload aria-hidden />
+                    Export visible bills
+                  </button>
+                </div>
+
+                <p className="accountant-shell__count">
+                  {visibleBills.length} bill(s) match the current filters.
+                </p>
 
                 <table className="bills-table">
                   <thead>
@@ -204,7 +312,7 @@ const AccountantDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {bills.slice(0, 20).map((bill) => (
+                    {visibleBills.slice(0, 20).map((bill) => (
                       <tr key={bill.id}>
                         <td>{bill.billMonth}</td>
                         <td>{bill.flatNumber || "Not assigned"}</td>
@@ -227,7 +335,9 @@ const AccountantDashboard = () => {
                 </div>
 
                 {outstandingBills.length === 0 ? (
-                  <p className="accountant-shell__empty">There are no outstanding bills right now.</p>
+                  <p className="accountant-shell__empty">
+                    There are no outstanding bills for the current filters.
+                  </p>
                 ) : (
                   <ul className="accountant-list">
                     {outstandingBills.map((bill) => (
@@ -254,7 +364,9 @@ const AccountantDashboard = () => {
                 </div>
 
                 {chartBars.length === 0 ? (
-                  <p className="accountant-shell__empty">Monthly collection data is not available yet.</p>
+                  <p className="accountant-shell__empty">
+                    Monthly collection data is not available yet.
+                  </p>
                 ) : (
                   <div className="accountant-chart">
                     {chartBars.map((item) => (
@@ -272,40 +384,87 @@ const AccountantDashboard = () => {
                 )}
               </section>
 
-              <section className="monthly-reports">
-                {monthlyData && Object.keys(monthlyData).length > 0 ? (
-                  Object.entries(monthlyData)
-                    .sort(([left], [right]) => left.localeCompare(right))
-                    .reverse()
-                    .map(([month, items]) => (
-                      <div key={month} className="report-month-card">
-                        <h4>{month}</h4>
-                        <table className="bills-table">
-                          <thead>
-                            <tr>
-                              <th>Flat</th>
-                              <th>Amount</th>
-                              <th>Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {items.map((item, index) => (
-                              <tr key={`${month}-${index}`}>
-                                <td>{item.flatNumber || "Not assigned"}</td>
-                                <td>{formatINR(item.amount)}</td>
-                                <td>
-                                  <span className={`badge ${item.status}`}>{item.status}</span>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
+              <div className="accountant-layout accountant-layout--reports">
+                <section className="accountant-shell__panel">
+                  <div className="accountant-shell__panel-header">
+                    <div>
+                      <p className="accountant-shell__panel-eyebrow">Focused month</p>
+                      <h3>Month selector</h3>
+                    </div>
+                  </div>
+
+                  {reportMonths.length === 0 ? (
+                    <p className="accountant-shell__empty">No monthly data is available.</p>
+                  ) : (
+                    <>
+                      <label className="accountant-report-toolbar">
+                        <span>Report month</span>
+                        <select
+                          value={activeReportMonth}
+                          onChange={(event) => setSelectedReportMonth(event.target.value)}
+                        >
+                          {reportMonths.map((month) => (
+                            <option key={month} value={month}>
+                              {month}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <div className="accountant-report-summary">
+                        <article>
+                          <span>Entries</span>
+                          <strong>{activeReportItems.length}</strong>
+                        </article>
+                        <article>
+                          <span>Collected</span>
+                          <strong>{formatINR(reportCollected)}</strong>
+                        </article>
+                        <article>
+                          <span>Pending items</span>
+                          <strong>{reportPending}</strong>
+                        </article>
                       </div>
-                    ))
-                ) : (
-                  <p className="accountant-shell__empty">No monthly data is available.</p>
-                )}
-              </section>
+                    </>
+                  )}
+                </section>
+
+                <section className="accountant-shell__panel accountant-shell__panel--wide">
+                  <div className="accountant-shell__panel-header">
+                    <div>
+                      <p className="accountant-shell__panel-eyebrow">Month details</p>
+                      <h3>{activeReportMonth || "No report selected"}</h3>
+                    </div>
+                  </div>
+
+                  {activeReportItems.length === 0 ? (
+                    <p className="accountant-shell__empty">
+                      Select a month with report data to inspect details.
+                    </p>
+                  ) : (
+                    <table className="bills-table">
+                      <thead>
+                        <tr>
+                          <th>Flat</th>
+                          <th>Amount</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {activeReportItems.map((item, index) => (
+                          <tr key={`${activeReportMonth}-${index}`}>
+                            <td>{item.flatNumber || "Not assigned"}</td>
+                            <td>{formatINR(item.amount)}</td>
+                            <td>
+                              <span className={`badge ${item.status}`}>{item.status}</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  )}
+                </section>
+              </div>
             </>
           )}
         </main>
