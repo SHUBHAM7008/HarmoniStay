@@ -1,7 +1,13 @@
-// src/pages/AdminBills.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./AdminBills.css";
+
+const formatINR = (value) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(Number(value) || 0);
 
 const AdminBills = () => {
   const [bills, setBills] = useState([]);
@@ -9,102 +15,186 @@ const AdminBills = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // Fetch all bills
-    axios
-  .get("http://localhost:8888/api/bills")
-  .then((res) => {
-    const sortedBills = res.data.sort((a, b) => {
-      // Convert billMonth to Date objects for comparison
-      const dateA = new Date(a.billMonth);
-      const dateB = new Date(b.billMonth);
-      return dateB - dateA; // Latest on top
-    });
-    setBills(sortedBills);
-  })
-  .catch((err) => console.error(err));
+    let cancelled = false;
 
+    const loadBills = async () => {
+      setLoading(true);
 
-    // Fetch all members to get phone numbers
-    axios.get("http://localhost:8888/api/members")
-      .then((res) => setUsers(res.data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+      try {
+        const [billsResponse, usersResponse] = await Promise.all([
+          axios.get("http://localhost:8888/api/bills"),
+          axios.get("http://localhost:8888/api/members"),
+        ]);
+
+        if (cancelled) {
+          return;
+        }
+
+        const sortedBills = [...(billsResponse.data || [])].sort(
+          (left, right) => new Date(right.billMonth || 0) - new Date(left.billMonth || 0)
+        );
+
+        setBills(sortedBills);
+        setUsers(Array.isArray(usersResponse.data) ? usersResponse.data : []);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadBills();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const sendNotification = async (userId, bill) => {
     try {
-      const user = users.find((u) => u._id === userId);
-      if (!user || !user.phone) {
-        alert("User phone number not found!");
+      const member = users.find(
+        (user) => String(user._id || user.id) === String(userId)
+      );
+
+      if (!member?.phone) {
+        window.alert("User phone number not found.");
         return;
       }
 
-      // Call your backend to trigger Twilio SMS
-      await axios.post(`http://localhost:8888/api/notices/notify`, {
-        phone: user.phone,
-        message: `Hi ${user.name}, your bill for ${bill.billMonth} of ₹${bill.amount} is pending.`
+      await axios.post("http://localhost:8888/api/notices/notify", {
+        phone: member.phone,
+        message: `Hi ${member.firstName || member.name || "resident"}, your bill for ${
+          bill.billMonth
+        } of ${formatINR(bill.amount)} is pending.`,
       });
 
-      alert("Notification sent successfully!");
+      window.alert("Notification sent successfully.");
     } catch (error) {
       console.error("Error sending notification:", error);
-      alert("Failed to send notification.");
+      window.alert("Failed to send notification.");
     }
   };
 
-  // Group bills by month
-  const groupedBills = bills.reduce((acc, bill) => {
-    if (!acc[bill.billMonth]) acc[bill.billMonth] = [];
-    acc[bill.billMonth].push(bill);
-    return acc;
+  const totalCollected = bills
+    .filter((bill) => String(bill.status || "").toUpperCase() === "PAID")
+    .reduce((sum, bill) => sum + (Number(bill.amount) || 0), 0);
+
+  const totalPending = bills
+    .filter((bill) => String(bill.status || "").toUpperCase() !== "PAID")
+    .reduce((sum, bill) => sum + (Number(bill.amount) || 0), 0);
+
+  const groupedBills = bills.reduce((groups, bill) => {
+    const month = bill.billMonth || "Unscheduled";
+
+    if (!groups[month]) {
+      groups[month] = [];
+    }
+
+    groups[month].push(bill);
+    return groups;
   }, {});
 
-  if (loading) return <div className="loading">Loading bills...</div>;
+  const groupedMonths = Object.keys(groupedBills);
+
+  if (loading) {
+    return <div className="admin-bills__loading">Loading bills...</div>;
+  }
 
   return (
     <div className="admin-bills-container">
-      <h2>Bill Management</h2>
-
-      {Object.keys(groupedBills).map((month) => (
-        <div key={month} className="month-bills">
-          <h3>{month}</h3>
-          <table className="bills-table">
-            <thead>
-              <tr>
-                <th>Flat</th>
-                <th>Amount (₹)</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {groupedBills[month].map((bill) => (
-                <tr key={bill._id}>
-                  <td>{bill.flatNumber}</td>
-                  <td>{bill.amount}</td>
-                  <td>
-                    <span className={`status ${bill.status.toLowerCase()}`}>
-                      {bill.status}
-                    </span>
-                  </td>
-                  <td>
-                    {bill.status === "UNPAID" ? (
-                      <button
-                        className="notify-btn"
-                        onClick={() => sendNotification(bill.userId, bill)}
-                      >
-                        Notify
-                      </button>
-                    ) : (
-                      <span className="paid-label">Paid</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <div className="admin-bills__header">
+        <div>
+          <p className="admin-bills__eyebrow">Maintenance operations</p>
+          <h2>Bill management</h2>
+          <p>
+            Review billing month by month, spot unpaid dues quickly, and notify residents
+            from one cleaner control surface.
+          </p>
         </div>
-      ))}
+      </div>
+
+      <div className="admin-bills__stats">
+        <article className="admin-bills__stat">
+          <span>Collected</span>
+          <strong>{formatINR(totalCollected)}</strong>
+        </article>
+        <article className="admin-bills__stat admin-bills__stat--warning">
+          <span>Pending</span>
+          <strong>{formatINR(totalPending)}</strong>
+        </article>
+        <article className="admin-bills__stat admin-bills__stat--muted">
+          <span>Total bills</span>
+          <strong>{bills.length}</strong>
+        </article>
+      </div>
+
+      {groupedMonths.length === 0 ? (
+        <div className="admin-bills__empty">No bills are available yet.</div>
+      ) : (
+        groupedMonths.map((month) => {
+          const monthBills = groupedBills[month];
+          const paidCount = monthBills.filter(
+            (bill) => String(bill.status || "").toUpperCase() === "PAID"
+          ).length;
+
+          return (
+            <section key={month} className="month-bills">
+              <div className="month-bills__header">
+                <div>
+                  <h3>{month}</h3>
+                  <p>{monthBills.length} bills tracked in this cycle.</p>
+                </div>
+                <span className="month-bills__meta">{paidCount} paid</span>
+              </div>
+
+              <table className="bills-table">
+                <thead>
+                  <tr>
+                    <th>Flat</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {monthBills.map((bill) => (
+                    <tr key={bill._id || bill.id}>
+                      <td>{bill.flatNumber || "Not assigned"}</td>
+                      <td>{formatINR(bill.amount)}</td>
+                      <td>
+                        <span
+                          className={`status ${
+                            String(bill.status || "").toLowerCase() === "paid"
+                              ? "paid"
+                              : "pending"
+                          }`}
+                        >
+                          {bill.status}
+                        </span>
+                      </td>
+                      <td>
+                        {String(bill.status || "").toUpperCase() === "UNPAID" ? (
+                          <button
+                            type="button"
+                            className="notify-btn"
+                            onClick={() => sendNotification(bill.userId, bill)}
+                          >
+                            Notify resident
+                          </button>
+                        ) : (
+                          <span className="paid-label">Settled</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          );
+        })
+      )}
     </div>
   );
 };

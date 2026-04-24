@@ -1,146 +1,131 @@
 .member-profile {
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  padding: 2rem 2.5rem;
-  margin: 2rem auto;
-  max-width: 900px;
-  box-shadow: var(--card-shadow);
-  color: var(--text-dark);
-  animation: fadeIn 0.4s ease;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.6rem;
 }
 
-.profile-header {
-  text-align: center;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 1.5rem;
-}
-
-.profile-avatar {
-  color: #007bff;
-  margin-bottom: 0.5rem;
-}
-
-.profile-role {
-  color: #777;
-  font-size: 0.9rem;
-  margin-top: 0.2rem;
-}
-
-.profile-section {
-  margin-top: 2rem;
-  background-color: #f8faff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.03);
-}
-
-.profile-section h3 {
-  margin-bottom: 1rem;
-  font-size: 1.2rem;
-  color: var(--primary);
+.member-profile .profile-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 1.2rem;
+  padding-bottom: 1.45rem;
+  border-bottom: 1px solid rgba(23, 50, 77, 0.08);
 }
 
-.profile-grid {
+.member-profile .profile-header__avatar-wrap {
+  width: 112px;
+  height: 112px;
+  border-radius: 32px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 0.8rem 1.5rem;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(23, 50, 77, 0.08) 0%, rgba(70, 165, 172, 0.12) 100%);
 }
 
-.profile-grid p {
-  margin: 0;
-  font-size: 0.95rem;
+.member-profile .profile-avatar {
+  color: var(--secondary);
 }
 
-.sub-section {
-  margin-top: 1.5rem;
-  background: #fff;
-  border-radius: 8px;
+.member-profile .profile-header__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.member-profile .profile-role {
+  margin-top: 0.4rem;
+  color: var(--text-medium);
+}
+
+.member-profile .profile-section {
+  margin-top: 1.4rem;
+  padding: 1.3rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.76);
+  border: 1px solid rgba(23, 50, 77, 0.08);
+  box-shadow: var(--shadow-soft);
+}
+
+.member-profile .profile-section h3,
+.member-profile .sub-section h4 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.member-profile .profile-grid {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.member-profile .profile-grid p {
+  display: grid;
+  gap: 0.3rem;
   padding: 1rem;
-  border: 1px solid #eee;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(23, 50, 77, 0.08);
 }
 
-.sub-section h4 {
-  margin-bottom: 0.6rem;
-  color: var(--primary-dark);
+.member-profile .profile-grid strong {
+  color: var(--text-dark);
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.ownership-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.5rem;
+.member-profile .profile-grid span {
+  color: var(--text-medium);
 }
 
-.ownership-table th,
-.ownership-table td {
-  border: 1px solid #ddd;
-  padding: 0.6rem;
-  text-align: left;
-  font-size: 0.9rem;
+.member-profile .change-password-form {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+  gap: 0.8rem;
 }
 
-.ownership-table th {
-  background: var(--primary);
-  color: white;
+.member-profile .sub-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(23, 50, 77, 0.08);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+.member-profile .sub-section p {
+  margin-top: 0.4rem;
 }
 
 .profile-loading {
   text-align: center;
-  color: #777;
   padding: 2rem;
-}
-.member-profile-container {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
+  color: var(--text-light);
 }
 
-.profile-card {
-  width: 75%;
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
-  padding: 2rem;
+@media (max-width: 820px) {
+  .member-profile .profile-grid,
+  .member-profile .change-password-form {
+    grid-template-columns: 1fr;
+  }
+
+  .member-profile .profile-header {
+    display: grid;
+    justify-items: start;
+  }
 }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
+@media (max-width: 640px) {
+  .member-profile {
+    padding: 0;
+  }
 
-.profile-icon {
-  color: #3498db;
-  margin-bottom: 0.5rem;
-}
-
-.role {
-  color: #7f8c8d;
-  font-size: 0.95rem;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem 2rem;
-  margin-bottom: 1.5rem;
-}
-
-.family-list {
-  display: grid;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.family-card {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 0.8rem 1rem;
-  border-left: 4px solid var(--primary);
+  .member-profile .ownership-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }

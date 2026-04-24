@@ -1,40 +1,51 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import {
-  FaArrowUp,
   FaArrowDown,
+  FaArrowUp,
+  FaBell,
+  FaBolt,
+  FaCalendarCheck,
+  FaFileInvoiceDollar,
   FaRupeeSign,
   FaSwimmingPool,
-  FaBell,
-  FaFileInvoiceDollar,
-  FaCalendarCheck,
-  FaBolt,
 } from "react-icons/fa";
 
 const API = "http://localhost:8888/api";
 
-const formatINR = (n) =>
-  n == null || Number.isNaN(n)
-    ? "—"
+const formatINR = (value) =>
+  value == null || Number.isNaN(value)
+    ? "Not available"
     : new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: "INR",
         maximumFractionDigits: 0,
-      }).format(n);
+      }).format(value);
 
-const todayStr = () => {
-  const d = new Date();
-  return d.toLocaleDateString("en-IN", {
+const todayStr = () =>
+  new Date().toLocaleDateString("en-IN", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   });
+
+const formatChartLabel = (monthKey) => {
+  if (!monthKey) {
+    return "";
+  }
+
+  const parsed = new Date(`${monthKey}-01`);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toLocaleDateString("en-IN", {
+      month: "short",
+      year: "2-digit",
+    });
+  }
+
+  return String(monthKey).replace(/_/g, " ");
 };
 
-/**
- * HarmonyStay admin home — stats and activity from live APIs (no placeholder numbers).
- */
 const AdminDashboardHome = ({ user, onNavigate }) => {
   const [loading, setLoading] = useState(true);
   const [summary, setSummary] = useState(null);
@@ -48,18 +59,20 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
 
   useEffect(() => {
     let cancelled = false;
+
     const load = async () => {
       setLoading(true);
+
       try {
         const [
-          sumRes,
-          monthlyRes,
-          memRes,
-          flatRes,
-          compRes,
-          facRes,
-          noticeRes,
-          billsRes,
+          summaryResponse,
+          monthlyResponse,
+          membersResponse,
+          flatsResponse,
+          complaintsResponse,
+          facilitiesResponse,
+          noticesResponse,
+          billsResponse,
         ] = await Promise.all([
           axios.get(`${API}/reports/maintenance-summary`).catch(() => ({ data: null })),
           axios.get(`${API}/reports/monthly-collection`).catch(() => ({ data: {} })),
@@ -70,22 +83,30 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
           axios.get(`${API}/notices`).catch(() => ({ data: [] })),
           axios.get(`${API}/bills`).catch(() => ({ data: [] })),
         ]);
-        if (cancelled) return;
-        setSummary(sumRes.data);
-        setMonthlyCollection(monthlyRes.data || {});
-        setMembers(Array.isArray(memRes.data) ? memRes.data : []);
-        setFlats(Array.isArray(flatRes.data) ? flatRes.data : []);
-        setComplaints(Array.isArray(compRes.data) ? compRes.data : []);
-        setFacilities(Array.isArray(facRes.data) ? facRes.data : []);
-        setNotices(Array.isArray(noticeRes.data) ? noticeRes.data : []);
-        setBills(Array.isArray(billsRes.data) ? billsRes.data : []);
-      } catch (e) {
-        console.error(e);
+
+        if (cancelled) {
+          return;
+        }
+
+        setSummary(summaryResponse.data);
+        setMonthlyCollection(monthlyResponse.data || {});
+        setMembers(Array.isArray(membersResponse.data) ? membersResponse.data : []);
+        setFlats(Array.isArray(flatsResponse.data) ? flatsResponse.data : []);
+        setComplaints(Array.isArray(complaintsResponse.data) ? complaintsResponse.data : []);
+        setFacilities(Array.isArray(facilitiesResponse.data) ? facilitiesResponse.data : []);
+        setNotices(Array.isArray(noticesResponse.data) ? noticesResponse.data : []);
+        setBills(Array.isArray(billsResponse.data) ? billsResponse.data : []);
+      } catch (error) {
+        console.error(error);
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     };
+
     load();
+
     return () => {
       cancelled = true;
     };
@@ -93,54 +114,82 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
 
   const openComplaints = useMemo(
     () =>
-      complaints.filter((c) =>
-        ["PENDING", "IN_PROGRESS"].includes(String(c.status || "").toUpperCase())
+      complaints.filter((item) =>
+        ["PENDING", "IN_PROGRESS"].includes(String(item.status || "").toUpperCase())
       ).length,
     [complaints]
   );
 
   const activeFacilityBookings = useMemo(
-    () => facilities.filter((f) => String(f.status).toUpperCase() === "BOOKED").length,
+    () =>
+      facilities.filter((item) => String(item.status || "").toUpperCase() === "BOOKED")
+        .length,
     [facilities]
   );
 
   const chartMonths = useMemo(() => {
-    if (!monthlyCollection || typeof monthlyCollection !== "object") return [];
+    if (!monthlyCollection || typeof monthlyCollection !== "object") {
+      return [];
+    }
+
     return Object.keys(monthlyCollection).sort();
   }, [monthlyCollection]);
 
   const chartBars = useMemo(() => {
-    const months = chartMonths.slice(-8);
-    let max = 1;
-    const rows = months.map((m) => {
-      const items = monthlyCollection[m] || [];
+    const visibleMonths = chartMonths.slice(-8);
+    let maxValue = 1;
+
+    const rows = visibleMonths.map((month) => {
+      const items = monthlyCollection[month] || [];
       const paid = items
-        .filter((x) => String(x.status).toUpperCase() === "PAID")
-        .reduce((s, x) => s + (Number(x.amount) || 0), 0);
-      max = Math.max(max, paid);
-      return { month: m, paid };
+        .filter((item) => String(item.status || "").toUpperCase() === "PAID")
+        .reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
+      maxValue = Math.max(maxValue, paid);
+      return {
+        month,
+        paid,
+      };
     });
-    return rows.map((r) => ({ ...r, h: max ? Math.round((r.paid / max) * 100) : 0 }));
+
+    return rows.map((row) => ({
+      ...row,
+      displayLabel: formatChartLabel(row.month),
+      height: maxValue ? Math.round((row.paid / maxValue) * 100) : 0,
+    }));
   }, [monthlyCollection, chartMonths]);
 
-  const recentPaidBills = useMemo(() => {
-    return [...bills]
-      .filter((b) => String(b.status).toUpperCase() === "PAID")
-      .slice(0, 5);
-  }, [bills]);
+  const recentPaidBills = useMemo(
+    () =>
+      [...bills]
+        .filter((item) => String(item.status || "").toUpperCase() === "PAID")
+        .sort(
+          (left, right) =>
+            new Date(right.updatedAt || right.dueDate || 0) -
+            new Date(left.updatedAt || left.dueDate || 0)
+        )
+        .slice(0, 5),
+    [bills]
+  );
 
-  const recentNotices = useMemo(() => {
-    return [...notices]
-      .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
-      .slice(0, 3);
-  }, [notices]);
+  const recentNotices = useMemo(
+    () =>
+      [...notices]
+        .sort((left, right) => new Date(right.date || 0) - new Date(left.date || 0))
+        .slice(0, 3),
+    [notices]
+  );
 
-  const recentBookings = useMemo(() => {
-    return [...facilities]
-      .filter((f) => String(f.status).toUpperCase() === "BOOKED")
-      .sort((a, b) => new Date(b.bookingDate || 0) - new Date(a.bookingDate || 0))
-      .slice(0, 5);
-  }, [facilities]);
+  const recentBookings = useMemo(
+    () =>
+      [...facilities]
+        .filter((item) => String(item.status || "").toUpperCase() === "BOOKED")
+        .sort(
+          (left, right) => new Date(right.bookingDate || 0) - new Date(left.bookingDate || 0)
+        )
+        .slice(0, 5),
+    [facilities]
+  );
 
   const collected = summary?.collected ?? 0;
   const dues = summary?.dues ?? 0;
@@ -148,18 +197,14 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
     collected + dues > 0 ? Math.round((collected / (collected + dues)) * 100) : 0;
 
   if (loading) {
-    return (
-      <div className="admin-home-loading">Loading dashboard…</div>
-    );
+    return <div className="admin-home-loading">Loading dashboard...</div>;
   }
 
   return (
     <div className="admin-home">
       <header className="admin-home__header">
         <div>
-          <h1 className="admin-home__title">
-            Hello, {user?.firstName || "Admin"}!
-          </h1>
+          <h1 className="admin-home__title">Hello, {user?.firstName || "Admin"}</h1>
           <p className="admin-home__date">{todayStr()}</p>
         </div>
       </header>
@@ -168,22 +213,22 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
         <article className="stat-card stat-card--indigo">
           <span className="stat-card__label">Maintenance collected</span>
           <strong className="stat-card__value">{formatINR(collected)}</strong>
-          <span className="stat-card__hint">From paid bills in the system</span>
+          <span className="stat-card__hint">Paid bills already recorded in the system.</span>
         </article>
         <article className="stat-card stat-card--amber">
           <span className="stat-card__label">Pending dues</span>
           <strong className="stat-card__value">{formatINR(dues)}</strong>
-          <span className="stat-card__hint">Unpaid maintenance total</span>
+          <span className="stat-card__hint">Outstanding maintenance still to be collected.</span>
         </article>
         <article className="stat-card stat-card--rose">
           <span className="stat-card__label">Open complaints</span>
           <strong className="stat-card__value">{openComplaints}</strong>
-          <span className="stat-card__hint">Pending or in progress</span>
+          <span className="stat-card__hint">Requests waiting on action or closure.</span>
         </article>
         <article className="stat-card stat-card--teal">
-          <span className="stat-card__label">Active facility bookings</span>
+          <span className="stat-card__label">Active bookings</span>
           <strong className="stat-card__value">{activeFacilityBookings}</strong>
-          <span className="stat-card__hint">Currently booked slots</span>
+          <span className="stat-card__hint">Amenities currently booked by residents.</span>
         </article>
       </section>
 
@@ -191,56 +236,65 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
         <div className="balance-card">
           <div className="balance-card__top">
             <div>
-              <p className="balance-card__eyebrow">Society maintenance</p>
+              <p className="balance-card__eyebrow">Collection overview</p>
               <h2 className="balance-card__amount">{formatINR(collected)}</h2>
-              <p className="balance-card__sub">Total collected (all time)</p>
+              <p className="balance-card__sub">Total maintenance collected across recorded bills.</p>
             </div>
+
             <div className="balance-card__trends">
               <div className="trend trend--up">
-                <FaArrowUp /> <span>Inflow share {inflowPct}%</span>
+                <FaArrowUp aria-hidden />
+                <span>Collection share {inflowPct}%</span>
               </div>
               <div className="trend trend--down">
-                <FaArrowDown /> <span>Outstanding {formatINR(dues)}</span>
+                <FaArrowDown aria-hidden />
+                <span>Outstanding {formatINR(dues)}</span>
               </div>
             </div>
           </div>
+
           <div className="sparkline" aria-hidden>
             {chartBars.length > 0 ? (
-              chartBars.map((b) => (
-                <div key={b.month} className="sparkline__bar-wrap" title={b.month}>
+              chartBars.map((item) => (
+                <div key={item.month} className="sparkline__bar-wrap" title={item.displayLabel}>
                   <div
                     className="sparkline__bar"
-                    style={{ height: `${Math.max(8, b.h)}%` }}
+                    style={{ height: `${Math.max(8, item.height)}%` }}
                   />
                 </div>
               ))
             ) : (
-              <p className="sparkline__empty">No monthly payment data yet</p>
+              <p className="sparkline__empty">Monthly collection will appear here once payments are recorded.</p>
             )}
           </div>
         </div>
 
         <div className="society-card">
           <div className="society-card__inner">
-            <FaRupeeSign className="society-card__chip" />
+            <FaRupeeSign className="society-card__chip" aria-hidden />
             <p className="society-card__brand">HarmonyStay</p>
-            <p className="society-card__meta">Society operations hub</p>
+            <p className="society-card__meta">Unified society operations workspace</p>
             <div className="society-card__nums">
-              <span>{members.length}</span> members · <span>{flats.length}</span> flats
+              <span>{members.length}</span> members | <span>{flats.length}</span> flats
             </div>
           </div>
+
           <div className="quick-actions">
             <button type="button" onClick={() => onNavigate("notice")}>
-              <FaBell /> Post notice
+              <FaBell aria-hidden />
+              Post notice
             </button>
             <button type="button" onClick={() => onNavigate("assignbills")}>
-              <FaFileInvoiceDollar /> Assign bills
+              <FaFileInvoiceDollar aria-hidden />
+              Assign bills
             </button>
             <button type="button" onClick={() => onNavigate("facilities")}>
-              <FaSwimmingPool /> Bookings
+              <FaSwimmingPool aria-hidden />
+              Review bookings
             </button>
             <button type="button" onClick={() => onNavigate("meetings")}>
-              <FaCalendarCheck /> Meetings
+              <FaCalendarCheck aria-hidden />
+              Schedule meetings
             </button>
           </div>
         </div>
@@ -248,22 +302,22 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
 
       <section className="admin-home__row">
         <div className="panel panel--chart">
-          <h3 className="panel__title">Monthly collection (paid amounts)</h3>
+          <h3 className="panel__title">Monthly collection</h3>
           <div className="bar-chart">
             {chartBars.length > 0 ? (
-              chartBars.map((b) => (
-                <div key={b.month} className="bar-chart__col">
+              chartBars.map((item) => (
+                <div key={item.month} className="bar-chart__col">
                   <div className="bar-chart__fill-wrap">
                     <div
                       className="bar-chart__fill"
-                      style={{ height: `${Math.max(4, b.h)}%` }}
+                      style={{ height: `${Math.max(8, item.height)}%` }}
                     />
                   </div>
-                  <span className="bar-chart__label">{b.month}</span>
+                  <span className="bar-chart__label">{item.displayLabel}</span>
                 </div>
               ))
             ) : (
-              <p className="panel__empty">Record bill payments to see trends here.</p>
+              <p className="panel__empty">Record bill payments to unlock monthly trend reporting.</p>
             )}
           </div>
         </div>
@@ -272,39 +326,42 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
       <section className="admin-home__row admin-home__row--two">
         <div className="panel">
           <h3 className="panel__title">
-            <FaFileInvoiceDollar /> Recent payments
+            <FaFileInvoiceDollar aria-hidden />
+            Recent payments
           </h3>
           <ul className="activity-list">
             {recentPaidBills.length === 0 && (
-              <li className="activity-list__empty">No paid bills yet.</li>
+              <li className="activity-list__empty">No paid bills have been recorded yet.</li>
             )}
-            {recentPaidBills.map((b) => (
-              <li key={b.id}>
+            {recentPaidBills.map((bill) => (
+              <li key={bill.id}>
                 <div>
-                  <strong>Flat {b.flatNumber || "—"}</strong>
-                  <span className="activity-list__meta">{b.billMonth}</span>
+                  <strong>Flat {bill.flatNumber || "Not assigned"}</strong>
+                  <span className="activity-list__meta">{bill.billMonth || "Billing period unavailable"}</span>
                 </div>
                 <span className="activity-list__amt activity-list__amt--pos">
-                  +{formatINR(b.amount)}
+                  +{formatINR(bill.amount)}
                 </span>
               </li>
             ))}
           </ul>
         </div>
+
         <div className="panel">
           <h3 className="panel__title">
-            <FaBolt /> Latest notices
+            <FaBolt aria-hidden />
+            Latest notices
           </h3>
-          <ul className="activity-list activity-list--compact">
+          <ul className="activity-list">
             {recentNotices.length === 0 && (
-              <li className="activity-list__empty">No notices posted.</li>
+              <li className="activity-list__empty">No notices have been published yet.</li>
             )}
-            {recentNotices.map((n) => (
-              <li key={n.id}>
+            {recentNotices.map((notice) => (
+              <li key={notice.id}>
                 <div>
-                  <strong>{n.title}</strong>
+                  <strong>{notice.title}</strong>
                   <span className="activity-list__meta">
-                    {n.date ? new Date(n.date).toLocaleDateString("en-IN") : ""}
+                    {notice.date ? new Date(notice.date).toLocaleDateString("en-IN") : "Date unavailable"}
                   </span>
                 </div>
               </li>
@@ -315,21 +372,22 @@ const AdminDashboardHome = ({ user, onNavigate }) => {
 
       <section className="panel">
         <h3 className="panel__title">
-          <FaSwimmingPool /> Recent facility bookings
+          <FaSwimmingPool aria-hidden />
+          Recent facility bookings
         </h3>
         <ul className="activity-list">
           {recentBookings.length === 0 && (
-            <li className="activity-list__empty">No facility bookings yet.</li>
+            <li className="activity-list__empty">No facility bookings are available yet.</li>
           )}
-          {recentBookings.map((f) => (
-            <li key={f.id}>
+          {recentBookings.map((facility) => (
+            <li key={facility.id}>
               <div>
-                <strong>{f.name?.replace(/_/g, " ")}</strong>
+                <strong>{facility.name?.replace(/_/g, " ") || "Facility"}</strong>
                 <span className="activity-list__meta">
-                  {f.bookingDate
-                    ? new Date(f.bookingDate).toLocaleDateString("en-IN")
-                    : ""}{" "}
-                  · {f.timeSlot} · Flat {f.flatId}
+                  {(facility.bookingDate &&
+                    new Date(facility.bookingDate).toLocaleDateString("en-IN")) ||
+                    "Date unavailable"}{" "}
+                  | {facility.timeSlot || "Slot pending"} | Flat {facility.flatId || "N/A"}
                 </span>
               </div>
               <span className="tag tag--booked">Booked</span>

@@ -3,6 +3,26 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import "./MemberComplaints.css";
 
+const formatLabel = (value) =>
+  String(value || "")
+    .toLowerCase()
+    .split("_")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+
+const statusClass = (status) => {
+  if (status === "RESOLVED") {
+    return "resolved";
+  }
+
+  if (status === "IN_PROGRESS") {
+    return "progress";
+  }
+
+  return "pending";
+};
+
 const MemberComplaints = () => {
   const { user } = useContext(AuthContext);
   const [complaints, setComplaints] = useState([]);
@@ -10,29 +30,49 @@ const MemberComplaints = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
-    if (user?.id || user?._id) loadComplaints();
-  }, [user]);
+    const uid = user?.id || user?._id;
 
-  const loadComplaints = async () => {
-    try {
-      const uid = user?.id || user?._id;
-      const res = await axios.get(`http://localhost:8888/api/complaints/user/${uid}`);
-      setComplaints(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!title || !description) {
-      setMessage("Please fill all fields");
+    if (!uid) {
       return;
     }
+
+    let cancelled = false;
+
+    const loadComplaints = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8888/api/complaints/user/${uid}`
+        );
+
+        if (!cancelled) {
+          setComplaints(Array.isArray(response.data) ? response.data : []);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    loadComplaints();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, reloadKey]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!title || !description) {
+      setMessage("Please fill all fields.");
+      return;
+    }
+
     try {
       const uid = user?.id || user?._id;
+
       await axios.post("http://localhost:8888/api/complaints", {
         userId: uid,
         flatId: user.flatId,
@@ -40,45 +80,109 @@ const MemberComplaints = () => {
         title,
         description,
       });
+
       setTitle("");
       setDescription("");
-      setMessage("Complaint lodged successfully!");
-      loadComplaints();
-    } catch (err) {
-      setMessage("Error lodging complaint");
+      setMessage("Complaint lodged successfully.");
+      setReloadKey((value) => value + 1);
+    } catch (error) {
+      console.error(error);
+      setMessage("Error lodging complaint.");
     }
   };
 
-  const statusClass = (s) => (s === "RESOLVED" ? "resolved" : s === "IN_PROGRESS" ? "progress" : "pending");
+  const openCount = complaints.filter((item) => item.status === "PENDING").length;
+  const progressCount = complaints.filter((item) => item.status === "IN_PROGRESS").length;
+  const resolvedCount = complaints.filter((item) => item.status === "RESOLVED").length;
 
   return (
     <div className="member-complaints-container">
-      <h2>Lodge a Complaint</h2>
-      <form className="complaint-form" onSubmit={handleSubmit}>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="MAINTENANCE">Maintenance</option>
-          <option value="ELECTRICITY">Electricity</option>
-          <option value="WATER">Water</option>
-          <option value="SECURITY">Security</option>
-          <option value="OTHER">Other</option>
-        </select>
-        <input placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-        <button type="submit">Submit Complaint</button>
-      </form>
-      {message && <p className="msg">{message}</p>}
+      <div className="member-complaints__header">
+        <div>
+          <p className="member-complaints__eyebrow">Resident help desk</p>
+          <h2>Complaints</h2>
+          <p>Log issues clearly and keep track of responses without losing status visibility.</p>
+        </div>
+      </div>
 
-      <h3>My Complaints</h3>
-      <div className="complaint-list">
-        {complaints.map((c) => (
-          <div key={c.id} className={`complaint-card ${statusClass(c.status)}`}>
-            <h4>{c.title}</h4>
-            <p><strong>Category:</strong> {c.category}</p>
-            <p>{c.description}</p>
-            <span className={`status ${statusClass(c.status)}`}>{c.status}</span>
-            {c.adminFeedback && <p className="feedback"><strong>Admin:</strong> {c.adminFeedback}</p>}
-          </div>
-        ))}
+      <div className="member-complaints__stats">
+        <article>
+          <span>Total</span>
+          <strong>{complaints.length}</strong>
+        </article>
+        <article>
+          <span>Pending</span>
+          <strong>{openCount}</strong>
+        </article>
+        <article>
+          <span>In progress</span>
+          <strong>{progressCount}</strong>
+        </article>
+        <article>
+          <span>Resolved</span>
+          <strong>{resolvedCount}</strong>
+        </article>
+      </div>
+
+      <div className="member-complaints__layout">
+        <form className="complaint-form" onSubmit={handleSubmit}>
+          <h3>Lodge a complaint</h3>
+          <select value={category} onChange={(event) => setCategory(event.target.value)}>
+            <option value="MAINTENANCE">Maintenance</option>
+            <option value="ELECTRICITY">Electricity</option>
+            <option value="WATER">Water</option>
+            <option value="SECURITY">Security</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <input
+            placeholder="Complaint title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            required
+          />
+          <textarea
+            placeholder="Describe the issue"
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            required
+          />
+          <button type="submit">Submit complaint</button>
+          {message && <p className="msg">{message}</p>}
+        </form>
+
+        <div className="complaint-list">
+          {complaints.length === 0 ? (
+            <div className="member-complaints__empty">You have not logged any complaints yet.</div>
+          ) : (
+            complaints.map((complaint) => (
+              <article
+                key={complaint.id || complaint._id}
+                className={`complaint-card ${statusClass(complaint.status)}`}
+              >
+                <div className="complaint-card__top">
+                  <div>
+                    <span className="complaint-card__category">
+                      {formatLabel(complaint.category)}
+                    </span>
+                    <h4>{complaint.title}</h4>
+                  </div>
+                  <span className={`status ${statusClass(complaint.status)}`}>
+                    {formatLabel(complaint.status)}
+                  </span>
+                </div>
+
+                <p>{complaint.description}</p>
+
+                {complaint.adminFeedback && (
+                  <div className="feedback">
+                    <strong>Admin feedback</strong>
+                    <span>{complaint.adminFeedback}</span>
+                  </div>
+                )}
+              </article>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

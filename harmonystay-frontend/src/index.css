@@ -1,41 +1,119 @@
-/* HarmonyStay - Unified Theme (Accountant Dashboard Style) */
 :root {
-  --primary: #003366;
-  --primary-light: #004080;
-  --primary-dark: #002244;
-  --sidebar-bg: #003366;
-  --sidebar-text: #ffffff;
-  --main-bg: #f5f5f5;
-  --card-bg: #ffffff;
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --card-radius: 12px;
-  --text-dark: #333333;
-  --text-medium: #555555;
-  --text-light: #777777;
-  --border-color: #e0e0e0;
-  --success: #28a745;
-  --danger: #dc3545;
-  --warning: #ffc107;
+  --primary: #17324d;
+  --primary-light: #24557b;
+  --primary-dark: #0d2235;
+  --secondary: #2d7b83;
+  --secondary-light: #46a5ac;
+  --accent: #d39b43;
+  --accent-soft: #f2e0be;
+  --sidebar-bg: rgba(13, 34, 53, 0.92);
+  --sidebar-text: #f7f1e8;
+  --main-bg: #f4efe7;
+  --main-bg-soft: #eef4f5;
+  --card-bg: rgba(255, 252, 247, 0.86);
+  --card-bg-strong: #fffdfa;
+  --card-muted: rgba(255, 255, 255, 0.64);
+  --card-shadow: 0 24px 60px rgba(23, 50, 77, 0.12);
+  --shadow-soft: 0 16px 40px rgba(18, 34, 48, 0.08);
+  --text-dark: #183043;
+  --text-medium: #556575;
+  --text-light: #7b8894;
+  --border-color: rgba(23, 50, 77, 0.12);
+  --border-strong: rgba(23, 50, 77, 0.2);
+  --success: #2e7d57;
+  --danger: #bf5a3d;
+  --warning: #cf8b22;
+  --radius-xs: 12px;
+  --radius-sm: 18px;
+  --radius-md: 24px;
+  --radius-lg: 32px;
+  --body-font: "Candara", "Trebuchet MS", "Segoe UI", sans-serif;
+  --heading-font: "Georgia", "Cambria", serif;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
   margin: 0;
-  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  font-family: var(--body-font);
+  color: var(--text-dark);
+  background:
+    radial-gradient(circle at top left, rgba(210, 155, 67, 0.2), transparent 32%),
+    radial-gradient(circle at top right, rgba(70, 165, 172, 0.18), transparent 28%),
+    linear-gradient(145deg, #f8f1e6 0%, #edf4f5 48%, #f7f8fc 100%);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--text-dark);
-  background: var(--main-bg);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-family: var(--heading-font);
+  letter-spacing: -0.02em;
+  color: var(--primary-dark);
+}
+
+p {
+  margin: 0;
+  color: var(--text-medium);
+  line-height: 1.6;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: "Consolas", "Courier New", monospace;
 }
 
-/* Shared component styles - Accountant theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(23, 50, 77, 0.2);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .admin-notices-container,
 .admin-bills-container,
 .admin-complaints-container,
@@ -55,72 +133,208 @@ code {
 .create-flat-container,
 .admin-parking-container,
 .admin-members-container,
-.admin-accountants-container {
+.admin-accountants-container,
+.admin-member-details-container,
+.member-profile,
+.report-month-card {
   background: var(--card-bg);
-  border-radius: var(--card-radius);
-  padding: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
   box-shadow: var(--card-shadow);
+  backdrop-filter: blur(18px);
 }
 
 .admin-notices-container h2,
 .admin-bills-container h2,
 .admin-complaints-container h2,
 .admin-reports-container h2,
-.member-bills-container h2 {
-  color: var(--primary);
-  margin-bottom: 1.5rem;
+.member-bills-container h2,
+.assign-bill-container h2,
+.member-profile h2,
+.member-profile h3,
+.member-profile h4 {
+  color: var(--primary-dark);
 }
 
+.notice-form input,
+.notice-form textarea,
+.assign-bill-form input,
+.assign-flat-form input,
+.assign-flat-form select,
+.create-flat-form input,
+.create-flat-form select,
+.filter-bar select,
+.member-bills-container input,
+.member-profile input,
+.member-profile textarea,
+.member-profile select {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xs);
+  color: var(--text-dark);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.notice-form input:focus,
+.notice-form textarea:focus,
+.assign-bill-form input:focus,
+.assign-flat-form input:focus,
+.assign-flat-form select:focus,
+.create-flat-form input:focus,
+.create-flat-form select:focus,
+.filter-bar select:focus,
+.member-bills-container input:focus,
+.member-profile input:focus,
+.member-profile textarea:focus,
+.member-profile select:focus,
+.login-form__field input:focus {
+  outline: none;
+  border-color: rgba(45, 123, 131, 0.6);
+  box-shadow: 0 0 0 4px rgba(70, 165, 172, 0.12);
+  transform: translateY(-1px);
+}
+
+.notice-form textarea,
+.member-profile textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.btn,
 .notice-form button,
 .admin-documents-container button,
-.assign-bill-container button,
+.assign-bill-form button,
 .assign-flat-form button,
-.create-flat-form button {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 8px;
+.create-flat-form button,
+.member-bills-container .pay-btn,
+.member-bills-container .export-buttons button,
+.member-profile button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
+.btn:hover,
 .notice-form button:hover,
 .admin-documents-container button:hover,
+.assign-bill-form button:hover,
 .assign-flat-form button:hover,
-.create-flat-form button:hover {
-  background: var(--primary-light);
+.create-flat-form button:hover,
+.member-bills-container .pay-btn:hover,
+.member-bills-container .export-buttons button:hover,
+.member-profile button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(23, 50, 77, 0.14);
 }
 
-table th {
-  background: var(--primary);
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 1rem 1.1rem;
+  text-align: left;
+}
+
+th {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.members-table,
+.bills-table,
+.ownership-table {
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.76);
+  box-shadow: var(--shadow-soft);
+}
+
+.members-table th,
+.bills-table th,
+.ownership-table th {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
   color: #fff;
+}
+
+.members-table td,
+.bills-table td,
+.ownership-table td {
+  border-bottom: 1px solid rgba(23, 50, 77, 0.08);
+}
+
+.members-table tbody tr:last-child td,
+.bills-table tbody tr:last-child td,
+.ownership-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.members-table tbody tr:hover,
+.bills-table tbody tr:hover,
+.ownership-table tbody tr:hover {
+  background: rgba(45, 123, 131, 0.06);
+}
+
+.badge,
+.status,
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  padding: 0.38rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .badge.PAID,
 .status.paid {
-  background: var(--success);
-  color: #fff;
+  background: rgba(46, 125, 87, 0.14);
+  color: var(--success);
 }
 
 .badge.UNPAID,
 .status.pending {
-  background: var(--danger);
-  color: #fff;
+  background: rgba(191, 90, 61, 0.14);
+  color: var(--danger);
 }
 
-.pay-btn,
-.notify-btn {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
+.message {
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-xs);
+  background: rgba(46, 125, 87, 0.1);
+  color: var(--success);
+  font-weight: 700;
 }
 
-.pay-btn:hover,
-.notify-btn:hover {
-  background: var(--primary-light);
+@media (max-width: 768px) {
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(210, 155, 67, 0.16), transparent 26%),
+      radial-gradient(circle at top right, rgba(70, 165, 172, 0.14), transparent 24%),
+      linear-gradient(155deg, #f8f1e6 0%, #eef4f6 54%, #f7f8fc 100%);
+  }
+
+  th,
+  td {
+    padding: 0.85rem 0.9rem;
+  }
 }

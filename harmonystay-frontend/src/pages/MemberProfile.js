@@ -1,154 +1,218 @@
-// src/pages/MemberProfile.js
 import React, { useEffect, useState } from "react";
-import { FaUserCircle, FaHome, FaHistory } from "react-icons/fa";
+import { FaHistory, FaHome, FaUserCircle } from "react-icons/fa";
 import axios from "axios";
 import "./MemberProfile.css";
 
 export default function MemberProfile({ user }) {
   const [flat, setFlat] = useState(null);
   const [loading, setLoading] = useState(true);
-    const [otpSent, setOtpSent] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [message, setMessage] = useState("");
 
-
   useEffect(() => {
     const fetchFlat = async () => {
-      if (!user?.flatId) return;
+      if (!user?.flatId) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await axios.get(`http://localhost:8888/api/flats/${user.flatId}`);
-        console.log(user.flatId);
-        console.log(res);
-        setFlat(res.data);
-      } catch (err) {
-        console.error("Error fetching flat:", err);
+        const response = await axios.get(`http://localhost:8888/api/flats/${user.flatId}`);
+        setFlat(response.data);
+      } catch (error) {
+        console.error("Error fetching flat:", error);
       } finally {
         setLoading(false);
       }
     };
+
     fetchFlat();
   }, [user]);
 
   const sendOtp = async () => {
     try {
-      console.log("sending !!");
       await axios.post(`http://localhost:8888/api/members/send-otp/${user.id}`);
       setOtpSent(true);
       setMessage("OTP sent to your registered phone.");
-      console.log(user);
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       setMessage("Failed to send OTP.");
     }
   };
 
   const changePassword = async () => {
     try {
-      const res = await axios.post(`http://localhost:8888/api/members/change-password/${user.id}`, {
-        otp,
-        newPassword,
-      });
-      setMessage(res.data);
+      const response = await axios.post(
+        `http://localhost:8888/api/members/change-password/${user.id}`,
+        {
+          otp,
+          newPassword,
+        }
+      );
+
+      setMessage(response.data);
       setOtpSent(false);
       setOtp("");
       setNewPassword("");
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       setMessage("Failed to change password.");
     }
   };
 
-
-  if (!user) return <div className="profile-loading">Loading member...</div>;
+  if (!user) {
+    return <div className="profile-loading">Loading member profile...</div>;
+  }
 
   return (
     <div className="member-profile">
       <div className="profile-header">
-        <FaUserCircle className="profile-avatar" size={90} />
-        <h2>{user.firstName} {user.lastName}</h2>
-        <p className="profile-role">{user.role?.toUpperCase()}</p>
-      </div>
-
-      <div className="profile-section">
-        <h3>👤 Personal Details</h3>
-        <div className="profile-grid">
-          <p><strong>Email:</strong> {user.email || "N/A"}</p>
-          <p><strong>Phone:</strong> {user.phone || "N/A"}</p>
-          <p><strong>Join Date:</strong> {user.dateOfJoining || "N/A"}</p>
-          <p><strong>Status:</strong> {user.status || "Active"}</p>
+        <div className="profile-header__avatar-wrap">
+          <FaUserCircle className="profile-avatar" size={96} />
+        </div>
+        <div>
+          <p className="profile-header__eyebrow">Resident profile</p>
+          <h2>
+            {user.firstName} {user.lastName || ""}
+          </h2>
+          <p className="profile-role">{String(user.role || "member").toUpperCase()}</p>
         </div>
       </div>
 
-<div className="profile-section">
-        <h3>🔑 Change Password</h3>
-        {!otpSent && <button onClick={sendOtp}>Send OTP</button>}
+      <div className="profile-section">
+        <h3>Personal details</h3>
+        <div className="profile-grid">
+          <p>
+            <strong>Email</strong>
+            <span>{user.email || "Not available"}</span>
+          </p>
+          <p>
+            <strong>Phone</strong>
+            <span>{user.phone || "Not available"}</span>
+          </p>
+          <p>
+            <strong>Join date</strong>
+            <span>{user.dateOfJoining || "Not available"}</span>
+          </p>
+          <p>
+            <strong>Status</strong>
+            <span>{user.status || "Active"}</span>
+          </p>
+        </div>
+      </div>
+
+      <div className="profile-section">
+        <h3>Change password</h3>
+        {!otpSent && (
+          <button type="button" onClick={sendOtp}>
+            Send OTP
+          </button>
+        )}
+
         {otpSent && (
           <div className="change-password-form">
             <input
               type="text"
               placeholder="Enter OTP"
               value={otp}
-              onChange={(e) => setOtp(e.target.value)}
+              onChange={(event) => setOtp(event.target.value)}
             />
             <input
               type="password"
-              placeholder="Enter New Password"
+              placeholder="Enter new password"
               value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
+              onChange={(event) => setNewPassword(event.target.value)}
             />
-            <button onClick={changePassword}>Change Password</button>
+            <button type="button" onClick={changePassword}>
+              Update password
+            </button>
           </div>
         )}
-        {message && <p>{message}</p>}
+
+        {message && <p className="message">{message}</p>}
       </div>
+
       {!loading && flat && (
         <div className="profile-section">
-          <h3><FaHome /> Flat Details</h3>
+          <h3>
+            <FaHome aria-hidden />
+            Flat details
+          </h3>
           <div className="profile-grid">
-            <p><strong>Flat No:</strong> {flat.flatNumber || 'N/A'}</p>
-            <p><strong>Wing:</strong> {flat.wing}</p>
-            <p><strong>Floor:</strong> {flat.floor}</p>
-            <p><strong>Area:</strong> {flat.area} sqft</p>
-            <p><strong>Type:</strong> {flat.type}</p>
-            <p><strong>Status:</strong> {flat.status}</p>
+            <p>
+              <strong>Flat number</strong>
+              <span>{flat.flatNumber || "Not available"}</span>
+            </p>
+            <p>
+              <strong>Wing</strong>
+              <span>{flat.wing || "Not available"}</span>
+            </p>
+            <p>
+              <strong>Floor</strong>
+              <span>{flat.floor || "Not available"}</span>
+            </p>
+            <p>
+              <strong>Area</strong>
+              <span>{flat.area ? `${flat.area} sqft` : "Not available"}</span>
+            </p>
+            <p>
+              <strong>Type</strong>
+              <span>{flat.type || "Not available"}</span>
+            </p>
+            <p>
+              <strong>Status</strong>
+              <span>{flat.status || "Not available"}</span>
+            </p>
           </div>
 
           {flat.owner && (
             <div className="sub-section">
-              <h4>🏠 Owner</h4>
-              <p><strong>Name:</strong> {flat.owner.firstName} {flat.owner.lastName}</p>
-              <p><strong>Email:</strong> {flat.owner.email}</p>
+              <h4>Owner</h4>
+              <p>
+                {flat.owner.firstName} {flat.owner.lastName}
+              </p>
+              <p>{flat.owner.email}</p>
             </div>
           )}
 
           {flat.tenant && (
             <div className="sub-section">
-              <h4>👥 Tenant</h4>
-              <p><strong>Name:</strong> {flat.tenant.firstName} {flat.tenant.lastName}</p>
-              <p><strong>Email:</strong> {flat.tenant.email}</p>
+              <h4>Tenant</h4>
+              <p>
+                {flat.tenant.firstName} {flat.tenant.lastName}
+              </p>
+              <p>{flat.tenant.email}</p>
             </div>
           )}
 
           {flat.ownershipHistory?.length > 0 && (
             <div className="sub-section">
-              <h4><FaHistory /> Ownership History</h4>
+              <h4>
+                <FaHistory aria-hidden />
+                Ownership history
+              </h4>
               <table className="ownership-table">
                 <thead>
                   <tr>
-                    <th>Previous Owner</th>
-                    <th>New Owner</th>
+                    <th>Previous owner</th>
+                    <th>New owner</th>
                     <th>Date</th>
                     <th>Remarks</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {flat.ownershipHistory.map((h, idx) => (
-                    <tr key={idx}>
-                      <td>{h.previousOwnerId}</td>
-                      <td>{h.newOwnerId}</td>
-                      <td>{new Date(h.transferDate).toLocaleDateString()}</td>
-                      <td>{h.remarks || "—"}</td>
+                  {flat.ownershipHistory.map((history, index) => (
+                    <tr key={`${history.transferDate}-${index}`}>
+                      <td>{history.previousOwnerId}</td>
+                      <td>{history.newOwnerId}</td>
+                      <td>
+                        {history.transferDate
+                          ? new Date(history.transferDate).toLocaleDateString("en-IN")
+                          : "Not available"}
+                      </td>
+                      <td>{history.remarks || "Not available"}</td>
                     </tr>
                   ))}
                 </tbody>

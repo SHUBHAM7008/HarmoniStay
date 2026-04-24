@@ -1,36 +1,228 @@
-.member-facilities-container { padding: 1.5rem; }
-.facility-form { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; align-items: center; }
-.facility-form select, .facility-form input { padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
-.facility-form button { padding: 0.6rem 1rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
-.bookings-list { display: flex; flex-direction: column; gap: 0.8rem; }
-.booking-card { background: #f8f9fa; padding: 1rem; border-radius: 10px; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-.booking-card .status { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.85rem; }
-.booking-card.BOOKED .status { background: var(--success); color: #fff; }
-.booking-card.CANCELLED .status { background: #6c757d; color: #fff; }
-.booking-card button { padding: 0.4rem 0.8rem; background: var(--danger); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
-.msg { color: var(--success); }
+.member-facilities-container {
+  display: grid;
+  gap: 1rem;
+  max-width: 1180px;
+}
 
-.booked-slots-info {
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+.member-facilities__header {
+  padding: 1.4rem 1.5rem;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top right, rgba(45, 123, 131, 0.16), transparent 24%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 250, 244, 0.76) 100%);
+  border: 1px solid rgba(23, 50, 77, 0.08);
+  box-shadow: var(--shadow-soft);
 }
-.booked-slots-info.has-bookings {
-  background: #fff3cd;
-  border: 1px solid #ffc107;
+
+.member-facilities__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--secondary);
 }
-.booked-slots-info.all-available {
-  background: #d4edda;
-  border: 1px solid #28a745;
+
+.member-facilities__header h2 {
+  margin-top: 0.45rem;
 }
-.booked-slots-info .all-available-msg { margin: 0; color: #155724; }
-.loading-slots { margin: 0 0 1rem 0; color: var(--text-medium); font-style: italic; }
-.booked-slots-info h4 { margin: 0 0 0.5rem 0; font-size: 0.95rem; }
-.booked-slots-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; }
-.booked-badge {
-  background: #dc3545;
+
+.member-facilities__header p:last-child {
+  margin-top: 0.5rem;
+  max-width: 64ch;
+}
+
+.member-facilities__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.member-facilities__stats article,
+.member-facilities__booking-panel,
+.member-facilities-container .bookings-list,
+.member-facilities__empty {
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
+}
+
+.member-facilities__stats article {
+  padding: 1.15rem 1.2rem;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.member-facilities__stats span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.member-facilities__stats strong {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 1.45rem;
+  color: var(--primary-dark);
+}
+
+.member-facilities__layout {
+  display: grid;
+  grid-template-columns: 380px minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.member-facilities__booking-panel {
+  display: grid;
+  gap: 1rem;
+  padding: 1.3rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.member-facilities-container .facility-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.member-facilities-container .facility-form button {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: #fff;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
+}
+
+.member-facilities-container .facility-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.member-facilities-container .bookings-list {
+  display: grid;
+  gap: 1rem;
+  padding: 1.2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+.member-facilities-container .booking-card {
+  padding: 1.15rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(23, 50, 77, 0.08);
+}
+
+.booking-card__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.booking-card__facility {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.42rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(45, 123, 131, 0.12);
+  color: var(--secondary);
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.member-facilities-container .booking-card h4 {
+  margin-top: 0.7rem;
+}
+
+.member-facilities-container .booking-card p {
+  margin-top: 0.7rem;
+}
+
+.member-facilities-container .booking-card .status {
+  min-width: auto;
+}
+
+.member-facilities-container .booking-card.BOOKED .status {
+  background: rgba(46, 125, 87, 0.14);
+  color: var(--success);
+}
+
+.member-facilities-container .booking-card.CANCELLED .status {
+  background: rgba(23, 50, 77, 0.12);
+  color: var(--text-medium);
+}
+
+.member-facilities-container .booking-card button {
+  margin-top: 0.95rem;
+  background: linear-gradient(135deg, #c66a4e 0%, var(--danger) 100%);
+  color: #fff;
+}
+
+.member-facilities-container .msg {
+  color: var(--success);
+  font-weight: 700;
+}
+
+.member-facilities-container .booked-slots-info {
+  border-radius: 22px;
+  padding: 1rem;
+}
+
+.member-facilities-container .booked-slots-info.has-bookings {
+  background: rgba(207, 139, 34, 0.12);
+  border: 1px solid rgba(207, 139, 34, 0.24);
+}
+
+.member-facilities-container .booked-slots-info.all-available {
+  background: rgba(46, 125, 87, 0.12);
+  border: 1px solid rgba(46, 125, 87, 0.2);
+}
+
+.member-facilities-container .booked-slots-info h4 {
+  margin: 0 0 0.6rem;
+}
+
+.member-facilities-container .booked-slots-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.member-facilities-container .booked-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.38rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(191, 90, 61, 0.12);
+  color: var(--danger);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.member-facilities-container .all-available-msg,
+.member-facilities-container .loading-slots,
+.member-facilities__empty {
+  color: var(--text-medium);
+}
+
+.member-facilities__empty {
+  padding: 1.2rem;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.76);
+}
+
+@media (max-width: 980px) {
+  .member-facilities__layout,
+  .member-facilities__stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .booking-card__top {
+    flex-direction: column;
+  }
 }

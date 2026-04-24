@@ -1,138 +1,101 @@
-/* MemberBills.css */
-
 .member-bills-container {
-  max-width: 1000px;
-  margin: 20px auto;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.45rem;
 }
 
-.member-bills-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.member-bills__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
 }
 
-/* Summary Section */
+.member-bills__header p {
+  margin-top: 0.45rem;
+}
+
 .bill-summary {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 20px;
-  background-color: #f8f9fa;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.2rem;
 }
 
-.bill-summary p {
-  margin: 0;
-  font-weight: 600;
-  color: #333;
+.bill-summary article {
+  padding: 1.1rem 1.15rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-soft);
 }
 
-/* Filter Section */
+.bill-summary span {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-light);
+}
+
+.bill-summary strong {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 1.55rem;
+  color: var(--primary-dark);
+}
+
 .filter-section {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.2rem;
+}
+
+.export-buttons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
 
-.filter-section input {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-  outline: none;
-  transition: 0.2s;
-}
-
-.filter-section input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 5px rgba(0,51,102,0.2);
-}
-
-/* Export Buttons */
-.export-buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
 .export-buttons button {
-  padding: 8px 16px;
-  background-color: #197de2;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
 }
 
-.export-buttons button:hover {
-  background-color: #105bb5;
-}
-
-/* Table Styles */
-.bills-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-}
-
-.bills-table th,
-.bills-table td {
-  border: 1px solid var(--border-color);
-  padding: 10px 12px;
-  text-align: center;
-}
-
-.bills-table th {
-  background: var(--primary);
-  color: white;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.bills-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.bills-table tbody tr:hover {
-  background-color: #f1f7ff;
-}
-
-/* Status Labels */
-.status {
-  padding: 5px 10px;
-  border-radius: 12px;
-  font-weight: 600;
-  color: #fff;
-  display: inline-block;
-}
-
-.status.paid {
-  background-color: #28a745;
-}
-
-.status.pending {
-  background-color: #ffc107;
-}
-
-/* Pay Button */
-.pay-btn {
-  padding: 6px 12px;
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.pay-btn:hover {
-  background: var(--primary-light);
+.member-bills__loading,
+.member-bills__empty {
+  color: var(--text-light);
 }
 
 .paid-label {
   color: var(--success);
-  font-weight: 600;
+  font-weight: 700;
+}
+
+@media (max-width: 880px) {
+  .member-bills__header,
+  .bill-summary,
+  .filter-section {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+
+  .member-bills__header {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .member-bills-container {
+    padding: 0;
+  }
+
+  .bills-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
