@@ -1,0 +1,5 @@
+.member-documents-container { padding: 1.5rem; }
+.filter-select { margin-bottom: 1rem; padding: 0.5rem 1rem; border-radius: 8px; }
+.doc-list { display: flex; flex-direction: column; gap: 1rem; }
+.doc-card { background: #f8f9fa; padding: 1rem; border-radius: 10px; }
+.doc-card a { color: var(--primary); }

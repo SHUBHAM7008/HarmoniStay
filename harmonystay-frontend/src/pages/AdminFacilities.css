@@ -1,0 +1,7 @@
+.admin-facilities-container { padding: 1.5rem; }
+.facilities-table { width: 100%; border-collapse: collapse; }
+.facilities-table th, .facilities-table td { padding: 0.75rem; border: 1px solid var(--border-color); }
+.facilities-table th { background: var(--primary); color: #fff; }
+.badge { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
+.badge.BOOKED { background: var(--success); color: #fff; }
+.badge.CANCELLED { background: #6c757d; color: #fff; }

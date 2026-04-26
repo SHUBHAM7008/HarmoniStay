@@ -1,0 +1,16 @@
+.admin-reports-container { padding: 1.5rem; }
+.month-filter { margin-bottom: 1rem; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
+.summary-cards { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+.summary-cards .card { background: #f8f9fa; padding: 1.5rem; border-radius: 12px; min-width: 150px; }
+.summary-cards .card h4 { margin: 0 0 0.5rem 0; color: #555; font-size: 0.9rem; }
+.summary-cards .card p { margin: 0; font-size: 1.5rem; font-weight: bold; color: #003366; }
+.summary-cards .card.paid { border-left: 4px solid #28a745; }
+.summary-cards .card.unpaid { border-left: 4px solid #dc3545; }
+.monthly-section h3 { margin-top: 1.5rem; }
+.month-block { margin-bottom: 1.5rem; }
+.month-block h4 { margin-bottom: 0.5rem; }
+.month-block table { width: 100%; border-collapse: collapse; }
+.month-block th, .month-block td { padding: 0.5rem; border: 1px solid var(--border-color); }
+.badge { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
+.badge.PAID { background: var(--success); color: #fff; }
+.badge.UNPAID { background: var(--danger); color: #fff; }

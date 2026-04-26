@@ -1,0 +1,305 @@
+/* Loaded after page CSS so the shared system visibly wins */
+
+.admin-main-scroll > *,
+.member-dashboard .main-panel > *,
+.accountant-dashboard .main-panel > *,
+.security-dashboard > * {
+  max-width: 1180px;
+}
+
+.admin-members-container,
+.admin-member-details-container,
+.add-member-container,
+.admin-bills-container,
+.admin-notices-container,
+.admin-complaints-container,
+.admin-meetings-container,
+.admin-facilities-container,
+.admin-documents-container,
+.admin-visitors-container,
+.admin-reports-container,
+.member-bills-container,
+.member-complaints-container,
+.member-facilities-container,
+.member-documents-container,
+.member-meetings-container,
+.member-parking-container,
+.assign-bill-container,
+.assign-flat-container,
+.create-flat-container,
+.admin-parking-container,
+.admin-accountants-container {
+  padding: 1.5rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.admin-members-container h1,
+.admin-member-details-container h1,
+.add-member-container .form-title,
+.admin-notices-container h2,
+.admin-bills-container h2,
+.admin-complaints-container h2,
+.admin-meetings-container h2,
+.admin-facilities-container h2,
+.admin-documents-container h2,
+.admin-visitors-container h2,
+.admin-reports-container h2,
+.member-bills-container h2,
+.member-complaints-container h2,
+.member-facilities-container h2,
+.member-documents-container h2,
+.member-meetings-container h2,
+.member-parking-container h2,
+.assign-bill-container h2,
+.assign-flat-container h2,
+.create-flat-container h2,
+.admin-parking-container h2,
+.admin-accountants-container h2 {
+  margin: 0 0 1.25rem !important;
+  color: var(--primary) !important;
+  font-size: 1.4rem !important;
+  line-height: 1.25;
+}
+
+.admin-members-container h1::after {
+  display: none !important;
+}
+
+.top-bar,
+.filter-bar,
+.form-card,
+.member-card,
+.add-member-form,
+.table-wrap,
+.table-wrapper,
+.complaints-table-wrap,
+.report-month-card,
+.profile-card,
+.dashboard-card {
+  background: #fff !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.top-bar,
+.filter-bar,
+.form-card,
+.member-card,
+.add-member-form {
+  padding: 1rem 1.1rem !important;
+}
+
+.table-wrap,
+.table-wrapper,
+.complaints-table-wrap {
+  overflow: auto;
+}
+
+.top-bar p,
+.filter-bar label,
+.admin-accountants-intro,
+.form-hint {
+  color: var(--text-medium) !important;
+}
+
+.notice-form,
+.visitor-form,
+.complaint-form,
+.facility-form,
+.doc-form,
+.accountant-form,
+.assign-flat-form,
+.assign-bill-form,
+.add-slot-form,
+.form-grid,
+.form-row,
+.accountant-form-row,
+.form-card form {
+  display: grid !important;
+  gap: 0.9rem !important;
+}
+
+.form-row,
+.accountant-form-row {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+}
+
+.form-group,
+.edit-form .form-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.filter-bar select,
+.form-grid input,
+.form-grid select,
+.form-card input,
+.form-card select,
+.form-group input,
+.form-group select,
+.form-group textarea,
+.notice-form input,
+.notice-form textarea,
+.visitor-form input,
+.visitor-form select,
+.complaint-form input,
+.complaint-form textarea,
+.facility-form input,
+.facility-form select,
+.doc-form input,
+.doc-form select,
+.accountant-form input,
+.accountant-form select,
+.edit-form input,
+.edit-form select,
+.edit-form textarea {
+  min-height: 40px !important;
+  width: 100% !important;
+  padding: 0.65rem 0.8rem !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 6px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+.form-group textarea,
+.notice-form textarea,
+.complaint-form textarea,
+.edit-form textarea {
+  min-height: 110px !important;
+  resize: vertical;
+}
+
+.btn,
+.btn-blue,
+.btn-green,
+.btn-red,
+.btn-cyan,
+.add-member-container button,
+.add-member-form button,
+.notice-form button,
+.visitor-form button,
+.complaint-form button,
+.facility-form button,
+.doc-form button,
+.accountant-form button,
+.assign-flat-form button,
+.assign-bill-form button,
+.add-slot-form button {
+  min-height: 40px !important;
+  padding: 0.6rem 0.95rem !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+}
+
+.btn {
+  border: 1px solid transparent !important;
+}
+
+.members-table,
+.parking-table,
+.visitors-table,
+.complaints-table,
+.accountants-table,
+.ownership-table,
+.bills-table,
+.facilities-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  background: #fff !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: var(--card-shadow) !important;
+}
+
+.members-table th,
+.members-table td,
+.parking-table th,
+.parking-table td,
+.visitors-table th,
+.visitors-table td,
+.complaints-table th,
+.complaints-table td,
+.accountants-table th,
+.accountants-table td,
+.ownership-table th,
+.ownership-table td,
+.bills-table th,
+.bills-table td,
+.facilities-table th,
+.facilities-table td {
+  padding: 0.85rem 0.9rem !important;
+  border-bottom: 1px solid #edf2f7 !important;
+}
+
+.members-table th,
+.parking-table th,
+.visitors-table th,
+.complaints-table th,
+.accountants-table th,
+.ownership-table th,
+.bills-table th,
+.facilities-table th {
+  background: var(--surface-muted) !important;
+  color: var(--primary) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-size: 0.85rem !important;
+}
+
+.member-row:hover,
+.members-table tbody tr:hover,
+.parking-table tbody tr:hover,
+.visitors-table tbody tr:hover,
+.complaints-table tbody tr:hover,
+.accountants-table tbody tr:hover,
+.ownership-table tbody tr:hover,
+.bills-table tbody tr:hover,
+.facilities-table tbody tr:hover {
+  background: #f8fbfd !important;
+}
+
+.admin-profile-card,
+.member-profile,
+.member-card,
+.form-card {
+  padding: 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+  .admin-members-container,
+  .admin-member-details-container,
+  .add-member-container,
+  .admin-bills-container,
+  .admin-notices-container,
+  .admin-complaints-container,
+  .admin-meetings-container,
+  .admin-facilities-container,
+  .admin-documents-container,
+  .admin-visitors-container,
+  .admin-reports-container,
+  .member-bills-container,
+  .member-complaints-container,
+  .member-facilities-container,
+  .member-documents-container,
+  .member-meetings-container,
+  .member-parking-container,
+  .assign-bill-container,
+  .assign-flat-container,
+  .create-flat-container,
+  .admin-parking-container,
+  .admin-accountants-container {
+    padding: 1rem !important;
+  }
+
+  .top-bar,
+  .filter-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+}

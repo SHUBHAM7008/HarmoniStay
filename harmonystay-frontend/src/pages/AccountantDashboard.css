@@ -1,0 +1,152 @@
+.accountant-dashboard {
+  display: flex;
+  min-height: 100vh;
+  background: var(--main-bg);
+  color: var(--text-dark);
+}
+
+.accountant-dashboard .sidebar {
+  width: 240px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 1.25rem 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.accountant-dashboard .sidebar h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.accountant-dashboard .role {
+  margin: 0.3rem 0 1.25rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.86rem;
+}
+
+.accountant-dashboard .menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.accountant-dashboard .menu-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 42px;
+  padding: 0 0.85rem;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.86);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.accountant-dashboard .menu-list li:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.accountant-dashboard .menu-list li.active {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 3px 0 0 #bfdbfe;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.accountant-dashboard .logout-btn {
+  margin-top: auto;
+  min-height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accountant-dashboard .main-panel {
+  flex: 1;
+  padding: 2rem;
+  background: var(--main-bg);
+}
+
+.accountant-dashboard .main-panel > h2,
+.accountant-dashboard .main-panel > h3 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+.accountant-dashboard .summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0 1.5rem;
+}
+
+.accountant-dashboard .card,
+.accountant-dashboard .report-month-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+}
+
+.accountant-dashboard .card {
+  padding: 1.25rem;
+}
+
+.accountant-dashboard .card h4 {
+  margin: 0 0 0.45rem;
+  color: var(--text-medium);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.accountant-dashboard .card p {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.accountant-dashboard .bills-table {
+  background: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.accountant-dashboard .monthly-reports {
+  display: grid;
+  gap: 1rem;
+}
+
+.accountant-dashboard .report-month-card {
+  padding: 1rem;
+}
+
+.accountant-dashboard .report-month-card h4 {
+  margin: 0 0 0.85rem;
+  color: var(--primary);
+}
+
+@media (max-width: 860px) {
+  .accountant-dashboard {
+    flex-direction: column;
+  }
+
+  .accountant-dashboard .sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  .accountant-dashboard .main-panel {
+    padding: 1.25rem;
+  }
+}

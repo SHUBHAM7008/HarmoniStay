@@ -1,0 +1,27 @@
+spring.application.name=HarmoniStay-Backend
+spring.profiles.active=local
+
+# PostgreSQL — copy to application-local.properties and set secrets
+spring.datasource.url=https://vdczljgvpmylrscejlkm.supabase.co
+# postgresql://postgres:[YOUR-PASSWORD]@db.vdczljgvpmylrscejlkm.supabase.co:5432/postgres
+spring.datasource.username=postgres
+spring.datasource.password=supershubham
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.open-in-view=false
+
+server.port=8888
+
+razorpay.key_id=${RAZORPAY_KEY_ID:}
+razorpay.key_secret=${RAZORPAY_KEY_SECRET:}
+
+twilio.account.sid=${TWILIO_ACCOUNT_SID:}
+twilio.auth.token=${TWILIO_AUTH_TOKEN:}
+twilio.phone.number=${TWILIO_PHONE_NUMBER:}
+google.calendar.access-token=${GOOGLE_CALENDAR_ACCESS_TOKEN:}
+
+# Private society document storage. Keep this outside public/static folders.
+harmonistay.documents.storage-path=${DOCUMENT_STORAGE_PATH:uploads/documents}
+spring.servlet.multipart.max-file-size=10MB
+spring.servlet.multipart.max-request-size=12MB

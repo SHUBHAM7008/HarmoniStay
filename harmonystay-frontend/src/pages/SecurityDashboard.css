@@ -1,0 +1,102 @@
+.security-dashboard {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.security-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.security-header h2 {
+  margin: 0;
+  color: var(--primary);
+}
+
+.logout-btn {
+  min-height: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0 0.95rem;
+  background: #fff;
+  color: var(--text-dark);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.security-card {
+  margin-bottom: 1rem;
+}
+
+.security-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+}
+
+.security-form button {
+  align-self: end;
+}
+
+.validation-text,
+.message-text {
+  margin: 0.75rem 0 0;
+  font-size: 0.92rem;
+}
+
+.validation-text {
+  color: var(--primary);
+}
+
+.message-text {
+  color: var(--success);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  background: #fff;
+}
+
+.security-table th,
+.security-table td {
+  white-space: nowrap;
+}
+
+.status-pill.pending {
+  background: rgba(214, 158, 46, 0.16);
+  color: #9c6b00;
+}
+
+.status-pill.accepted {
+  background: rgba(47, 133, 90, 0.12);
+  color: var(--success);
+}
+
+.status-pill.rejected {
+  background: rgba(197, 48, 48, 0.12);
+  color: var(--danger);
+}
+
+.category-chip {
+  background: #eef4fb;
+  color: var(--primary);
+  border: 1px solid #c9d7e6;
+  text-transform: capitalize;
+}
+
+@media (max-width: 768px) {
+  .security-dashboard {
+    padding: 1rem;
+  }
+
+  .security-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

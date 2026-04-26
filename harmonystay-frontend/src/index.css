@@ -1,0 +1,250 @@
+/* HarmonyStay - Shared design system */
+:root {
+  --primary: #003366;
+  --primary-light: #004080;
+  --primary-dark: #002244;
+  --sidebar-bg: #003366;
+  --sidebar-text: #ffffff;
+  --main-bg: #f4f6f8;
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --card-radius: 8px;
+  --panel-radius: 6px;
+  --text-dark: #243447;
+  --text-medium: #52606d;
+  --text-light: #7b8794;
+  --border-color: #d9e2ec;
+  --border-strong: #bcccdc;
+  --surface-muted: #f8fafc;
+  --success: #2f855a;
+  --danger: #c53030;
+  --warning: #d69e2e;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-dark);
+  background: var(--main-bg);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  letter-spacing: 0;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+/* Shared surfaces */
+.admin-notices-container,
+.admin-bills-container,
+.admin-complaints-container,
+.admin-meetings-container,
+.admin-facilities-container,
+.admin-documents-container,
+.admin-visitors-container,
+.admin-reports-container,
+.member-bills-container,
+.member-complaints-container,
+.member-facilities-container,
+.member-documents-container,
+.member-meetings-container,
+.member-parking-container,
+.assign-bill-container,
+.assign-flat-container,
+.create-flat-container,
+.admin-parking-container,
+.admin-members-container,
+.admin-accountants-container,
+.security-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: var(--space-6);
+  box-shadow: var(--card-shadow);
+}
+
+.admin-notices-container h2,
+.admin-bills-container h2,
+.admin-complaints-container h2,
+.admin-reports-container h2,
+.member-bills-container h2,
+.security-card h3 {
+  color: var(--primary);
+  margin: 0 0 var(--space-5);
+  font-size: 1.25rem;
+}
+
+/* Shared controls */
+.notice-form button,
+.admin-documents-container button,
+.assign-bill-container button,
+.assign-flat-form button,
+.create-flat-form button,
+.pay-btn,
+.notify-btn,
+.security-form button {
+  min-height: 40px;
+  border: 1px solid var(--primary);
+  border-radius: var(--panel-radius);
+  background: var(--primary);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.notice-form button:hover,
+.admin-documents-container button:hover,
+.assign-flat-form button:hover,
+.create-flat-form button:hover,
+.pay-btn:hover,
+.notify-btn:hover,
+.security-form button:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-light);
+}
+
+.admin-documents-container input,
+.admin-documents-container select,
+.assign-bill-container input,
+.assign-bill-container select,
+.assign-flat-form input,
+.assign-flat-form select,
+.create-flat-form input,
+.create-flat-form select,
+.security-form input,
+.security-form select {
+  min-height: 40px;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: var(--panel-radius);
+  padding: 0.65rem 0.8rem;
+  background: #fff;
+  color: var(--text-dark);
+}
+
+.admin-documents-container input:focus,
+.admin-documents-container select:focus,
+.assign-bill-container input:focus,
+.assign-bill-container select:focus,
+.assign-flat-form input:focus,
+.assign-flat-form select:focus,
+.create-flat-form input:focus,
+.create-flat-form select:focus,
+.security-form input:focus,
+.security-form select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 51, 102, 0.08);
+}
+
+/* Shared tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 0.85rem 0.9rem;
+  text-align: left;
+}
+
+table th {
+  background: var(--surface-muted);
+  color: var(--primary);
+  font-weight: 700;
+  border-bottom: 1px solid var(--border-color);
+}
+
+table td {
+  border-bottom: 1px solid #edf2f7;
+  color: var(--text-dark);
+}
+
+.badge,
+.status-pill,
+.category-chip,
+.status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 24px;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge.PAID,
+.status.paid {
+  background: rgba(47, 133, 90, 0.12);
+  color: var(--success);
+}
+
+.badge.UNPAID,
+.status.pending {
+  background: rgba(197, 48, 48, 0.12);
+  color: var(--danger);
+}
+
+@media (max-width: 768px) {
+  .admin-notices-container,
+  .admin-bills-container,
+  .admin-complaints-container,
+  .admin-meetings-container,
+  .admin-facilities-container,
+  .admin-documents-container,
+  .admin-visitors-container,
+  .admin-reports-container,
+  .member-bills-container,
+  .member-complaints-container,
+  .member-facilities-container,
+  .member-documents-container,
+  .member-meetings-container,
+  .member-parking-container,
+  .assign-bill-container,
+  .assign-flat-container,
+  .create-flat-container,
+  .admin-parking-container,
+  .admin-members-container,
+  .admin-accountants-container,
+  .security-card {
+    padding: var(--space-5);
+  }
+
+  table th,
+  table td {
+    padding: 0.75rem;
+  }
+}

@@ -1,0 +1,47 @@
+/* Admin Bills - Accountant Theme */
+.admin-bills-container h2 {
+  margin-bottom: 1.5rem;
+}
+
+.bills-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.bills-table th,
+.bills-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.bills-table th {
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+}
+
+.bills-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.status.paid { background: var(--success); color: #fff; padding: 0.3rem 0.6rem; border-radius: 6px; }
+.status.pending { background: var(--danger); color: #fff; padding: 0.3rem 0.6rem; border-radius: 6px; }
+
+.paid-label {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.month-bills {
+  margin-bottom: 2rem;
+}
+
+.month-bills h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,81 @@
+/* src/pages/AdminNotices.css */
+
+.admin-notices-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-notices-container h2 {
+  text-align: center;
+}
+
+.notice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notice-form input,
+.notice-form textarea {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.notice-form button {
+  width: 150px;
+  align-self: flex-start;
+}
+
+.message {
+  text-align: center;
+  font-weight: 500;
+  color: var(--success);
+}
+
+.notice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow-y: auto;
+  max-height: 60vh; /* scroll if too many notices */
+}
+
+.notice-list li {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 10px;
+  border-left: 4px solid var(--primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notice-list li h4 {
+  margin: 0;
+  color: #111;
+}
+
+.notice-list li p {
+  margin: 0;
+  color: #333;
+}
+
+.notice-list li button {
+  align-self: flex-end;
+  padding: 0.4rem 0.8rem;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.notice-list li button:hover {
+  opacity: 0.9;
+}

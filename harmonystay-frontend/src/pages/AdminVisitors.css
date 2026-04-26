@@ -1,0 +1,8 @@
+.admin-visitors-container { padding: 1.5rem; }
+.visitor-form { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+.visitor-form input { padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
+.visitor-form button { padding: 0.6rem 1rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+.visitors-table { width: 100%; border-collapse: collapse; }
+.visitors-table th, .visitors-table td { padding: 0.75rem; border: 1px solid var(--border-color); }
+.visitors-table th { background: var(--primary); color: #fff; }
+.visitors-table button { padding: 0.4rem 0.8rem; background: var(--success); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
