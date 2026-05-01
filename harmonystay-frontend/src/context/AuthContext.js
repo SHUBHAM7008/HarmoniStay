@@ -47,10 +47,16 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify(body),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Login failed with status:", response.status, errorData);
+        return false;
+      }
+
       const data = await response.json();
       console.log("Login API Response:", data);
 
-      if (response.ok && data.status === "success") {
+      if (data.status === "success") {
         // ✅ if backend returns admin, member, or accountant object
         const loggedUser = data.admin || data.user;
         
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
       return false;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error (likely backend unreachable):", error);
       return false;
     }
   };

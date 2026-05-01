@@ -1,126 +1,28 @@
-/* HarmonyStay - Unified Theme (Accountant Dashboard Style) */
-:root {
-  --primary: #003366;
-  --primary-light: #004080;
-  --primary-dark: #002244;
-  --sidebar-bg: #003366;
-  --sidebar-text: #ffffff;
-  --main-bg: #f5f5f5;
-  --card-bg: #ffffff;
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  --card-radius: 12px;
-  --text-dark: #333333;
-  --text-medium: #555555;
-  --text-light: #777777;
-  --border-color: #e0e0e0;
-  --success: #28a745;
-  --danger: #dc3545;
-  --warning: #ffc107;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
-}
+@layer base {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
-body {
-  margin: 0;
-  font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: var(--text-dark);
-  background: var(--main-bg);
+  /* Hide scrollbar for IE, Edge and Firefox */
+  * {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  body {
+    @apply bg-background text-on-background antialiased font-body;
+    margin: 0;
+  }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-/* Shared component styles - Accountant theme */
-.admin-notices-container,
-.admin-bills-container,
-.admin-complaints-container,
-.admin-meetings-container,
-.admin-facilities-container,
-.admin-documents-container,
-.admin-visitors-container,
-.admin-reports-container,
-.member-bills-container,
-.member-complaints-container,
-.member-facilities-container,
-.member-documents-container,
-.member-meetings-container,
-.member-parking-container,
-.assign-bill-container,
-.assign-flat-container,
-.create-flat-container,
-.admin-parking-container,
-.admin-members-container,
-.admin-accountants-container {
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  padding: 2rem;
-  box-shadow: var(--card-shadow);
-}
-
-.admin-notices-container h2,
-.admin-bills-container h2,
-.admin-complaints-container h2,
-.admin-reports-container h2,
-.member-bills-container h2 {
-  color: var(--primary);
-  margin-bottom: 1.5rem;
-}
-
-.notice-form button,
-.admin-documents-container button,
-.assign-bill-container button,
-.assign-flat-form button,
-.create-flat-form button {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.notice-form button:hover,
-.admin-documents-container button:hover,
-.assign-flat-form button:hover,
-.create-flat-form button:hover {
-  background: var(--primary-light);
-}
-
-table th {
-  background: var(--primary);
-  color: #fff;
-}
-
-.badge.PAID,
-.status.paid {
-  background: var(--success);
-  color: #fff;
-}
-
-.badge.UNPAID,
-.status.pending {
-  background: var(--danger);
-  color: #fff;
-}
-
-.pay-btn,
-.notify-btn {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.pay-btn:hover,
-.notify-btn:hover {
-  background: var(--primary-light);
 }
