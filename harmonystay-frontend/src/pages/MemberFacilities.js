@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
@@ -21,36 +21,25 @@ const MemberFacilities = () => {
   const { user } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
   const [allBookedSlots, setAllBookedSlots] = useState([]);
-  const [bookedSlotsLoading, setBookedSlotsLoading] = useState(false);
+  const [, setBookedSlotsLoading] = useState(false);
   const [name, setName] = useState("GYM");
   const [bookingDate, setBookingDate] = useState("");
   const [timeSlot, setTimeSlot] = useState("09:00-11:00");
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    if (user?.id || user?._id) loadBookings();
-  }, [user]);
+  const userId = user?.id || user?._id;
 
-  useEffect(() => {
-    if (name && bookingDate) {
-      loadBookedSlots();
-    } else {
-      setAllBookedSlots([]);
-      setBookedSlotsLoading(false);
-    }
-  }, [name, bookingDate]);
-
-  const loadBookings = async () => {
+  const loadBookings = useCallback(async () => {
     try {
-      const uid = user?.id || user?._id;
-      const res = await axios.get(`http://localhost:8888/api/facilities/user/${uid}`);
+      if (!userId) return;
+      const res = await axios.get(`http://localhost:8888/api/facilities/user/${userId}`);
       setBookings(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [userId]);
 
-  const loadBookedSlots = async () => {
+  const loadBookedSlots = useCallback(async () => {
     setBookedSlotsLoading(true);
     try {
       const res = await axios.get("http://localhost:8888/api/facilities/availability", {
@@ -63,7 +52,20 @@ const MemberFacilities = () => {
     } finally {
       setBookedSlotsLoading(false);
     }
-  };
+  }, [bookingDate, name]);
+
+  useEffect(() => {
+    loadBookings();
+  }, [loadBookings]);
+
+  useEffect(() => {
+    if (name && bookingDate) {
+      loadBookedSlots();
+    } else {
+      setAllBookedSlots([]);
+      setBookedSlotsLoading(false);
+    }
+  }, [bookingDate, loadBookedSlots, name]);
 
   const handleBook = async (e) => {
     e.preventDefault();
@@ -77,9 +79,8 @@ const MemberFacilities = () => {
       return;
     }
     try {
-      const uid = user?.id || user?._id;
       await axios.post("http://localhost:8888/api/facilities", {
-        userId: uid,
+        userId,
         flatId: user.flatId,
         name,
         bookingDate,

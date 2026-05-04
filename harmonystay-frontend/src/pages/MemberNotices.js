@@ -7,7 +7,6 @@ const MemberNotices = () => {
     { id: "demo-3", title: "Quarterly Resident Mixer", description: "Don't miss our upcoming Q4 mixer at the Clubhouse Lounge. This is a great opportunity to meet your neighbors and the new concierge team...", date: new Date(), type: "Events" },
     { id: "demo-4", title: "Pool Drainage and Cleaning", description: "The West Wing infinity pool will be closed for a deep clean and filtration check. We apologize for any inconvenience caused during this period.", date: new Date(), type: "Maintenance" }
   ]);
-  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {

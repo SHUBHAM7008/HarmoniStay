@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
 const MemberDocuments = () => {
@@ -11,11 +11,8 @@ const MemberDocuments = () => {
   const [filter, setFilter] = useState("ALL");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    loadDocuments();
-  }, []);
-
-  const loadDocuments = async () => {
+  const loadDocuments = useCallback(async () => {
+    setLoading(true);
     try {
       const res = await axios.get("http://localhost:8888/api/documents");
       const data = Array.isArray(res.data) ? res.data : [];
@@ -29,8 +26,14 @@ const MemberDocuments = () => {
       }
     } catch (err) {
       console.error("API failed, keeping demo data");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadDocuments();
+  }, [loadDocuments]);
 
   const filtered = filter === "ALL" ? documents : documents.filter((d) => d.category === filter);
 
