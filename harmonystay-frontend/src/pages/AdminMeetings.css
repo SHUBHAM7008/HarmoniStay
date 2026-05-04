@@ -1,8 +1,177 @@
-.admin-meetings-container { padding: 1.5rem; }
-.meeting-form { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; max-width: 500px; }
-.meeting-form input, .meeting-form textarea, .meeting-form select { padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
-.meeting-form button { padding: 0.6rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; width: fit-content; }
-.meetings-list { display: flex; flex-direction: column; gap: 1rem; }
-.meeting-card { background: #f8f9fa; padding: 1rem; border-radius: 10px; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
-.meeting-card button { padding: 0.4rem 0.8rem; border-radius: 6px; border: none; cursor: pointer; }
-.meeting-card button.del { background: var(--danger); color: #fff; }
+/* Admin Meetings - Modern Admin Theme */
+@import './AdminTheme.css';
+
+.admin-meetings-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
+}
+
+.admin-meetings-container h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.admin-meetings-container h2 svg {
+  font-size: 2rem;
+}
+
+.meeting-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  background: var(--admin-bg-secondary);
+  padding: 2rem;
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
+}
+
+.meeting-form input,
+.meeting-form textarea,
+.meeting-form select {
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
+  font-size: 0.95rem;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
+  font-family: inherit;
+}
+
+.meeting-form input:focus,
+.meeting-form textarea:focus,
+.meeting-form select:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
+}
+
+.meeting-form button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--admin-radius-lg);
+  cursor: pointer;
+  width: fit-content;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all var(--admin-transition-base);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.meeting-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.meetings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.meeting-card {
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  border: 1px solid var(--admin-border-light);
+  box-shadow: var(--admin-shadow-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  transition: all var(--admin-transition-base);
+  animation: slideUp var(--admin-transition-base);
+}
+
+.meeting-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.meeting-card__info {
+  flex: 1;
+  min-width: 200px;
+}
+
+.meeting-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--admin-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.meeting-card__meta {
+  font-size: 0.9rem;
+  color: var(--admin-text-light);
+  margin: 0.25rem 0;
+}
+
+.meeting-card button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--admin-transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.meeting-card button.del {
+  background: var(--admin-danger);
+  color: #fff;
+}
+
+.meeting-card button.del:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .admin-meetings-container {
+    padding: 1rem;
+  }
+
+  .meeting-form {
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  .meeting-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .meeting-card button {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,8 +1,170 @@
-.admin-visitors-container { padding: 1.5rem; }
-.visitor-form { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
-.visitor-form input { padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
-.visitor-form button { padding: 0.6rem 1rem; background: var(--primary); color: #fff; border: none; border-radius: 8px; cursor: pointer; }
-.visitors-table { width: 100%; border-collapse: collapse; }
-.visitors-table th, .visitors-table td { padding: 0.75rem; border: 1px solid var(--border-color); }
-.visitors-table th { background: var(--primary); color: #fff; }
-.visitors-table button { padding: 0.4rem 0.8rem; background: var(--success); color: #fff; border: none; border-radius: 6px; cursor: pointer; }
+/* Admin Visitors - Modern Admin Theme */
+@import './AdminTheme.css';
+
+.admin-visitors-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
+}
+
+.admin-visitors-container h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+}
+
+.admin-visitors-container h2 svg {
+  font-size: 2rem;
+}
+
+.visitor-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
+}
+
+.visitor-form input {
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
+  font-size: 0.95rem;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
+  flex: 1;
+  min-width: 150px;
+}
+
+.visitor-form input:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
+}
+
+.visitor-form button {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--admin-radius-lg);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all var(--admin-transition-base);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.visitor-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.visitors-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.visitors-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--admin-bg-secondary);
+}
+
+.visitors-table th,
+.visitors-table td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--admin-border-light);
+  text-align: left;
+}
+
+.visitors-table th {
+  background: linear-gradient(90deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+}
+
+.visitors-table tbody tr {
+  transition: all var(--admin-transition-base);
+}
+
+.visitors-table tbody tr:hover {
+  background: var(--admin-bg-tertiary);
+}
+
+.visitors-table tr:last-child td {
+  border-bottom: none;
+}
+
+.visitors-table button {
+  padding: 0.5rem 1rem;
+  background: var(--admin-success);
+  color: #fff;
+  border: none;
+  border-radius: var(--admin-radius-md);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all var(--admin-transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.visitors-table button:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .admin-visitors-container {
+    padding: 1rem;
+  }
+
+  .visitor-form {
+    flex-direction: column;
+  }
+
+  .visitor-form input {
+    min-width: 100%;
+  }
+
+  .visitors-table {
+    font-size: 0.85rem;
+  }
+
+  .visitors-table th,
+  .visitors-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}

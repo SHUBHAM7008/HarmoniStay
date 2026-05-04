@@ -1,4 +1,5 @@
-/* AdminMembers.css - Accountant theme */
+/* AdminMembers.css - Modern Admin Theme */
+@import './AdminTheme.css';
 
 .admin-members-container {
   width: 100%;
@@ -8,28 +9,24 @@
   flex-direction: column;
   gap: 1.5rem;
   box-sizing: border-box;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
 }
 
 .admin-members-container h1 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
+  text-align: left;
+  margin-bottom: 0;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
   position: relative;
-  padding-bottom: 15px;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.admin-members-container h1::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 3px;
-  background: var(--primary);
-  border-radius: 2px;
+.admin-members-container h1 svg {
+  font-size: 2rem;
 }
 
 .top-bar {
@@ -37,16 +34,18 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1.5rem;
-  background: var(--card-bg);
-  padding: 1.2rem 1.5rem;
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border-color);
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .top-bar p {
   margin: 0;
-  color: var(--text-medium);
+  color: var(--admin-text-medium);
   font-weight: 600;
   font-size: 1.05rem;
 }
@@ -54,46 +53,47 @@
 .filter-bar {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-  background: var(--card-bg);
-  padding: 1.2rem 1.5rem;
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border-color);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  flex-wrap: wrap;
 }
 
 .filter-bar label {
   font-weight: 600;
-  color: var(--text-dark);
+  color: var(--admin-text-dark);
   font-size: 1rem;
 }
 
 .filter-bar select {
-  padding: 10px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
   font-size: 1rem;
   outline: none;
-  background: var(--card-bg);
-  color: var(--text-dark);
-  transition: all 0.3s ease;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
   cursor: pointer;
-  min-width: 150px;
+  min-width: 200px;
 }
 
 .filter-bar select:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
 }
 
 .btn {
-  padding: 10px 20px;
+  padding: 0.75rem 1.25rem;
   font-weight: 600;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--admin-radius-lg);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--admin-transition-base);
   color: #fff;
   font-size: 0.95rem;
   display: inline-flex;
@@ -102,38 +102,56 @@
 }
 
 .btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
 }
 
 .btn-blue {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
 }
 
 .btn-blue:hover {
-  background: var(--primary-light);
+  background: linear-gradient(135deg, var(--admin-primary-dark) 0%, var(--admin-primary) 100%);
+  transform: translateY(-2px);
 }
 
 .btn-green {
-  background: var(--success);
+  background: var(--admin-success);
+}
+
+.btn-green:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
 }
 
 .btn-red {
-  background: var(--danger);
+  background: var(--admin-danger);
+}
+
+.btn-red:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
 }
 
 .btn-cyan {
-  background: #0891b2;
+  background: var(--admin-secondary);
+}
+
+.btn-cyan:hover {
+  background: var(--admin-secondary-dark);
+  transform: translateY(-2px);
 }
 
 .add-member-form {
-  background: var(--card-bg);
+  background: var(--admin-bg-secondary);
   padding: 2rem;
-  border-radius: var(--card-radius);
+  border-radius: var(--admin-radius-xl);
   margin-bottom: 2rem;
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border-color);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
   position: relative;
   overflow: hidden;
+  animation: slideUp var(--admin-transition-base);
 }
 
 .add-member-form::before {
@@ -143,7 +161,7 @@
   left: 0;
   width: 100%;
   height: 4px;
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
 }
 
 .add-member-form h2 {
@@ -151,7 +169,7 @@
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--admin-text-dark);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -161,7 +179,7 @@
   content: '';
   width: 4px;
   height: 24px;
-  background: var(--primary);
+  background: var(--admin-primary);
   border-radius: 2px;
 }
 
@@ -173,60 +191,67 @@
 }
 
 .form-grid input {
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
   font-size: 1rem;
-  background: var(--card-bg);
-  color: var(--text-dark);
-  transition: all 0.3s ease;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
 }
 
 .form-grid input:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.1);
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
+}
+
+.form-grid input::placeholder {
+  color: var(--admin-text-lighter);
 }
 
 .members-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   margin-top: 1rem;
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
+  background: var(--admin-bg-secondary);
+  border-radius: var(--admin-radius-lg);
   overflow: hidden;
-  box-shadow: var(--card-shadow);
-  border: 1px solid var(--border-color);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
 }
 
 .members-table th,
 .members-table td {
   padding: 1rem 1.2rem;
   text-align: left;
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--admin-border-light);
 }
 
 .members-table th {
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
   color: #fff;
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.85rem;
   letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
 }
 
 .members-table tr:nth-child(even) {
-  background: var(--main-bg);
+  background: var(--admin-bg-tertiary);
 }
 
 .member-row {
-  transition: all 0.3s ease;
+  transition: all var(--admin-transition-base);
   cursor: pointer;
 }
 
 .member-row:hover {
-  background: rgba(0, 51, 102, 0.05) !important;
+  background: rgba(0, 106, 97, 0.08) !important;
+  transform: scale(1.01);
 }
 
 .members-table tr:last-child td {
@@ -236,7 +261,7 @@
 .no-members {
   text-align: center;
   padding: 3rem;
-  color: var(--text-light);
+  color: var(--admin-text-light);
   font-size: 1.1rem;
   font-style: italic;
 }
@@ -246,7 +271,7 @@
   gap: 12px;
   padding: 12px 0;
   justify-content: flex-start;
-  animation: slideDown 0.3s ease;
+  animation: slideIn var(--admin-transition-base);
   margin-left: 40%;
 }
 
@@ -255,16 +280,14 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fadeIn {
+@keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.members-table,
-.add-member-form,
-.top-bar,
-.filter-bar {
-  animation: fadeIn 0.5s ease-out;
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 @media (max-width: 768px) {
@@ -299,8 +322,9 @@
 
 @media (max-width: 640px) {
   .members-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
+    font-size: 0.8rem;
+  }
+  .add-member-form {
+    padding: 1rem;
   }
 }

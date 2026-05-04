@@ -1,16 +1,205 @@
-.admin-reports-container { padding: 1.5rem; }
-.month-filter { margin-bottom: 1rem; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--border-color); }
-.summary-cards { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
-.summary-cards .card { background: #f8f9fa; padding: 1.5rem; border-radius: 12px; min-width: 150px; }
-.summary-cards .card h4 { margin: 0 0 0.5rem 0; color: #555; font-size: 0.9rem; }
-.summary-cards .card p { margin: 0; font-size: 1.5rem; font-weight: bold; color: #003366; }
-.summary-cards .card.paid { border-left: 4px solid #28a745; }
-.summary-cards .card.unpaid { border-left: 4px solid #dc3545; }
-.monthly-section h3 { margin-top: 1.5rem; }
-.month-block { margin-bottom: 1.5rem; }
-.month-block h4 { margin-bottom: 0.5rem; }
-.month-block table { width: 100%; border-collapse: collapse; }
-.month-block th, .month-block td { padding: 0.5rem; border: 1px solid var(--border-color); }
-.badge { padding: 0.2rem 0.5rem; border-radius: 6px; font-size: 0.8rem; }
-.badge.PAID { background: var(--success); color: #fff; }
-.badge.UNPAID { background: var(--danger); color: #fff; }
+/* Admin Reports - Modern Admin Theme */
+@import './AdminTheme.css';
+
+.admin-reports-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
+}
+
+.admin-reports-container h2 {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 0;
+}
+
+.admin-reports-container h2 svg {
+  font-size: 2rem;
+}
+
+.month-filter {
+  margin-bottom: 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
+  font-size: 0.95rem;
+  background: var(--admin-bg-secondary);
+  color: var(--admin-text-dark);
+  cursor: pointer;
+  transition: all var(--admin-transition-base);
+}
+
+.month-filter:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-cards .card {
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  min-width: 200px;
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  transition: all var(--admin-transition-base);
+  animation: slideUp var(--admin-transition-base);
+}
+
+.summary-cards .card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.summary-cards .card h4 {
+  margin: 0 0 0.75rem 0;
+  color: var(--admin-text-light);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.summary-cards .card p {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--admin-primary);
+}
+
+.summary-cards .card.paid {
+  border-left: 4px solid var(--admin-success);
+}
+
+.summary-cards .card.paid p {
+  color: var(--admin-success);
+}
+
+.summary-cards .card.unpaid {
+  border-left: 4px solid var(--admin-danger);
+}
+
+.summary-cards .card.unpaid p {
+  color: var(--admin-danger);
+}
+
+.monthly-section {
+  margin-top: 2rem;
+}
+
+.monthly-section h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--admin-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--admin-border-light);
+}
+
+.month-block {
+  margin-bottom: 2rem;
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
+}
+
+.month-block h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--admin-primary);
+  margin-bottom: 1rem;
+}
+
+.month-block table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.month-block th,
+.month-block td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--admin-border-light);
+  text-align: left;
+}
+
+.month-block th {
+  background: rgba(0, 106, 97, 0.08);
+  color: var(--admin-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.month-block tr:last-child td {
+  border-bottom: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.badge.PAID {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+
+.badge.UNPAID {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .admin-reports-container {
+    padding: 1rem;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .summary-cards .card {
+    min-width: 100%;
+  }
+
+  .month-block {
+    padding: 1rem;
+  }
+
+  .month-block th,
+  .month-block td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}

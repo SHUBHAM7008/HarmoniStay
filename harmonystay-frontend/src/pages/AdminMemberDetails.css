@@ -1,106 +1,250 @@
+/* Admin Member Details - Modern Admin Theme */
+@import './AdminTheme.css';
+
 .admin-member-details-container {
   max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
+  min-height: 100vh;
 }
 
 .member-card {
-  background: var(--card-bg);
-  border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
-  padding: 30px;
-  transition: all 0.3s;
+  background: var(--admin-bg-secondary);
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-lg);
+  border: 1px solid var(--admin-border-light);
+  padding: 2rem;
+  transition: all var(--admin-transition-base);
 }
 
 .member-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: var(--admin-shadow-xl);
 }
 
 .profile-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--admin-border-light);
 }
 
 .profile-image {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  margin-right: 20px;
-  border: 2px solid #f0f0f0;
+  border: 3px solid var(--admin-primary);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.profile-basic {
+  flex: 1;
 }
 
 .profile-basic h2 {
-  margin: 0;
-  font-size: 24px;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
 }
 
 .role-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 8px;
-  margin-top: 6px;
-  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  margin-top: 0.5rem;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }
 
-.role-badge.admin { background: var(--warning); color: #333; }
-.role-badge.member { background: var(--primary); color: white; }
-.role-badge.accountant { background: var(--success); color: white; }
+.role-badge.admin {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.role-badge.member {
+  background: rgba(0, 106, 97, 0.15);
+  color: #015249;
+}
+
+.role-badge.accountant {
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
 
 .status {
-  margin-top: 4px;
-  font-size: 14px;
-  color: #777;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--admin-text-light);
 }
 
-.member-info section, .edit-form section {
-  margin-bottom: 25px;
+.member-info section,
+.edit-form section {
+  margin-bottom: 2rem;
 }
 
-.member-info h3, .edit-form h3 {
-  margin-bottom: 10px;
-  color: var(--primary);
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 4px;
+.member-info h3,
+.edit-form h3 {
+  margin-bottom: 1rem;
+  color: var(--admin-primary);
+  border-bottom: 2px solid var(--admin-border-light);
+  padding-bottom: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px 20px;
+  gap: 1.5rem;
 }
 
-.form-grid input {
-  padding: 10px;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  width: 100%;
-  font-size: 14px;
-}
-
-.form-actions, .member-actions {
+.form-group {
   display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--admin-text-dark);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.form-grid input,
+.form-group input {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  font-size: 0.95rem;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
+  font-family: inherit;
+}
+
+.form-grid input:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
+}
+
+.form-actions,
+.member-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }
 
 .btn {
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  border-radius: var(--admin-radius-lg);
   border: none;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 700;
+  transition: all var(--admin-transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.btn-edit { background: var(--primary); color: white; }
-.btn-save { background: var(--success); color: white; }
-.btn-cancel { background: var(--danger); color: white; }
+.btn-edit {
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
+  color: white;
+}
 
-ul { padding-left: 20px; }
-ul li { margin-bottom: 6px; }
+.btn-edit:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
 
-.loading { text-align: center; font-size: 16px; color: #777; }
+.btn-save {
+  background: var(--admin-success);
+  color: white;
+}
+
+.btn-save:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.btn-cancel {
+  background: var(--admin-danger);
+  color: white;
+}
+
+.btn-cancel:hover {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.member-info ul {
+  padding-left: 1.5rem;
+  list-style: none;
+}
+
+.member-info ul li {
+  margin-bottom: 0.75rem;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--admin-text-medium);
+  line-height: 1.6;
+}
+
+.member-info ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--admin-primary);
+  font-weight: bold;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--admin-text-light);
+  padding: 3rem;
+}
+
+@media (max-width: 768px) {
+  .admin-member-details-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .member-card {
+    padding: 1.5rem;
+  }
+
+  .form-actions,
+  .member-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

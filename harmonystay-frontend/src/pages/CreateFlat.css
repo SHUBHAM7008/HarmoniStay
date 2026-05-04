@@ -1,60 +1,118 @@
+/* CreateFlat.css - Modern Admin Theme */
+@import './AdminTheme.css';
+
 .create-flat-container {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   box-sizing: border-box;
+  padding: 2rem;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
 }
 
 .create-flat-container h2 {
-  text-align: center;
-  margin-bottom: 1rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.create-flat-container h2 svg {
+  font-size: 2rem;
 }
 
 .create-flat-form {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  flex: 1;
   width: 100%;
-  height: 100%;
   box-sizing: border-box;
+  background: var(--admin-bg-secondary);
+  padding: 2rem;
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
 }
 
 .create-flat-form label {
   display: flex;
   flex-direction: column;
-  font-weight: 500;
-  color: #555;
+  font-weight: 600;
+  color: var(--admin-text-dark);
+  font-size: 0.95rem;
 }
 
 .create-flat-form input,
 .create-flat-form select {
   margin-top: 0.5rem;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px solid var(--admin-border);
   font-size: 1rem;
   width: 100%;
   box-sizing: border-box;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
+  font-family: inherit;
+}
+
+.create-flat-form input:focus,
+.create-flat-form select:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
 }
 
 .create-flat-form button {
   grid-column: 1 / -1;
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
   color: #fff;
-  padding: 0.8rem;
+  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--admin-radius-lg);
   cursor: pointer;
-  font-weight: 600;
-  transition: 0.3s;
-  justify-self: start;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all var(--admin-transition-base);
+  box-shadow: var(--admin-shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .create-flat-form button:hover {
-  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .create-flat-container {
+    padding: 1rem;
+  }
+
+  .create-flat-form {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+
+  .create-flat-container h2 {
+    font-size: 1.75rem;
+  }
 }
 
 .message {
