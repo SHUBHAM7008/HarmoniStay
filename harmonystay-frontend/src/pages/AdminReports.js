@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import "./AdminReports.css";
 
@@ -7,12 +7,7 @@ const AdminReports = () => {
   const [monthly, setMonthly] = useState(null);
   const [filterMonth, setFilterMonth] = useState("");
 
-  useEffect(() => {
-    loadSummary();
-    loadMonthly();
-  }, [filterMonth]);
-
-  const loadSummary = async () => {
+  const loadSummary = useCallback(async () => {
     try {
       const url = filterMonth
         ? `http://localhost:8888/api/reports/maintenance-summary?month=${filterMonth}`
@@ -22,16 +17,21 @@ const AdminReports = () => {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [filterMonth]);
 
-  const loadMonthly = async () => {
+  const loadMonthly = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:8888/api/reports/monthly-collection");
       setMonthly(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadSummary();
+    loadMonthly();
+  }, [loadSummary, loadMonthly]);
 
   return (
     <div className="admin-reports-container">

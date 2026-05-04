@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 
@@ -11,20 +11,21 @@ const MemberComplaints = () => {
   const [message, setMessage] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [feedbackForms, setFeedbackForms] = useState({});
+  const userId = user?.id || user?._id;
 
-  useEffect(() => {
-    if (user?.id || user?._id) loadComplaints();
-  }, [user]);
-
-  const loadComplaints = async () => {
+  const loadComplaints = useCallback(async () => {
     try {
-      const uid = user?.id || user?._id;
-      const res = await axios.get(`http://localhost:8888/api/complaints/user/${uid}`);
+      if (!userId) return;
+      const res = await axios.get(`http://localhost:8888/api/complaints/user/${userId}`);
       setComplaints(res.data);
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    loadComplaints();
+  }, [loadComplaints]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,9 +34,8 @@ const MemberComplaints = () => {
       return;
     }
     try {
-      const uid = user?.id || user?._id;
       await axios.post("http://localhost:8888/api/complaints", {
-        userId: uid,
+        userId,
         flatId: user.flatId,
         category,
         title,
@@ -71,9 +71,8 @@ const MemberComplaints = () => {
     }
 
     try {
-      const uid = user?.id || user?._id;
       await axios.put(`http://localhost:8888/api/complaints/${id}/member-feedback`, {
-        userId: uid,
+        userId,
         rating: String(form.rating),
         description: form.description.trim(),
       });
