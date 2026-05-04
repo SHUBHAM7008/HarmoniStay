@@ -1,103 +1,215 @@
+/* AdminAccountants.css - Modern Admin Theme */
+@import './AdminTheme.css';
+
+.admin-accountants-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
+}
+
 .admin-accountants-container h2 {
-  color: var(--primary);
-  margin-bottom: 0.5rem;
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: var(--admin-primary);
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.admin-accountants-container h2 svg {
+  font-size: 2rem;
 }
 
 .admin-accountants-intro {
-  color: var(--text-medium);
+  color: var(--admin-text-medium);
   margin-bottom: 1.5rem;
   max-width: 720px;
+  line-height: 1.6;
 }
 
 .accountant-form {
   margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid var(--border-color);
+  padding: 2rem;
+  background: var(--admin-bg-secondary);
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+  animation: slideUp var(--admin-transition-base);
 }
 
 .accountant-form h3 {
   margin-top: 0;
-  color: var(--primary);
+  margin-bottom: 1.5rem;
+  color: var(--admin-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 .accountant-form-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .accountant-form label {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  min-width: 180px;
-  flex: 1;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--admin-text-dark);
 }
 
 .accountant-form input {
-  padding: 0.55rem 0.75rem;
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--admin-border);
+  border-radius: var(--admin-radius-md);
+  font-size: 0.95rem;
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  transition: all var(--admin-transition-base);
+}
+
+.accountant-form input:focus {
+  outline: none;
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 3px rgba(0, 106, 97, 0.1);
 }
 
 .accountant-form button[type="submit"] {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
   color: #fff;
   border: none;
-  padding: 0.65rem 1.25rem;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--admin-radius-lg);
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: all var(--admin-transition-base);
+  box-shadow: var(--admin-shadow-md);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .accountant-form button[type="submit"]:hover {
-  background: var(--primary-light);
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+.acct-msg {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--admin-radius-lg);
+  font-weight: 700;
+  text-align: center;
 }
 
 .acct-msg.success {
-  color: var(--success);
-  font-weight: 600;
+  background: rgba(34, 197, 94, 0.15);
+  color: #15803d;
 }
 
 .acct-msg.error {
-  color: var(--danger);
-  font-weight: 600;
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
 }
 
 .table-wrap {
   overflow-x: auto;
+  border-radius: var(--admin-radius-lg);
+  box-shadow: var(--admin-shadow-md);
 }
 
 .accountants-table {
   width: 100%;
   border-collapse: collapse;
+  background: var(--admin-bg-secondary);
 }
 
 .accountants-table th,
 .accountants-table td {
-  padding: 0.75rem;
-  border: 1px solid var(--border-color);
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--admin-border-light);
   text-align: left;
 }
 
 .accountants-table th {
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
   color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+}
+
+.accountants-table tbody tr {
+  transition: all var(--admin-transition-base);
+}
+
+.accountants-table tbody tr:hover {
+  background: var(--admin-bg-tertiary);
+}
+
+.accountants-table tr:last-child td {
+  border-bottom: none;
 }
 
 .btn-del {
-  background: var(--danger);
+  background: var(--admin-danger);
   color: #fff;
   border: none;
-  padding: 0.35rem 0.75rem;
-  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--admin-radius-md);
   cursor: pointer;
   font-size: 0.85rem;
+  font-weight: 700;
+  transition: all var(--admin-transition-base);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .btn-del:hover {
-  opacity: 0.9;
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .admin-accountants-container {
+    padding: 1rem;
+  }
+
+  .accountant-form {
+    padding: 1.5rem;
+  }
+
+  .accountant-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .accountants-table {
+    font-size: 0.85rem;
+  }
+
+  .accountants-table th,
+  .accountants-table td {
+    padding: 0.75rem 0.5rem;
+  }
 }
