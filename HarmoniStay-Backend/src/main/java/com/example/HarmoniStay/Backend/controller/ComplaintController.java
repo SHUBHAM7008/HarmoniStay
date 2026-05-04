@@ -45,6 +45,20 @@ public class ComplaintController {
         );
     }
 
+    @PutMapping("/{id}/member-feedback")
+    public Complaint submitMemberFeedback(@PathVariable String id, @RequestBody Map<String, String> body) {
+        try {
+            return complaintService.submitMemberFeedback(
+                    id,
+                    body.get("userId"),
+                    body.get("rating") == null ? null : Integer.parseInt(body.get("rating")),
+                    body.get("description")
+            );
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Rating must be a number between 1 and 5");
+        }
+    }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         complaintService.deleteComplaint(id);

@@ -46,6 +46,25 @@ public class ComplaintService {
         return complaintRepository.save(c);
     }
 
+    public Complaint submitMemberFeedback(String id, String userId, Integer rating, String description) {
+        Complaint c = complaintRepository.findById(id).orElseThrow();
+        if (userId == null || userId.isBlank() || !userId.equals(c.getUserId())) {
+            throw new IllegalArgumentException("You are not allowed to give feedback for this complaint");
+        }
+        if (rating == null || rating < 1 || rating > 5) {
+            throw new IllegalArgumentException("Rating must be between 1 and 5");
+        }
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("Feedback description is required");
+        }
+
+        c.setMemberFeedbackRating(rating);
+        c.setMemberFeedbackDescription(description.trim());
+        c.setMemberFeedbackAt(new Date());
+        c.setUpdatedAt(new Date());
+        return complaintRepository.save(c);
+    }
+
     public void deleteComplaint(String id) {
         complaintRepository.deleteById(id);
     }

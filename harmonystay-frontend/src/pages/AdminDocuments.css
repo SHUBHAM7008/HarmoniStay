@@ -54,6 +54,36 @@
   font-family: inherit;
 }
 
+.doc-file-input {
+  position: relative;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border-radius: var(--admin-radius-md);
+  border: 2px dashed var(--admin-border);
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-medium);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 700;
+  overflow: hidden;
+  transition: all var(--admin-transition-base);
+}
+
+.doc-file-input:hover {
+  border-color: var(--admin-primary);
+  color: var(--admin-primary);
+  background: rgba(0, 106, 97, 0.04);
+}
+
+.doc-file-input input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
 .doc-form input:focus,
 .doc-form select:focus,
 .doc-form textarea:focus {
@@ -83,6 +113,19 @@
   box-shadow: var(--admin-shadow-md);
 }
 
+.doc-form button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  transform: none;
+  box-shadow: none;
+}
+
+.doc-message {
+  margin: 0;
+  color: var(--admin-primary);
+  font-weight: 700;
+}
+
 .doc-list {
   display: flex;
   flex-direction: column;
@@ -90,8 +133,9 @@
 }
 
 .doc-card {
+  position: relative;
   background: var(--admin-bg-secondary);
-  padding: 1.5rem;
+  padding: 1.5rem 8rem 1.5rem 1.5rem;
   border-radius: var(--admin-radius-lg);
   border: 1px solid var(--admin-border-light);
   box-shadow: var(--admin-shadow-md);
@@ -128,41 +172,58 @@
   margin: 0;
 }
 
-.doc-card a {
-  color: var(--admin-primary);
-  text-decoration: none;
-  font-weight: 600;
-  transition: color var(--admin-transition-fast);
+.doc-status {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(0, 106, 97, 0.1);
+  color: var(--admin-primary);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
 }
 
-.doc-card a:hover {
-  color: var(--admin-primary-light);
-  text-decoration: underline;
+.doc-actions {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.doc-card button.del {
-  margin-top: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: var(--admin-danger);
-  color: #fff;
+.doc-icon-action {
+  width: 30px;
+  height: 30px;
   border: none;
   border-radius: var(--admin-radius-md);
+  background: rgba(0, 106, 97, 0.1);
+  color: var(--admin-primary);
   cursor: pointer;
-  font-weight: 700;
-  font-size: 0.85rem;
   transition: all var(--admin-transition-base);
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  font-size: 0.78rem;
 }
 
-.doc-card button.del:hover {
-  background: #dc2626;
+.doc-icon-action:hover {
+  background: var(--admin-primary);
+  color: #fff;
   transform: translateY(-2px);
   box-shadow: var(--admin-shadow-md);
+}
+
+.doc-icon-action--danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--admin-danger);
+}
+
+.doc-icon-action--danger:hover {
+  background: var(--admin-danger);
+  color: #fff;
 }
 
 @keyframes slideUp {
@@ -181,7 +242,7 @@
   }
 
   .doc-card {
-    padding: 1rem;
+    padding: 3.5rem 1rem 1rem;
   }
 
   .doc-card-header {
@@ -189,8 +250,9 @@
     align-items: flex-start;
   }
 
-  .doc-card button.del {
-    width: 100%;
-    justify-content: center;
+  .doc-actions {
+    top: 1rem;
+    left: 1rem;
+    right: auto;
   }
 }

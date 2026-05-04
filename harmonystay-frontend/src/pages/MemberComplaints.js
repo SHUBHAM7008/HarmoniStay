@@ -10,6 +10,7 @@ const MemberComplaints = () => {
   const [description, setDescription] = useState("");
   const [message, setMessage] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
+  const [feedbackForms, setFeedbackForms] = useState({});
 
   useEffect(() => {
     if (user?.id || user?._id) loadComplaints();
@@ -47,6 +48,41 @@ const MemberComplaints = () => {
       setTimeout(() => setMessage(""), 3000);
     } catch (err) {
       setMessage("Error lodging complaint");
+    }
+  };
+
+  const updateFeedbackForm = (id, patch) => {
+    setFeedbackForms((prev) => ({
+      ...prev,
+      [id]: {
+        rating: prev[id]?.rating || 5,
+        description: prev[id]?.description || "",
+        ...patch,
+      },
+    }));
+  };
+
+  const submitComplaintFeedback = async (complaint) => {
+    const id = complaint.id || complaint._id;
+    const form = feedbackForms[id] || { rating: 5, description: "" };
+    if (!form.description.trim()) {
+      setMessage("Please add feedback description");
+      return;
+    }
+
+    try {
+      const uid = user?.id || user?._id;
+      await axios.put(`http://localhost:8888/api/complaints/${id}/member-feedback`, {
+        userId: uid,
+        rating: String(form.rating),
+        description: form.description.trim(),
+      });
+      setMessage("Feedback submitted successfully!");
+      setFeedbackForms((prev) => ({ ...prev, [id]: { rating: 5, description: "" } }));
+      await loadComplaints();
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      setMessage(err?.response?.data?.message || "Error submitting feedback");
     }
   };
 
@@ -222,6 +258,53 @@ const MemberComplaints = () => {
                       <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">
                         <span className="material-symbols-outlined text-sm animate-pulse">schedule</span>
                         Awaiting Manager Review
+                      </div>
+                    )}
+
+                    {c.memberFeedbackRating ? (
+                      <div className="mt-5 bg-secondary/5 border border-secondary/10 rounded-2xl p-5">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="material-symbols-outlined text-amber-400 text-base">star</span>
+                          <span className="text-[10px] font-black text-on-surface uppercase tracking-widest">Your Feedback</span>
+                          <span className="text-xs font-black text-amber-500 ml-auto">{c.memberFeedbackRating}/5</span>
+                        </div>
+                        <p className="text-sm text-slate-600 font-medium leading-relaxed">{c.memberFeedbackDescription}</p>
+                      </div>
+                    ) : (
+                      <div className="mt-5 bg-white rounded-2xl border border-outline-variant/40 p-5">
+                        <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
+                          <span className="text-[10px] font-black text-on-surface uppercase tracking-widest">Feedback to Admin</span>
+                          <div className="flex gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => {
+                              const id = c.id || c._id;
+                              const selected = feedbackForms[id]?.rating || 5;
+                              return (
+                                <button
+                                  key={star}
+                                  type="button"
+                                  onClick={() => updateFeedbackForm(id, { rating: star })}
+                                  className={`material-symbols-outlined text-2xl transition-all ${star <= selected ? "text-amber-400" : "text-slate-200 hover:text-amber-200"}`}
+                                  style={{ fontVariationSettings: star <= selected ? "'FILL' 1" : "'FILL' 0" }}
+                                >
+                                  star
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <textarea
+                          value={feedbackForms[c.id || c._id]?.description || ""}
+                          onChange={(e) => updateFeedbackForm(c.id || c._id, { description: e.target.value })}
+                          className="w-full bg-slate-50 border border-outline-variant/50 rounded-xl px-4 py-3 text-sm font-bold focus:border-secondary focus:ring-4 focus:ring-secondary/10 outline-none min-h-[84px]"
+                          placeholder="Share your feedback about how this complaint was handled..."
+                        />
+                        <button
+                          type="button"
+                          onClick={() => submitComplaintFeedback(c)}
+                          className="mt-3 px-5 py-3 bg-secondary text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:brightness-110 active:scale-[0.98] transition-all"
+                        >
+                          Submit Feedback
+                        </button>
                       </div>
                     )}
                   </div>

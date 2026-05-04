@@ -17,6 +17,7 @@ public class VisitorRequest {
     private String flatNumber;
     private String memberId;
     private String memberName;
+    private String visitorName;
     private String purpose;
     private String category;
     private String securityName;
@@ -56,6 +57,9 @@ public class VisitorRequest {
 
     public String getMemberName() { return memberName; }
     public void setMemberName(String memberName) { this.memberName = memberName; }
+
+    public String getVisitorName() { return visitorName; }
+    public void setVisitorName(String visitorName) { this.visitorName = visitorName; }
 
     public String getPurpose() { return purpose; }
     public void setPurpose(String purpose) { this.purpose = purpose; }

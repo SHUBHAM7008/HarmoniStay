@@ -88,6 +88,18 @@ public class DocumentController {
             @PathVariable String id,
             @RequestHeader(value = "X-User-Role", defaultValue = "MEMBER") String role
     ) {
+        return documentFile(id, role, false);
+    }
+
+    @GetMapping("/{id}/view")
+    public ResponseEntity<Resource> view(
+            @PathVariable String id,
+            @RequestHeader(value = "X-User-Role", defaultValue = "MEMBER") String role
+    ) {
+        return documentFile(id, role, true);
+    }
+
+    private ResponseEntity<Resource> documentFile(String id, String role, boolean inline) {
         SocietyDocument document = documentService.prepareDownload(id, role);
         Path filePath = fileStorageService.resolve(document.getStoredFilePath());
         Resource resource = new PathResource(filePath);
@@ -97,12 +109,16 @@ public class DocumentController {
             mediaType = MediaType.parseMediaType(document.getContentType());
         }
 
+        String fileName = document.getOriginalFileName() == null || document.getOriginalFileName().isBlank()
+                ? "document"
+                : document.getOriginalFileName();
+        ContentDisposition disposition = inline
+                ? ContentDisposition.inline().filename(fileName).build()
+                : ContentDisposition.attachment().filename(fileName).build();
+
         return ResponseEntity.ok()
                 .contentType(mediaType)
-                .header(HttpHeaders.CONTENT_DISPOSITION, ContentDisposition.attachment()
-                        .filename(document.getOriginalFileName())
-                        .build()
-                        .toString())
+                .header(HttpHeaders.CONTENT_DISPOSITION, disposition.toString())
                 .body(resource);
     }
 
