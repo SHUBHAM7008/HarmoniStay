@@ -21,6 +21,11 @@ public class Complaint {
     private String status;
     @Column(length = 2000)
     private String adminFeedback;
+    private Integer memberFeedbackRating;
+    @Column(length = 2000)
+    private String memberFeedbackDescription;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date memberFeedbackAt;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
@@ -49,6 +54,15 @@ public class Complaint {
 
     public String getAdminFeedback() { return adminFeedback; }
     public void setAdminFeedback(String adminFeedback) { this.adminFeedback = adminFeedback; }
+
+    public Integer getMemberFeedbackRating() { return memberFeedbackRating; }
+    public void setMemberFeedbackRating(Integer memberFeedbackRating) { this.memberFeedbackRating = memberFeedbackRating; }
+
+    public String getMemberFeedbackDescription() { return memberFeedbackDescription; }
+    public void setMemberFeedbackDescription(String memberFeedbackDescription) { this.memberFeedbackDescription = memberFeedbackDescription; }
+
+    public Date getMemberFeedbackAt() { return memberFeedbackAt; }
+    public void setMemberFeedbackAt(Date memberFeedbackAt) { this.memberFeedbackAt = memberFeedbackAt; }
 
     public Date getCreatedAt() { return createdAt; }
     public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }

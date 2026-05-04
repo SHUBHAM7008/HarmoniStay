@@ -53,6 +53,7 @@ const AdminComplaints = () => {
               <th>Title</th>
               <th>Status</th>
               <th>Feedback</th>
+              <th>Member Rating</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -70,6 +71,20 @@ const AdminComplaints = () => {
                     value={feedback[c.id || c._id] ?? c.adminFeedback ?? ""}
                     onChange={(e) => setFeedback({ ...feedback, [c.id || c._id]: e.target.value })}
                   />
+                </td>
+                <td>
+                  {c.memberFeedbackRating ? (
+                    <div className="member-feedback-cell">
+                      <div className="member-feedback-stars" aria-label={`${c.memberFeedbackRating} out of 5 stars`}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <span key={star} className={star <= c.memberFeedbackRating ? "is-filled" : ""}>★</span>
+                        ))}
+                      </div>
+                      <p>{c.memberFeedbackDescription}</p>
+                    </div>
+                  ) : (
+                    <span className="no-feedback">No feedback</span>
+                  )}
                 </td>
                 <td>
                   {c.status !== "IN_PROGRESS" && (

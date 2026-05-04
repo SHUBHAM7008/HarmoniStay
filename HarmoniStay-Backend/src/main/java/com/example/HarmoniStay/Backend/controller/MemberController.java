@@ -63,9 +63,9 @@ public class MemberController {
         memberService.deleteMember(id);
     }
 
-    @GetMapping("/{email}")
-    public Optional<Member> getMemberById(@PathVariable String email) {
-        return memberService.getMemberByEmail(email);
+    @GetMapping("/{identifier}")
+    public Optional<Member> getMemberById(@PathVariable String identifier) {
+        return memberService.getMemberByIdOrEmail(identifier);
     }
 
     @GetMapping("/{memberId}/ownership-history")

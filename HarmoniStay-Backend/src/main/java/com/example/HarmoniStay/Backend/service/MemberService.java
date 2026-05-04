@@ -71,17 +71,24 @@ public class MemberService {
     }
 
     public void deleteMember(String id) {
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+        flatService.clearOwnershipForMember(member.getId());
+        memberRepository.delete(member);
     }
 
-    public Optional<Member> getMemberByEmail(String id) {
-        return memberRepository.findByEmail(id);
+    public Optional<Member> getMemberByIdOrEmail(String identifier) {
+        if (identifier == null || identifier.isBlank()) {
+            return Optional.empty();
+        }
+        return memberRepository.findById(identifier.trim())
+                .or(() -> memberRepository.findByEmail(identifier.trim()));
     }
 
     @Transactional
     public Member updateMember(String id, Member updatedMember) {
-        Member existing = memberRepository.findByEmail(id)
-                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+        Member existing = getMemberByIdOrEmail(id)
+                .orElseThrow(() -> new RuntimeException("Member not found with id/email: " + id));
         String previousFlatId = existing.getFlatId();
 
         // Update only if the new value is not null
@@ -121,4 +128,3 @@ public class MemberService {
         return saved;
     }
 }
-

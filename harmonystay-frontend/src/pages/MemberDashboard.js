@@ -104,7 +104,7 @@ const MemberDashboard = () => {
             <div className="space-y-4 mb-8">
               <div className="p-4 bg-surface-container rounded-xl">
                 <p className="text-xs uppercase tracking-widest font-bold text-on-surface-variant mb-1">Visitor Name</p>
-                <p className="text-lg font-bold text-on-surface">{pendingVisitorRequest.memberName}</p>
+                <p className="text-lg font-bold text-on-surface">{pendingVisitorRequest.visitorName || "Visitor"}</p>
               </div>
               <div className="p-4 bg-surface-container rounded-xl">
                 <p className="text-xs uppercase tracking-widest font-bold text-on-surface-variant mb-1">Purpose</p>

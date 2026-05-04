@@ -46,10 +46,14 @@ public class VisitorRequestService {
 
     public VisitorRequest createRequest(Map<String, String> payload) {
         String flatNumber = payload.get("flatNumber");
+        String visitorName = payload.get("visitorName");
         String purpose = payload.get("purpose");
         String category = payload.get("category");
         if (flatNumber == null || flatNumber.isBlank()) {
             throw new RuntimeException("Flat number is required");
+        }
+        if (visitorName == null || visitorName.isBlank()) {
+            throw new RuntimeException("Visitor name is required");
         }
         if (purpose == null || purpose.isBlank()) {
             throw new RuntimeException("Purpose is required");
@@ -64,6 +68,7 @@ public class VisitorRequestService {
         String ownerName = ((owner.getFirstName() != null ? owner.getFirstName() : "") + " " +
                 (owner.getLastName() != null ? owner.getLastName() : "")).trim();
         vr.setMemberName(ownerName);
+        vr.setVisitorName(visitorName.trim());
         vr.setPurpose(purpose.trim());
         vr.setCategory(category != null && !category.isBlank() ? category.trim() : "etc");
         vr.setSecurityName(payload.getOrDefault("securityName", "Security"));
