@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getMemberById, updateMember } from '../service/memberService';
 import { useParams } from 'react-router-dom';
 import './AdminMemberDetails.css';
@@ -11,11 +11,7 @@ export default function AdminMemberDetails() {
   const [editData, setEditData] = useState({});
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadMember();
-  }, [id]);
-
-  const loadMember = async () => {
+  const loadMember = useCallback(async () => {
     try {
       const data = await getMemberById(id);
       setMember(data);
@@ -37,7 +33,11 @@ export default function AdminMemberDetails() {
     } catch (err) {
       console.error('Error loading member:', err);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadMember();
+  }, [loadMember]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

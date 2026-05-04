@@ -7,6 +7,7 @@ const MemberParking = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showVisitorPass, setShowVisitorPass] = useState(false);
+  const [payingSlotId, setPayingSlotId] = useState(null);
 
   const fetchMemberSlots = async () => {
     if (!user?.flatId) return;
@@ -26,14 +27,64 @@ const MemberParking = () => {
     fetchMemberSlots();
   }, [user]);
 
-  const handlePay = async (slotId) => {
+  const currentPaymentMonth = () => new Date().toISOString().slice(0, 7);
+
+  const isPaid = (slot) => String(slot?.paymentStatus || "").toLowerCase() === "paid";
+
+  const handlePay = async (slot) => {
+    const slotId = slot.id || slot._id;
+    const amount = Number(slot.monthlyCharge || 0);
+    if (!slotId) return;
+    if (!amount || amount <= 0) {
+      alert("Parking charge is not configured for this slot.");
+      return;
+    }
+    if (!window.Razorpay) {
+      alert("Payment checkout is not loaded. Please refresh and try again.");
+      return;
+    }
+
+    setPayingSlotId(slotId);
     try {
-      await axios.put(`http://localhost:8888/api/parking/pay/${slotId}`);
-      alert("Payment successful!");
-      fetchMemberSlots();
+      const orderRes = await axios.post("http://localhost:8888/api/payments/create-order", {
+        amount: Math.round(amount * 100),
+      });
+      const { orderId } = orderRes.data;
+
+      const options = {
+        key: "rzp_test_RXjylnpmWsTC8v",
+        amount: Math.round(amount * 100),
+        currency: "INR",
+        name: "HarmonyStay",
+        description: `Parking payment for slot ${slot.slotNumber}`,
+        order_id: orderId,
+        handler: async function () {
+          await axios.put(`http://localhost:8888/api/parking/pay/${slotId}`, {
+            month: currentPaymentMonth(),
+          });
+          alert("Parking payment successful!");
+          fetchMemberSlots();
+          setPayingSlotId(null);
+        },
+        prefill: {
+          name: [user?.firstName, user?.lastName].filter(Boolean).join(" ") || "Member",
+          email: user?.email || "",
+          contact: user?.phone || "9999999999",
+        },
+        theme: { color: "#006a61" },
+        modal: {
+          ondismiss: function () {
+            setPayingSlotId(null);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (err) {
       console.error("Payment failed:", err);
       alert("Payment failed. Try again.");
+      setPayingSlotId(null);
     }
   };
 
@@ -92,10 +143,28 @@ const MemberParking = () => {
                     <p className="font-extrabold text-on-surface text-lg">{slot.vehicleType || "Assigned Slot"}</p>
                     <p className="text-xs font-black text-slate-400 font-mono tracking-widest uppercase mt-1">{slot.vehicleNumber || "NO VEHICLE"}</p>
                     <div className="flex items-center gap-2 mt-3">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${slot.paymentStatus === 'Paid' ? 'bg-secondary/10 text-secondary' : 'bg-amber-100 text-amber-700'}`}>
-                        {slot.paymentStatus === 'Paid' ? 'Active' : 'Payment Due'}
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${isPaid(slot) ? 'bg-secondary/10 text-secondary' : 'bg-amber-100 text-amber-700'}`}>
+                        {isPaid(slot) ? 'Active' : 'Payment Due'}
                       </span>
                       <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Spot {slot.slotNumber}</span>
+                    </div>
+                    <div className="mt-4 flex items-center justify-between gap-3">
+                      <span className="text-xs font-black text-slate-500 uppercase tracking-widest">
+                        Rs. {Number(slot.monthlyCharge || 0).toFixed(0)} / month
+                      </span>
+                      {!isPaid(slot) && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePay(slot);
+                          }}
+                          disabled={payingSlotId === (slot.id || slot._id)}
+                          className="px-4 py-2 rounded-xl bg-secondary text-white text-[10px] font-black uppercase tracking-widest hover:brightness-110 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                        >
+                          {payingSlotId === (slot.id || slot._id) ? "Opening..." : "Pay Now"}
+                        </button>
+                      )}
                     </div>
                   </div>
                   <button className="material-symbols-outlined text-slate-300 hover:text-secondary transition-colors">more_vert</button>

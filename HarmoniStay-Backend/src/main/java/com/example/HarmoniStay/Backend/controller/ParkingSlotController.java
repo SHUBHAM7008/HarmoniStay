@@ -5,7 +5,9 @@ import com.example.HarmoniStay.Backend.service.ParkingSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.YearMonth;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/parking")
@@ -45,6 +47,16 @@ public class ParkingSlotController {
             @RequestParam String status,
             @RequestParam String month) {
         return service.updatePayment(slotId, status, month);
+    }
+
+    @PutMapping("/pay/{slotId}")
+    public ParkingSlot markPaid(
+            @PathVariable String slotId,
+            @RequestBody(required = false) Map<String, String> payload) {
+        String month = payload != null && payload.get("month") != null && !payload.get("month").isBlank()
+                ? payload.get("month")
+                : YearMonth.now().toString();
+        return service.updatePayment(slotId, "Paid", month);
     }
 
 }
