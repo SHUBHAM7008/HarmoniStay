@@ -1,0 +1,8 @@
+HarmoniStay-Backend/target/
+HarmoniStay-Backend/uploads/
+HarmoniStay-Backend/src/main/resources/application-local.properties
+
+harmonystay-frontend/node_modules/
+harmonystay-frontend/build/
+
+*.log

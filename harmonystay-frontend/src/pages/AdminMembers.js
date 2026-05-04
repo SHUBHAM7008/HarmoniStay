@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getMembers, deleteMember, updateMember } from '../service/memberService';
 import { getFlats } from '../service/flatService'; // fetch available flats
 import { useNavigate } from 'react-router-dom';
@@ -22,12 +22,15 @@ export default function AdminMembers() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadMembers();
-    loadFlats();
+  const applyFlatFilter = useCallback((sourceMembers, flatValue) => {
+    if (flatValue === 'All') {
+      setFilteredMembers(sourceMembers);
+    } else {
+      setFilteredMembers(sourceMembers.filter(m => m.flatNo === flatValue));
+    }
   }, []);
 
-  const loadMembers = async () => {
+  const loadMembers = useCallback(async () => {
     try {
       const data = await getMembers();
       const membersWithId = data.map(m => ({
@@ -38,14 +41,13 @@ export default function AdminMembers() {
         flatNo: m.flatId ? `${m.flatId}` : 'Not Assigned'
       }));
       setMembers(membersWithId);
-      applyFlatFilter(membersWithId, selectedFlat);
     } catch (err) {
       console.error('Error loading members:', err);
       setMessage('Unable to load members.');
     }
-  };
+  }, []);
 
-  const loadFlats = async () => {
+  const loadFlats = useCallback(async () => {
     try {
       const data = await getFlats();
       setFlats(Array.isArray(data) ? data : []);
@@ -53,15 +55,16 @@ export default function AdminMembers() {
       console.error('Error loading flats:', err);
       setMessage('Unable to load flats.');
     }
-  };
+  }, []);
 
-  const applyFlatFilter = (sourceMembers, flatValue) => {
-    if (flatValue === 'All') {
-      setFilteredMembers(sourceMembers);
-    } else {
-      setFilteredMembers(sourceMembers.filter(m => m.flatNo === flatValue));
-    }
-  };
+  useEffect(() => {
+    loadMembers();
+    loadFlats();
+  }, [loadMembers, loadFlats]);
+
+  useEffect(() => {
+    applyFlatFilter(members, selectedFlat);
+  }, [applyFlatFilter, members, selectedFlat]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this member?')) {
