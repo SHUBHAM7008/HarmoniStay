@@ -9,7 +9,6 @@ import './AdminMembers.css';
 export default function AdminMembers() {
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
-  const [flats, setFlats] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState(null); 
   const [selectedFlat, setSelectedFlat] = useState('All');
   const [message, setMessage] = useState('');
@@ -43,7 +42,7 @@ export default function AdminMembers() {
   const loadFlats = useCallback(async () => {
     try {
       const data = await getFlats();
-      setFlats(Array.isArray(data) ? data : []);
+      return Array.isArray(data) ? data : [];
     } catch (err) {
       console.error('Error loading flats:', err);
       setMessage('Unable to load flats.');
