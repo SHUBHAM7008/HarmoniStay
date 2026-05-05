@@ -9,6 +9,14 @@
   min-height: 100vh;
 }
 
+.admin-member-details-container--dialog {
+  max-width: none;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
 .member-card {
   background: var(--admin-bg-secondary);
   border-radius: var(--admin-radius-xl);
@@ -18,9 +26,25 @@
   transition: all var(--admin-transition-base);
 }
 
-.member-card:hover {
+.admin-member-details-container:not(.admin-member-details-container--dialog) .member-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--admin-shadow-xl);
+}
+
+.admin-member-details-container--dialog .member-card {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 2rem;
+}
+
+.member-detail-message {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--admin-radius-lg);
+  background: rgba(0, 106, 97, 0.1);
+  color: var(--admin-primary);
+  font-weight: 700;
 }
 
 .profile-header {
@@ -203,7 +227,7 @@
 }
 
 .member-info ul li::before {
-  content: '→';
+  content: '>';
   position: absolute;
   left: 0;
   color: var(--admin-primary);

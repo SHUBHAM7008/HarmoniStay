@@ -254,7 +254,7 @@ const MemberFacilities = () => {
                               </div>
                               <div>
                                 <p className="text-sm font-extrabold text-on-surface">{FACILITY_MAP[b.name]?.label || b.name}</p>
-                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Unit {b.flatId} • Private Session</p>
+                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Flat {b.flatId} • Reserved Slot</p>
                               </div>
                             </div>
                           </td>

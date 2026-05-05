@@ -1,0 +1,106 @@
+.status-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.48);
+  backdrop-filter: blur(3px);
+}
+
+.status-dialog__panel {
+  position: relative;
+  width: min(420px, 92vw);
+  padding: 2rem;
+  border: 1px solid #eef2ff;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.18);
+  color: #0b1c30;
+  text-align: center;
+  animation: statusDialogPop 180ms ease-out;
+}
+
+.status-dialog__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem;
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.status-dialog__close:hover {
+  background: #f1f5f9;
+  color: #334155;
+  transform: rotate(90deg);
+}
+
+.status-dialog__icon {
+  width: 52px;
+  height: 52px;
+  margin-bottom: 1rem;
+}
+
+.status-dialog__panel--success .status-dialog__icon {
+  color: #22c55e;
+}
+
+.status-dialog__panel--error .status-dialog__icon {
+  color: #ef4444;
+}
+
+.status-dialog__panel--info .status-dialog__icon {
+  color: #3b82f6;
+}
+
+.status-dialog__panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.status-dialog__panel p {
+  margin: 0;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.status-dialog__button {
+  margin-top: 1.5rem;
+  min-width: 110px;
+  padding: 0.75rem 1.25rem;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #006a61 0%, #00897b 100%);
+  color: #ffffff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.status-dialog__button:hover {
+  box-shadow: 0 10px 24px rgba(0, 106, 97, 0.2);
+  transform: translateY(-1px);
+}
+
+@keyframes statusDialogPop {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

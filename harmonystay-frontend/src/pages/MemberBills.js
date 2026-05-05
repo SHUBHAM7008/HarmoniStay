@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import jsPDF from "jspdf";
-import "jspdf-autotable"; 
+import autoTable from "jspdf-autotable";
 import Papa from "papaparse";
 
 const MemberBills = () => {
@@ -158,7 +158,11 @@ const MemberBills = () => {
       formatDate(b.dueDate),
       b.transactionId || "-"
     ]);
-    doc.autoTable(tableColumn, tableRows, { startY: 25 });
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 25,
+    });
     doc.save("Maintenance_History.pdf");
   };
 

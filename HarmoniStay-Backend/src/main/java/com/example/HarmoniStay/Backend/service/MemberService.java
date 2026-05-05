@@ -1,6 +1,7 @@
 package com.example.HarmoniStay.Backend.service;
 
 import com.example.HarmoniStay.Backend.model.Member;
+import com.example.HarmoniStay.Backend.repository.FlatOwnershipHistoryRepository;
 import com.example.HarmoniStay.Backend.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class MemberService {
 
     @Autowired
     private FlatService flatService;
+
+    @Autowired
+    private FlatOwnershipHistoryRepository flatOwnershipHistoryRepository;
 
     @Autowired
     private SmsService smsService;
@@ -70,10 +74,12 @@ public class MemberService {
         }
     }
 
-    public void deleteMember(String id) {
-        Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Member not found with id: " + id));
+    @Transactional
+    public void deleteMember(String identifier) {
+        Member member = getMemberByIdOrEmail(identifier)
+                .orElseThrow(() -> new RuntimeException("Member not found with id/email: " + identifier));
         flatService.clearOwnershipForMember(member.getId());
+        flatOwnershipHistoryRepository.deleteByMemberId(member.getId());
         memberRepository.delete(member);
     }
 

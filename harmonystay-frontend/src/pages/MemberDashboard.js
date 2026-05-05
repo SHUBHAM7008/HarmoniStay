@@ -15,6 +15,7 @@ const MemberDashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [pendingVisitorRequest, setPendingVisitorRequest] = useState(null);
   const [responding, setResponding] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,14 +75,15 @@ const MemberDashboard = () => {
   const NavItem = ({ id, icon, label }) => (
     <button
       onClick={() => setActiveMenu(id)}
+      title={sidebarCollapsed ? label : undefined}
       className={`flex items-center w-full gap-3 px-4 py-3 rounded-lg transition-all duration-300 group ${
         activeMenu === id
           ? "bg-slate-50 text-secondary font-bold border-r-4 border-secondary translate-x-1"
           : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-      }`}
+      } ${sidebarCollapsed ? "justify-center px-0 gap-0 border-r-0 translate-x-0" : ""}`}
     >
       <span className={`material-symbols-outlined transition-all ${activeMenu === id ? "fill-[1]" : "group-hover:scale-110"}`} style={{ fontVariationSettings: activeMenu === id ? "'FILL' 1" : "'FILL' 0" }}>{icon}</span>
-      <span className="text-sm">{label}</span>
+      <span className={`text-sm overflow-hidden whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? "w-0 opacity-0 -translate-x-2" : "w-auto opacity-100 translate-x-0"}`}>{label}</span>
     </button>
   );
 
@@ -133,15 +135,24 @@ const MemberDashboard = () => {
       )}
 
       {/* Sidebar Navigation */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-outline-variant shadow-[4px_0_24px_rgba(15,23,42,0.04)] z-50 flex flex-col">
-        <div className="p-6 flex items-center gap-3">
-          <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center text-white shadow-lg shadow-secondary/20">
+      <aside className={`fixed left-0 top-0 h-screen bg-white border-r border-outline-variant shadow-[4px_0_24px_rgba(15,23,42,0.04)] z-50 flex flex-col transition-all duration-300 ease-in-out overflow-hidden ${sidebarCollapsed ? "w-20" : "w-64"}`}>
+        <div className={`p-6 flex items-center gap-3 transition-all duration-300 ${sidebarCollapsed ? "justify-center px-3" : ""}`}>
+          <div className={`w-10 h-10 bg-secondary rounded-lg items-center justify-center text-white shadow-lg shadow-secondary/20 flex-shrink-0 ${sidebarCollapsed ? "hidden" : "flex"}`}>
             <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>apartment</span>
           </div>
-          <div>
+          <div className={`overflow-hidden whitespace-nowrap transition-all duration-300 min-w-0 flex-1 ${sidebarCollapsed ? "w-0 opacity-0 -translate-x-2" : "w-auto opacity-100 translate-x-0"}`}>
             <h1 className="text-xl font-extrabold tracking-tight text-slate-900">HarmonyStay</h1>
             <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Management Portal</p>
           </div>
+          <button
+            type="button"
+            onClick={() => setSidebarCollapsed((prev) => !prev)}
+            aria-label={sidebarCollapsed ? "Open menu" : "Close menu"}
+            title={sidebarCollapsed ? "Open menu" : "Close menu"}
+            className={`w-10 h-10 rounded-xl border border-slate-100 bg-white text-slate-500 hover:text-secondary hover:border-secondary/30 flex items-center justify-center transition-all active:scale-95 flex-shrink-0 ${sidebarCollapsed ? "" : "ml-auto"}`}
+          >
+            <span className="material-symbols-outlined">menu</span>
+          </button>
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto no-scrollbar">
@@ -158,15 +169,16 @@ const MemberDashboard = () => {
           <div className="pt-4 mt-4 border-t border-slate-50">
             <button 
               onClick={handleLogout}
-              className="flex items-center w-full gap-3 px-4 py-3 rounded-lg text-error hover:bg-error/5 transition-all group"
+              title={sidebarCollapsed ? "Logout" : undefined}
+              className={`flex items-center w-full gap-3 px-4 py-3 rounded-lg text-error hover:bg-error/5 transition-all group ${sidebarCollapsed ? "justify-center px-0 gap-0" : ""}`}
             >
               <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">logout</span>
-              <span className="text-sm font-bold">Logout</span>
+              <span className={`text-sm font-bold overflow-hidden whitespace-nowrap transition-all duration-300 ${sidebarCollapsed ? "w-0 opacity-0 -translate-x-2" : "w-auto opacity-100 translate-x-0"}`}>Logout</span>
             </button>
           </div>
         </nav>
 
-        <div className="p-4 mt-auto">
+        <div className={`p-4 mt-auto transition-all duration-300 ${sidebarCollapsed ? "opacity-0 pointer-events-none translate-y-2" : "opacity-100 translate-y-0"}`}>
           <div className="bg-slate-900 rounded-2xl p-4 text-white shadow-xl">
             <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-3">Logged in as {user.role}</p>
             <div className="flex items-center gap-3">
@@ -187,16 +199,18 @@ const MemberDashboard = () => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+      <div className={`flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300 ease-in-out ${sidebarCollapsed ? "ml-20" : "ml-64"}`}>
         {/* Top Header */}
         <header className="h-16 flex-shrink-0 bg-white/80 backdrop-blur-md border-b border-slate-100 z-40 px-8 flex items-center justify-between">
-          <div className="flex items-center bg-slate-50 px-5 py-2 rounded-full w-96 border border-slate-100 focus-within:bg-white focus-within:ring-4 focus-within:ring-secondary/10 transition-all">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center bg-slate-50 px-5 py-2 rounded-full w-96 border border-slate-100 focus-within:bg-white focus-within:ring-4 focus-within:ring-secondary/10 transition-all">
             <span className="material-symbols-outlined text-slate-400 mr-2 text-xl">search</span>
             <input 
               type="text" 
               placeholder="Search meetings, attendees..." 
               className="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-slate-400 font-medium"
             />
+            </div>
           </div>
 
           <div className="flex items-center gap-6">
@@ -211,7 +225,7 @@ const MemberDashboard = () => {
             <div className="flex items-center gap-3">
               <div className="text-right hidden lg:block">
                 <p className="text-xs font-black text-slate-900 uppercase tracking-tighter leading-none">HarmonyStay</p>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Premium Estate</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Society Portal</p>
               </div>
             </div>
           </div>
@@ -225,7 +239,7 @@ const MemberDashboard = () => {
               <section className="mb-12">
                 <h2 className="text-5xl font-extrabold text-on-surface mb-2 tracking-tight">Welcome back, {user.firstName} 👋</h2>
                 <p className="text-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                  Here’s a quick overview of your residence. Everything looks in order for today.
+                  Here’s a quick overview of your society updates, services, and community activity for today.
                 </p>
               </section>
 
@@ -294,7 +308,7 @@ const MemberDashboard = () => {
                   <div className="flex items-center justify-between mb-8">
                     <div>
                       <h3 className="text-3xl font-extrabold text-on-surface">Recent Activity</h3>
-                      <p className="text-on-surface-variant font-medium">Latest updates from your residence</p>
+                      <p className="text-on-surface-variant font-medium">Latest updates from your society</p>
                     </div>
                     <button className="text-secondary font-black text-xs uppercase tracking-widest hover:underline">View All</button>
                   </div>
@@ -306,7 +320,7 @@ const MemberDashboard = () => {
                       </div>
                       <div className="flex-1">
                         <p className="text-on-surface font-bold">Sarah Jenkins <span className="text-on-surface-variant font-medium">responded to your Plumbing Request</span></p>
-                        <p className="text-[11px] font-bold text-on-surface-variant/50 uppercase mt-1 tracking-widest">2 hours ago • Unit 402</p>
+                        <p className="text-[11px] font-bold text-on-surface-variant/50 uppercase mt-1 tracking-widest">2 hours ago • Flat 402</p>
                         <div className="mt-3 text-sm text-on-surface-variant bg-surface-container-low p-4 rounded-xl border-l-4 border-secondary shadow-sm">
                           "Hello! A contractor has been scheduled for tomorrow between 9 AM and 11 AM."
                         </div>
@@ -339,14 +353,14 @@ const MemberDashboard = () => {
                   </div>
 
                   <div className="bg-white rounded-2xl p-8 shadow-sm border border-outline-variant flex-1">
-                    <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-8 border-b border-surface-container pb-4">Your Property Manager</h4>
+                    <h4 className="text-[10px] font-black uppercase tracking-widest text-on-surface-variant/60 mb-8 border-b border-surface-container pb-4">Society Office Contact</h4>
                     <div className="flex items-center gap-5 mb-8">
                       <div className="w-16 h-16 rounded-full overflow-hidden shadow-md ring-2 ring-surface-container border-2 border-white">
                         <img className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300&h=300" alt="Avatar" />
                       </div>
                       <div>
                         <p className="text-lg font-extrabold text-on-surface leading-tight">David Richardson</p>
-                        <p className="text-xs font-bold text-on-surface-variant/60 uppercase tracking-tight">Senior Administrator</p>
+                        <p className="text-xs font-bold text-on-surface-variant/60 uppercase tracking-tight">Society Administrator</p>
                       </div>
                     </div>
                     <button className="w-full flex items-center justify-center gap-3 py-4 rounded-xl border-2 border-surface-container text-on-surface font-black text-xs uppercase tracking-widest hover:bg-surface-container transition-all active:scale-95">

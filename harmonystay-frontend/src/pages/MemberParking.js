@@ -113,7 +113,7 @@ const MemberParking = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: My Assets */}
+        {/* Left Column: My Vehicles */}
         <div className="lg:col-span-2 space-y-8">
           {/* Registered Vehicles */}
           <section className="bg-white rounded-2xl shadow-[0_4px_24px_rgba(15,23,42,0.05)] border border-outline-variant/30 overflow-hidden">
@@ -195,7 +195,7 @@ const MemberParking = () => {
                         </div>
                         <div>
                           <p className="text-sm font-extrabold text-on-surface">{user?.name || "Member"}</p>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Unit {user?.flatId}</p>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Flat {user?.flatId}</p>
                         </div>
                       </div>
                     </td>

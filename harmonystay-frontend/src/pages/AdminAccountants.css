@@ -165,25 +165,73 @@
   border-bottom: none;
 }
 
-.btn-del {
-  background: var(--admin-danger);
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
+.accountants-table input,
+.accountants-table select {
+  width: 100%;
+  min-width: 120px;
+  box-sizing: border-box;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-md);
+  background: var(--admin-bg-primary);
+  color: var(--admin-text-dark);
+  font: inherit;
+}
+
+.accountant-edit-name {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+
+.accountant-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.acct-icon-action {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--admin-radius-md);
+  background: rgba(0, 106, 97, 0.1);
+  color: var(--admin-primary);
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 700;
   transition: all var(--admin-transition-base);
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  justify-content: center;
+  font-size: 0.85rem;
 }
 
-.btn-del:hover {
-  background: #dc2626;
+.acct-icon-action:hover {
+  background: var(--admin-primary);
+  color: #fff;
   transform: translateY(-2px);
   box-shadow: var(--admin-shadow-md);
+}
+
+.acct-icon-action--muted {
+  background: rgba(100, 116, 139, 0.12);
+  color: var(--admin-text-medium);
+}
+
+.acct-icon-action--muted:hover {
+  background: var(--admin-text-medium);
+  color: #fff;
+}
+
+.acct-icon-action--danger {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--admin-danger);
+}
+
+.acct-icon-action--danger:hover {
+  background: var(--admin-danger);
+  color: #fff;
 }
 
 @keyframes slideUp {

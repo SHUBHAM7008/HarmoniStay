@@ -36,6 +36,17 @@ public class AccountantController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody Accountant body) {
+        try {
+            return ResponseEntity.ok(accountantService.update(id, body));
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            Map<String, String> err = new HashMap<>();
+            err.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(err);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
         accountantService.deleteById(id);

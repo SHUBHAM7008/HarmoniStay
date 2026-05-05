@@ -41,6 +41,26 @@ public class FlatService {
         return flatRepository.save(flat);
     }
 
+    public Flat updateFlat(String id, Flat input) {
+        Flat existing = flatRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Flat not found"));
+
+        existing.setFlatNumber(input.getFlatNumber());
+        existing.setWing(input.getWing());
+        existing.setFloor(input.getFloor());
+        existing.setArea(input.getArea());
+        existing.setAmount(input.getAmount());
+        existing.setType(input.getType());
+        existing.setStatus(input.getStatus());
+        existing.setUpdatedAt(new Date());
+
+        return flatRepository.save(existing);
+    }
+
+    public void deleteFlat(String id) {
+        flatRepository.deleteById(id);
+    }
+
     @Transactional
     public Flat assignFlatToMember(String flatId, String memberId) throws Exception {
         Flat flat = resolveFlatByIdOrNumber(flatId)

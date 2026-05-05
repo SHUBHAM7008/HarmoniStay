@@ -48,7 +48,7 @@ const DualLoginPage = () => {
       <section className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-8 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            alt="Luxury property interior" 
+            alt="Modern society clubhouse" 
             className="w-full h-full object-cover" 
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQF0w3DqNIrCjfKEMAL0n-eS9JPqByQAnXC3Z0dEf2f7GRNDwWLFNhvKkU98FQdrKRd0vMA62SHaQVScsXE2GzSYLDYV38C8GGDwuAlJdwI6N09e54duIZRubdlHhxLW3FfFc7PCGqKWYYkiCT_CZ8mnkhZM5CodxcfF-84Og9V9OUNwCmVHI_KvMIN8XYEhDJmVtotDyhc1fHbPv2thdFAuerqEh10KmsOZsEsYyE4ESyPhK_gHVd0IYjbX0d-F4o3DVszKLsk74"
           />
@@ -66,8 +66,8 @@ const DualLoginPage = () => {
 
         {/* Hero Text */}
         <div className="relative z-10 max-w-lg mb-8">
-          <h1 className="text-5xl font-extrabold text-white mb-4 leading-tight">Elevate Your Property Management.</h1>
-          <p className="text-lg text-white/80 font-medium leading-relaxed">Seamlessly manage luxury estates, financial reporting, and team workflows in one unified, intelligent ecosystem.</p>
+          <h1 className="text-5xl font-extrabold text-white mb-4 leading-tight">Manage Your Society With Ease.</h1>
+          <p className="text-lg text-white/80 font-medium leading-relaxed">Bring members, admins, accountants, and security teams together for notices, maintenance, payments, visitors, and shared facilities.</p>
         </div>
 
         <div className="relative z-10">
@@ -77,7 +77,7 @@ const DualLoginPage = () => {
               <img className="w-8 h-8 rounded-full border-2 border-primary-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLPctSo9DkIvF4hYlE_348H-YgmhpgXxipxOQyE32Eqk_4DLCqr9DlGKsHOPXDNudi8tXrwKaNrAS9aLkOHi9wF5PsFh5w6d8xUNdyShRcbAOkiiLyz7PYQkTT-gZcm0AjMg65lRR0BSWEPOsBevImKv8y1F0OpJMVUbQ3hq1YDWNpBVnsTmZylkhpZEgKWektGmfgMRK1TeCcdwqJgFKYzAzPzA2mSkV8aAfwokP5L2PHdXO9mGsslt1cGEKmQT-GVNazqjGnkDw" alt="User 2"/>
               <img className="w-8 h-8 rounded-full border-2 border-primary-container" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUYUSTckQyo0gniGUQV7EhA9Jn-ObsBPNIZ3pjEaR_hK35O_F2E0BNkhQUbXGv7_0kaKiCLWap0IUqH9Pb02dYUL4JioOjrTH3C1tfUmzQMKAF4s-KylY5-Okgt-y-bq1Aly0VGm53Kope_tjfRO5E21qDi6JxNDr2V2r2gniMgLxhVmiHcRX0xQPAH03xRoKwYXb2gdiYAV93sracdPLRhp3RxuTs9Rpm8tftl1bZ9VRj35D09oWKo2BxC_nWl8hQGCHWNjApZFY" alt="User 3"/>
             </div>
-            <span>Trusted by 500+ premium property groups</span>
+            <span>Built for modern housing societies and resident communities</span>
           </div>
         </div>
       </section>
@@ -96,7 +96,7 @@ const DualLoginPage = () => {
           <div className="bg-white/95 backdrop-blur-md p-8 lg:p-10 rounded-2xl shadow-[4px_0_24px_rgba(15,23,42,0.08)] border border-outline-variant/30">
             <header className="mb-8 text-center lg:text-left">
               <h2 className="text-3xl font-extrabold text-primary mb-2">Secure Access</h2>
-              <p className="text-on-surface-variant font-medium">Welcome back. Please select your role to continue.</p>
+              <p className="text-on-surface-variant font-medium">Welcome back to your society portal. Please select your role to continue.</p>
             </header>
 
             {/* Role Selector Tabs */}
@@ -186,7 +186,7 @@ const DualLoginPage = () => {
                   className="w-full bg-secondary text-white font-bold py-4 rounded-xl shadow-lg hover:bg-secondary/90 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                   type="submit"
                 >
-                  <span>{loading ? 'Authenticating...' : 'Login to Dashboard'}</span>
+                  <span>{loading ? 'Authenticating...' : 'Login to Society Portal'}</span>
                   {!loading && <span className="material-symbols-outlined text-lg">arrow_forward</span>}
                 </button>
               </div>

@@ -12,4 +12,5 @@ public interface FlatOwnershipHistoryRepository extends JpaRepository<FlatOwners
     List<FlatOwnershipHistory> findByFlatIdOrderByFirstDayDesc(String flatId);
     List<FlatOwnershipHistory> findByMemberIdOrderByFirstDayDesc(String memberId);
     Optional<FlatOwnershipHistory> findFirstByFlatIdAndLastDayIsNullOrderByFirstDayDesc(String flatId);
+    void deleteByMemberId(String memberId);
 }

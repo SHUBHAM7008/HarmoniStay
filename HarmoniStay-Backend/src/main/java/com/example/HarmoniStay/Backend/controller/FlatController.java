@@ -27,6 +27,17 @@ public class FlatController {
     public Flat createFlat(@RequestBody Flat flat) {
         return flatService.createFlat(flat);
     }
+
+    @PutMapping("/{id}")
+    public Flat updateFlat(@PathVariable String id, @RequestBody Flat flat) {
+        return flatService.updateFlat(id, flat);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteFlat(@PathVariable String id) {
+        flatService.deleteFlat(id);
+    }
+
     @GetMapping("/members")
     public List<Member> getAllMembers() {
         return flatService.getAllMembers();

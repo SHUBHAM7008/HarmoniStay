@@ -87,11 +87,15 @@ const AdminComplaints = () => {
                   )}
                 </td>
                 <td>
-                  {c.status !== "IN_PROGRESS" && (
-                    <button onClick={() => updateStatus(c.id || c._id, "IN_PROGRESS")}>In Progress</button>
-                  )}
-                  {c.status !== "RESOLVED" && (
-                    <button className="resolve" onClick={() => updateStatus(c.id || c._id, "RESOLVED")}>Resolve</button>
+                  {c.status === "RESOLVED" ? (
+                    <span className="complaint-done-label">Done</span>
+                  ) : (
+                    <>
+                      {c.status === "PENDING" && (
+                        <button onClick={() => updateStatus(c.id || c._id, "IN_PROGRESS")}>In Progress</button>
+                      )}
+                      <button className="resolve" onClick={() => updateStatus(c.id || c._id, "RESOLVED")}>Done</button>
+                    </>
                   )}
                 </td>
               </tr>

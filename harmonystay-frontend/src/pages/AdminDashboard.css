@@ -101,6 +101,13 @@
   padding: 1.5rem 1rem 1.25rem;
   height: 100vh;
   overflow: hidden;
+  transition: width 260ms ease, padding 260ms ease;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar {
+  width: 84px;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
 }
 
 .admin-sidebar__brand {
@@ -110,6 +117,69 @@
   padding-bottom: 1.35rem;
   border-bottom: 1px solid #eef2ff;
   margin-bottom: 1rem;
+  min-width: 0;
+}
+
+.admin-sidebar__toggle {
+  width: 38px;
+  height: 38px;
+  margin-left: auto;
+  border: 1px solid #e5eeff;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.admin-sidebar__toggle:hover {
+  background: #effaf5;
+  border-color: #cbd5e1;
+  color: #006a61;
+}
+
+.admin-dashboard--dark .admin-sidebar__toggle {
+  background: #1f2937;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+.admin-sidebar__brand-text,
+.admin-sidebar__nav button span,
+.admin-sidebar__logout span {
+  transition: opacity 180ms ease, width 260ms ease, transform 260ms ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.admin-sidebar__brand-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar__brand {
+  justify-content: center;
+  gap: 0;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar__logo {
+  display: none;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar__toggle {
+  margin-left: 0;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar__brand-text,
+.admin-dashboard--sidebar-collapsed .admin-sidebar__nav button span,
+.admin-dashboard--sidebar-collapsed .admin-sidebar__logout span {
+  width: 0;
+  opacity: 0;
+  transform: translateX(-8px);
 }
 
 .admin-sidebar__logo {
@@ -170,6 +240,13 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
+.admin-dashboard--sidebar-collapsed .admin-sidebar__nav button {
+  justify-content: center;
+  gap: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .admin-sidebar__nav button:hover {
   background: #effaf5;
   color: #006a61;
@@ -195,6 +272,11 @@
   justify-content: center;
   gap: 0.6rem;
   transition: background 0.2s, color 0.2s;
+}
+
+.admin-dashboard--sidebar-collapsed .admin-sidebar__logout {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .admin-sidebar__logout:hover {
