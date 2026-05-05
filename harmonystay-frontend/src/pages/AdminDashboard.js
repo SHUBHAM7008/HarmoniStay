@@ -20,6 +20,7 @@ import {
   FaMoon,
   FaSun,
   FaCalculator,
+  FaBars,
 } from "react-icons/fa";
 
 import AdminMembers from "./AdminMembers";
@@ -45,6 +46,7 @@ const AdminDashboard = () => {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const [searchQ, setSearchQ] = useState("");
   const [darkUi, setDarkUi] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     if (!user || user.role !== "admin") {
@@ -87,15 +89,24 @@ const AdminDashboard = () => {
 
   return (
     <div
-      className={`admin-dashboard admin-dashboard--modern${darkUi ? " admin-dashboard--dark" : ""}`}
+      className={`admin-dashboard admin-dashboard--modern${darkUi ? " admin-dashboard--dark" : ""}${sidebarCollapsed ? " admin-dashboard--sidebar-collapsed" : ""}`}
     >
       <aside className="admin-sidebar">
         <div className="admin-sidebar__brand">
           <span className="admin-sidebar__logo">HS</span>
-          <div>
+          <div className="admin-sidebar__brand-text">
             <strong>HarmonyStay</strong>
             <small>Society admin</small>
           </div>
+          <button
+            type="button"
+            className="admin-sidebar__toggle"
+            title={sidebarCollapsed ? "Open menu" : "Close menu"}
+            aria-label={sidebarCollapsed ? "Open menu" : "Close menu"}
+            onClick={() => setSidebarCollapsed((prev) => !prev)}
+          >
+            <FaBars />
+          </button>
         </div>
 
         <nav className="admin-sidebar__nav">
@@ -106,6 +117,7 @@ const AdminDashboard = () => {
                   type="button"
                   className={activeMenu === id ? "is-active" : ""}
                   onClick={() => setActiveMenu(id)}
+                  title={sidebarCollapsed ? label : undefined}
                 >
                   <Icon aria-hidden />
                   <span>{label}</span>
@@ -116,7 +128,7 @@ const AdminDashboard = () => {
         </nav>
 
         <button type="button" className="admin-sidebar__logout" onClick={handleLogout}>
-          <FaSignOutAlt /> Logout
+          <FaSignOutAlt /> <span>Logout</span>
         </button>
       </aside>
 

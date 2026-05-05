@@ -7,8 +7,8 @@ const MemberNotices = () => {
     { id: "demo-3", title: "Quarterly Resident Mixer", description: "Don't miss our upcoming Q4 mixer at the Clubhouse Lounge. This is a great opportunity to meet your neighbors and the new concierge team...", date: new Date(), type: "Events" },
     { id: "demo-4", title: "Pool Drainage and Cleaning", description: "The West Wing infinity pool will be closed for a deep clean and filtration check. We apologize for any inconvenience caused during this period.", date: new Date(), type: "Maintenance" }
   ]);
-  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("ALL");
+  const [sortOrder, setSortOrder] = useState("newest");
 
   useEffect(() => {
     fetchNotices();
@@ -42,46 +42,17 @@ const MemberNotices = () => {
 
   const categories = ["All Notices", "Maintenance", "Community", "Security", "Events"];
   
-  const filteredNotices = filter === "ALL" 
-    ? notices 
-    : notices.filter(n => (n.type || "").toUpperCase() === filter.toUpperCase());
+  const filteredNotices = (filter === "ALL"
+    ? notices
+    : notices.filter(n => (n.type || "").toUpperCase() === filter.toUpperCase())
+  ).sort((a, b) => {
+    const dateA = new Date(a.date).getTime() || 0;
+    const dateB = new Date(b.date).getTime() || 0;
+    return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+  });
 
   return (
     <div className="pt-4 pb-12 max-w-[1440px] mx-auto animate-in fade-in duration-700">
-      {/* Hero Section: Featured Notice */}
-      <section className="mb-16">
-        <div className="relative overflow-hidden rounded-[32px] bg-primary-container text-white p-12 shadow-2xl flex flex-col md:flex-row items-center gap-12 group border border-white/10">
-          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-secondary via-transparent to-transparent"></div>
-          <div className="relative z-10 flex-1">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-error/20 text-error-container text-[10px] font-black uppercase tracking-widest rounded-full border border-error/30 mb-8">
-              <span className="material-symbols-outlined text-sm animate-pulse" style={{ fontVariationSettings: "'FILL' 1" }}>error</span>
-              Urgent Announcement
-            </span>
-            <h2 className="text-5xl font-black mb-6 leading-tight tracking-tighter">Annual System <br/>Infrastructure Upgrade</h2>
-            <p className="text-primary-fixed/70 text-lg font-medium mb-10 max-w-2xl leading-relaxed">
-              Scheduled maintenance across all residential towers will occur this weekend. This includes elevators, smart security nodes, and backup power synchronization. 
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <button className="bg-secondary text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:brightness-110 transition-all hover:translate-y-[-2px] shadow-lg shadow-secondary/20">
-                View Detailed Schedule
-                <span className="material-symbols-outlined text-lg">arrow_forward</span>
-              </button>
-              <button className="border-2 border-white/10 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/5 transition-all">
-                Add to Calendar
-              </button>
-            </div>
-          </div>
-          <div className="relative z-10 w-full md:w-[40%] aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.02] transition-transform duration-700">
-            <img 
-              alt="System Upgrade" 
-              className="w-full h-full object-cover" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWFUKF-TB4wVTybvn1iAwleAefChKKUsEEUs3Yhra8TIXSr4Chl_Gnfzu1_7REpC_Abx6GSKf5wZIyj2-OoADNKv1WY4JHsHuu-VVytjtDn56j9Xmh5p-hm78oNtkUlftFxfqv5evEpdCz5LGjRbLoIn0AghRshgVzYCaGgzgzCZAGpNvm4TOC_WLDyQ3toWW5U45AukhhCaZ9axdF6G7L45GyPLIEZ4Ug7LVrUkJlBvouq16lFLkE8pLQK0Sy7zXi2kzuM0EouXc" 
-            />
-            <div className="absolute inset-0 bg-secondary/10 group-hover:opacity-0 transition-opacity"></div>
-          </div>
-        </div>
-      </section>
-
       {/* Filters Section */}
       <section className="mb-10">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -101,11 +72,16 @@ const MemberNotices = () => {
             ))}
           </div>
           <div className="flex items-center gap-4 text-slate-400 whitespace-nowrap">
-            <span className="text-[10px] font-black uppercase tracking-widest">Sorted by:</span>
-            <button className="flex items-center gap-2 text-on-surface font-black text-xs uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-50">
-              Newest First
-              <span className="material-symbols-outlined text-lg">expand_more</span>
-            </button>
+            <label htmlFor="notice-sort" className="text-[10px] font-black uppercase tracking-widest">Sorted by:</label>
+            <select
+              id="notice-sort"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              className="text-on-surface font-black text-xs uppercase tracking-widest bg-white px-4 py-2 rounded-xl border border-slate-100 outline-none cursor-pointer focus:ring-4 focus:ring-secondary/10 focus:border-secondary"
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
           </div>
         </div>
       </section>
@@ -153,19 +129,6 @@ const MemberNotices = () => {
             </div>
           );
         })}
-
-        {/* CTA Card */}
-        <div className="group bg-gradient-to-br from-slate-900 to-slate-800 p-10 rounded-[32px] shadow-2xl flex flex-col justify-center items-center text-center border border-white/5 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
-          <div className="w-20 h-20 rounded-3xl bg-white/5 backdrop-blur-sm flex items-center justify-center mb-8 border border-white/10 group-hover:scale-110 transition-transform">
-            <span className="material-symbols-outlined text-5xl text-white">campaign</span>
-          </div>
-          <h3 className="text-2xl font-black text-white mb-4 tracking-tight">Stay Updated</h3>
-          <p className="text-slate-400 text-sm font-medium mb-10 max-w-[240px] leading-relaxed">Want to receive push notifications for every new notice directly on your phone?</p>
-          <button className="w-full bg-secondary text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:brightness-110 transition-all shadow-lg shadow-secondary/20">
-            Enable Notifications
-          </button>
-        </div>
       </section>
 
       {/* Pagination/Load More */}

@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { getMembers, deleteMember, updateMember } from '../service/memberService';
+import { getMembers, deleteMember } from '../service/memberService';
 import { getFlats } from '../service/flatService'; // fetch available flats
-import { useNavigate } from 'react-router-dom';
+import { IoCloseOutline } from 'react-icons/io5';
+import AddMember from './AddMember';
+import AdminMemberDetails from './AdminMemberDetails';
 import './AdminMembers.css';
 
 export default function AdminMembers() {
@@ -10,17 +12,8 @@ export default function AdminMembers() {
   const [flats, setFlats] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState(null); 
   const [selectedFlat, setSelectedFlat] = useState('All');
-  const [editingMemberId, setEditingMemberId] = useState(null);
-  const [editForm, setEditForm] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    flatId: '',
-    status: 'ACTIVE',
-  });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate();
+  const [dialog, setDialog] = useState({ type: null, member: null });
 
   const applyFlatFilter = useCallback((sourceMembers, flatValue) => {
     if (flatValue === 'All') {
@@ -71,7 +64,6 @@ export default function AdminMembers() {
       try {
         await deleteMember(id);
         setSelectedMemberId(null);
-        setEditingMemberId(null);
         setMessage('Member deleted successfully.');
         await loadMembers();
         await loadFlats(); // refresh flats
@@ -93,66 +85,59 @@ export default function AdminMembers() {
     applyFlatFilter(members, selected);
   };
 
-  const startEdit = (member) => {
-    setEditingMemberId(member.id);
-    setEditForm({
-      firstName: member.firstName || '',
-      lastName: member.lastName || '',
-      email: member.email || '',
-      phone: member.phone === 'N/A' ? '' : member.phone || '',
-      flatId: member.flatId || '',
-      status: member.status || 'ACTIVE',
-    });
+  const handleMemberAdded = async () => {
+    setDialog({ type: null, member: null });
+    setMessage('Member added successfully.');
+    await loadMembers();
+    await loadFlats();
   };
 
-  const cancelEdit = () => {
-    setEditingMemberId(null);
-    setEditForm({
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      flatId: '',
-      status: 'ACTIVE',
-    });
+  const handleMemberUpdated = async () => {
+    setMessage('Member updated successfully.');
+    await loadMembers();
+    await loadFlats();
   };
 
-  const handleEditChange = (e) => {
-    const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
-  };
+  const closeDialog = () => setDialog({ type: null, member: null });
 
-  const handleSaveEdit = async (member) => {
-    try {
-      const payload = {
-        firstName: editForm.firstName.trim(),
-        lastName: editForm.lastName.trim(),
-        email: editForm.email.trim(),
-        phone: editForm.phone.trim(),
-        flatId: editForm.flatId,
-        status: editForm.status,
-      };
-      await updateMember(member.id || member.email, payload);
-      setMessage('Member updated successfully.');
-      cancelEdit();
-      await loadMembers();
-      await loadFlats();
-    } catch (err) {
-      console.error('Error updating member:', err);
-      setMessage('Unable to update member.');
-    }
-  };
-
-  const editableFlatsFor = (member) => {
-    return flats.filter((flat) => flat.status !== 'OCCUPIED' || flat.flatNumber === member.flatId);
-  };
+  const selectedDialogMemberId = dialog.member?.email || dialog.member?.id;
 
   return (
     <div className="admin-members-container">
+      {dialog.type && (
+        <div className="member-dialog" role="dialog" aria-modal="true" aria-label="Member dialog">
+          <div className={`member-dialog__panel member-dialog__panel--${dialog.type}`}>
+            <button
+              type="button"
+              className="member-dialog__close"
+              onClick={closeDialog}
+              aria-label="Close dialog"
+            >
+              <IoCloseOutline aria-hidden="true" />
+            </button>
+            {dialog.type === 'add' && <AddMember isDialog onMemberAdded={handleMemberAdded} />}
+            {dialog.type === 'details' && (
+              <AdminMemberDetails
+                isDialog
+                memberId={selectedDialogMemberId}
+                onUpdated={handleMemberUpdated}
+              />
+            )}
+            {dialog.type === 'edit' && (
+              <AdminMemberDetails
+                isDialog
+                initialEditing
+                memberId={selectedDialogMemberId}
+                onUpdated={handleMemberUpdated}
+              />
+            )}
+          </div>
+        </div>
+      )}
   
       <div className="top-bar">
         <p>Manage all society members here.</p>
-        <button className="btn btn-blue" onClick={() => navigate(`/admin/addmember`)}>
+        <button className="btn btn-blue" onClick={() => setDialog({ type: 'add', member: null })}>
           + Add Member
         </button>
       </div>
@@ -193,39 +178,11 @@ export default function AdminMembers() {
               {selectedMemberId === m.id && (
                 <tr className="action-row">
                   <td colSpan="5">
-                    {editingMemberId === m.id ? (
-                      <div className="member-edit-panel">
-                        <div className="member-edit-grid">
-                          <input name="firstName" value={editForm.firstName} onChange={handleEditChange} placeholder="First name" />
-                          <input name="lastName" value={editForm.lastName} onChange={handleEditChange} placeholder="Last name" />
-                          <input name="email" type="email" value={editForm.email} onChange={handleEditChange} placeholder="Email" />
-                          <input name="phone" value={editForm.phone} onChange={handleEditChange} placeholder="Phone" />
-                          <select name="flatId" value={editForm.flatId} onChange={handleEditChange}>
-                            <option value="">Not Assigned</option>
-                            {editableFlatsFor(m).map((flat) => (
-                              <option key={flat.id} value={flat.flatNumber}>
-                                {flat.wing ? `${flat.wing}-` : ''}{flat.flatNumber} ({flat.type || flat.status})
-                              </option>
-                            ))}
-                          </select>
-                          <select name="status" value={editForm.status} onChange={handleEditChange}>
-                            <option value="ACTIVE">Active</option>
-                            <option value="INACTIVE">Inactive</option>
-                            <option value="SUSPENDED">Suspended</option>
-                          </select>
-                        </div>
-                        <div className="action-buttons">
-                          <button className="btn btn-green" onClick={() => handleSaveEdit(m)}>Save</button>
-                          <button className="btn btn-red" onClick={cancelEdit}>Cancel</button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="action-buttons">
-                        <button className="btn btn-green" onClick={() => startEdit(m)}>Edit</button>
-                        <button className="btn btn-red" onClick={() => handleDelete(m.id)}>Delete</button>
-                        <button className="btn btn-cyan" onClick={() => navigate(`/admin/member/${m.email}`)}>Details</button>
-                      </div>
-                    )}
+                    <div className="action-buttons">
+                      <button className="btn btn-green" onClick={() => setDialog({ type: 'edit', member: m })}>Edit</button>
+                      <button className="btn btn-red" onClick={() => handleDelete(m.id)}>Delete</button>
+                      <button className="btn btn-cyan" onClick={() => setDialog({ type: 'details', member: m })}>Details</button>
+                    </div>
                   </td>
                 </tr>
               )}

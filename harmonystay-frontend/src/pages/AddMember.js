@@ -1,36 +1,40 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { addMember as createMember } from "../service/memberService";
+import { getFlats } from "../service/flatService";
 import "./AddMember.css";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
-const AddMember = () => {
-  const [flats, setFlats] = useState([]); // for dropdown
-   const navigate = useNavigate();
-  const [member, setMember] = useState({
-    email: "",
-    password: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    flatId: "",
-    role: "MEMBER",
-    status: "ACTIVE",
-    profileImage: "",
-    emergencyContact: { name: "", phone: "", relation: "" },
-    familyMembers: [{ name: "", age: "", relation: "" }],
-    dateOfJoining: "",
-  });
+const emptyMember = {
+  email: "",
+  password: "",
+  firstName: "",
+  lastName: "",
+  phone: "",
+  flatId: "",
+  role: "MEMBER",
+  status: "ACTIVE",
+  profileImage: "",
+  emergencyContact: { name: "", phone: "", relation: "" },
+  familyMembers: [{ name: "", age: "", relation: "" }],
+  dateOfJoining: "",
+};
 
-  // Fetch Flats on mount
+const AddMember = ({ isDialog = false, onMemberAdded }) => {
+  const [flats, setFlats] = useState([]);
+  const [member, setMember] = useState(emptyMember);
+  const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   useEffect(() => {
     const fetchFlats = async () => {
       try {
-        const res = await axios.get("http://localhost:8888/api/flats");
-        setFlats(res.data);
+        const data = await getFlats();
+        setFlats(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching flats:", err);
+        setMessage("Unable to load available flats. Please try again.");
       }
     };
+
     fetchFlats();
   }, []);
 
@@ -63,33 +67,36 @@ const AddMember = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setMessage("");
+    let keepFormMounted = true;
+
     try {
-      await axios.post("http://localhost:8888/api/members", member);
-      alert("✅ Member added successfully!");
-      setMember({
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        phone: "",
-        flatId: "",
-        role: "MEMBER",
-        status: "ACTIVE",
-        profileImage: "",
-        emergencyContact: { name: "", phone: "", relation: "" },
-        familyMembers: [{ name: "", age: "", relation: "" }],
-        dateOfJoining: "",
-      });
+      await createMember(member);
+      if (onMemberAdded) {
+        keepFormMounted = false;
+        await onMemberAdded();
+        return;
+      }
+
+      setMember(emptyMember);
+      setMessage("Member added successfully.");
     } catch (error) {
-      console.error("❌ Error adding member:", error);
-      alert("Failed to add member.");
+      console.error("Error adding member:", error);
+      setMessage("Unable to add member. Please check the details and try again.");
+    } finally {
+      if (keepFormMounted) {
+        setIsSubmitting(false);
+      }
     }
   };
 
   return (
-    <div className="add-member-container">
+    <div className={`add-member-container${isDialog ? " add-member-container--dialog" : ""}`}>
       <div className="form-card">
-        <h1 className="form-title">Add Member</h1>
+        <h1 className="form-title" id="add-member-dialog-title">Add Member</h1>
+        {message && <p className="add-member-message">{message}</p>}
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Email</label>
@@ -118,12 +125,12 @@ const AddMember = () => {
               <input type="text" name="phone" value={member.phone} onChange={handleChange} required />
             </div>
 
-           <div className="form-group">
+            <div className="form-group">
               <label>Flat</label>
               <select name="flatId" value={member.flatId} onChange={handleChange} required>
                 <option value="">Select Flat</option>
                 {flats
-                  .filter(flat => flat.status !== "OCCUPIED") // filter out occupied flats
+                  .filter((flat) => flat.status !== "OCCUPIED")
                   .map((flat) => (
                     <option key={flat.id} value={flat.flatNumber}>
                       {flat.wing}-{flat.flatNumber} ({flat.type})
@@ -131,8 +138,6 @@ const AddMember = () => {
                   ))}
               </select>
             </div>
-
-
           </div>
 
           <div className="form-row">
@@ -141,7 +146,7 @@ const AddMember = () => {
               <select name="role" value={member.role} onChange={handleChange}>
                 <option value="MEMBER">Member</option>
               </select>
-              <small className="form-hint">Accountants are created from Admin → Accountants.</small>
+              <small className="form-hint">Accountants are created from Admin - Accountants.</small>
             </div>
 
             <div className="form-group">
@@ -163,15 +168,30 @@ const AddMember = () => {
           <div className="form-row">
             <div className="form-group">
               <label>Name</label>
-              <input type="text" name="name" value={member.emergencyContact.name} onChange={handleEmergencyChange} />
+              <input
+                type="text"
+                name="name"
+                value={member.emergencyContact.name}
+                onChange={handleEmergencyChange}
+              />
             </div>
             <div className="form-group">
               <label>Phone</label>
-              <input type="text" name="phone" value={member.emergencyContact.phone} onChange={handleEmergencyChange} />
+              <input
+                type="text"
+                name="phone"
+                value={member.emergencyContact.phone}
+                onChange={handleEmergencyChange}
+              />
             </div>
             <div className="form-group">
               <label>Relation</label>
-              <input type="text" name="relation" value={member.emergencyContact.relation} onChange={handleEmergencyChange} />
+              <input
+                type="text"
+                name="relation"
+                value={member.emergencyContact.relation}
+                onChange={handleEmergencyChange}
+              />
             </div>
           </div>
 
@@ -188,10 +208,16 @@ const AddMember = () => {
               </div>
               <div className="form-group">
                 <label>Relation</label>
-                <input type="text" name="relation" value={fm.relation} onChange={(e) => handleFamilyChange(index, e)} />
+                <input
+                  type="text"
+                  name="relation"
+                  value={fm.relation}
+                  onChange={(e) => handleFamilyChange(index, e)}
+                />
               </div>
             </div>
           ))}
+
           <button type="button" className="add-family-btn" onClick={addFamilyMember}>
             + Add Family Member
           </button>
@@ -201,13 +227,9 @@ const AddMember = () => {
             <input type="date" name="dateOfJoining" value={member.dateOfJoining} onChange={handleChange} />
           </div>
 
-          <button type="submit" className="submit-btn">Add Member</button>
-           <button
-              type="button"
-              onClick={() => navigate(-1)}
-            >
-              ← Back
-            </button>
+          <button type="submit" className="submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? "Adding..." : "Add Member"}
+          </button>
         </form>
       </div>
     </div>

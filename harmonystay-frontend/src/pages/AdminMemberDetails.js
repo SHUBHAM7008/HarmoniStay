@@ -1,21 +1,26 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { getMemberById, updateMember } from '../service/memberService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './AdminMemberDetails.css';
-import { useNavigate } from 'react-router-dom';
 
-export default function AdminMemberDetails() {
-  const { id } = useParams();
+export default function AdminMemberDetails({
+  memberId,
+  initialEditing = false,
+  isDialog = false,
+  onUpdated,
+}) {
+  const { id: routeId } = useParams();
+  const id = memberId || routeId;
   const [member, setMember] = useState(null);
-  const [editing, setEditing] = useState(false);
+  const [editing, setEditing] = useState(initialEditing);
   const [editData, setEditData] = useState({});
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
   const loadMember = useCallback(async () => {
     try {
       const data = await getMemberById(id);
       setMember(data);
-      console.log(data);
       setEditData({
         firstName: data.firstName || '',
         lastName: data.lastName || '',
@@ -23,7 +28,7 @@ export default function AdminMemberDetails() {
         phone: data.phone || '',
         role: data.role || '',
         status: data.status || '',
-        flatId: data.flat || '',
+        flatId: data.flatId || data.flat || '',
         profileImage: data.profileImage || '',
         dateOfJoining: data.dateOfJoining || '',
         emergencyContactName: data.emergencyContact?.name || '',
@@ -32,12 +37,17 @@ export default function AdminMemberDetails() {
       });
     } catch (err) {
       console.error('Error loading member:', err);
+      setMessage('Unable to load member details.');
     }
   }, [id]);
 
   useEffect(() => {
     loadMember();
   }, [loadMember]);
+
+  useEffect(() => {
+    setEditing(initialEditing);
+  }, [initialEditing, id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -49,17 +59,20 @@ export default function AdminMemberDetails() {
       await updateMember(id, editData);
       setEditing(false);
       await loadMember();
-      alert('Member updated successfully!');
+      setMessage('Member updated successfully.');
+      onUpdated?.();
     } catch (err) {
       console.error('Update failed:', err);
+      setMessage('Unable to update member.');
     }
   };
 
   if (!member) return <p className="loading">Loading member details...</p>;
 
   return (
-    <div className="admin-member-details-container">
+    <div className={`admin-member-details-container${isDialog ? ' admin-member-details-container--dialog' : ''}`}>
       <div className="member-card">
+        {message && <p className="member-detail-message">{message}</p>}
         <div className="profile-header">
           <img
             src={member.profileImage || '/default-avatar.png'}
@@ -68,7 +81,7 @@ export default function AdminMemberDetails() {
           />
           <div className="profile-basic">
             <h2>{member.firstName} {member.lastName}</h2>
-            <p className={`role-badge ${member.role.toLowerCase()}`}>{member.role}</p>
+            <p className={`role-badge ${(member.role || 'member').toLowerCase()}`}>{member.role || 'MEMBER'}</p>
             <p className="status">{member.status}</p>
           </div>
         </div>
@@ -140,7 +153,7 @@ export default function AdminMemberDetails() {
 
             <div className="member-actions">
               <button className="btn btn-edit" onClick={() => setEditing(true)}>Edit</button>
-              <button className="btn btn-edit" onClick={() => navigate(-1)}>Back</button>
+              {!isDialog && <button className="btn btn-edit" onClick={() => navigate(-1)}>Back</button>}
             </div>
           </div>
         )}

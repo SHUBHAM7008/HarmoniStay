@@ -39,6 +39,36 @@ public class AccountantService {
         return accountantRepository.save(a);
     }
 
+    public Accountant update(String id, Accountant input) {
+        Accountant existing = accountantRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Accountant not found"));
+
+        if (input.getEmail() == null || input.getEmail().isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        String normalizedEmail = input.getEmail().trim().toLowerCase();
+        accountantRepository.findByEmail(normalizedEmail)
+                .filter(accountant -> !accountant.getId().equals(id))
+                .ifPresent(accountant -> {
+                    throw new IllegalStateException("An accountant with this email already exists");
+                });
+
+        existing.setEmail(normalizedEmail);
+        existing.setFirstName(input.getFirstName() != null && !input.getFirstName().isBlank()
+                ? input.getFirstName().trim()
+                : "Accountant");
+        existing.setLastName(input.getLastName() != null ? input.getLastName().trim() : "");
+        existing.setPhone(input.getPhone() != null && !input.getPhone().isBlank() ? input.getPhone().trim() : null);
+        existing.setStatus(input.getStatus() != null && !input.getStatus().isBlank() ? input.getStatus() : "ACTIVE");
+
+        if (input.getPassword() != null && !input.getPassword().isBlank()) {
+            existing.setPassword(input.getPassword());
+        }
+
+        return accountantRepository.save(existing);
+    }
+
     public void deleteById(String id) {
         accountantRepository.deleteById(id);
     }

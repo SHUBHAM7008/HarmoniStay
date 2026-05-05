@@ -17,28 +17,33 @@ export async function addMember(member) {
 }
 
 export async function deleteMember(id) {
-  const res = await fetch(`${BASE_URL}/${id}`, { method: 'DELETE' });
-  if (!res.ok) throw new Error('Failed to delete member');
+  const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, { method: 'DELETE' });
+  let data = {};
 
-  // If backend returns JSON, parse it. Otherwise, just show success
   try {
-    const data = await res.json();
-    alert(data.message || 'Member deleted successfully');
-    return data;
+    data = await res.json();
   } catch {
-    alert('Member deleted successfully');
-    return {};
+    data = {};
   }
+
+  if (!res.ok) {
+    throw new Error(data.message || 'Failed to delete member');
+  }
+
+  return data;
 }
 
 export async function updateMember(id, updatedData) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
+  const res = await fetch(`${BASE_URL}/${encodeURIComponent(id)}`, {
     method: 'PUT', // or PATCH depending on your backend
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updatedData),
   });
 
-  if (!res.ok) throw new Error('Failed to update member');
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.message || 'Failed to update member');
+  }
   return res.json();
 }
 

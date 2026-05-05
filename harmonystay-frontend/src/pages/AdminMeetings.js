@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FaCalendarAlt, FaClock, FaEdit, FaFileAlt, FaMapMarkerAlt, FaTrash, FaUsers } from "react-icons/fa";
 import "./AdminMeetings.css";
 
 const AdminMeetings = () => {
@@ -59,6 +60,27 @@ const AdminMeetings = () => {
     }
   };
 
+  const formatMeetingDate = (value) => {
+    if (!value) return "Not scheduled";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Not scheduled";
+    return date.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const formatMeetingTime = (value) => {
+    if (!value) return "Time not set";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "Time not set";
+    return date.toLocaleTimeString("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div className="admin-meetings-container">
       <h2>Meeting Management</h2>
@@ -78,10 +100,39 @@ const AdminMeetings = () => {
       <div className="meetings-list">
         {meetings.map((m) => (
           <div key={m.id} className="meeting-card">
-            <h4>{m.title} ({m.type})</h4>
-            <p>{new Date(m.scheduledDate).toLocaleDateString()} - {m.venue}</p>
-            <button onClick={() => editMeeting(m)}>Edit</button>
-            <button className="del" onClick={() => deleteMeeting(m.id)}>Delete</button>
+            <div className="meeting-card__type-icon">
+              <FaUsers aria-hidden="true" />
+            </div>
+            <div className="meeting-card__content">
+              <div className="meeting-card__top">
+                <div>
+                  <span className="meeting-card__type">{m.type || "Meeting"}</span>
+                  <h4>{m.title}</h4>
+                </div>
+                <div className="meeting-card__actions">
+                  <button title="Edit meeting" aria-label={`Edit meeting ${m.title}`} onClick={() => editMeeting(m)}>
+                    <FaEdit />
+                  </button>
+                  <button title="Delete meeting" aria-label={`Delete meeting ${m.title}`} className="del" onClick={() => deleteMeeting(m.id)}>
+                    <FaTrash />
+                  </button>
+                </div>
+              </div>
+              <div className="meeting-card__meta-grid">
+                <span><FaCalendarAlt /> {formatMeetingDate(m.scheduledDate)}</span>
+                <span><FaClock /> {formatMeetingTime(m.scheduledDate)}</span>
+                <span><FaMapMarkerAlt /> {m.venue || "Venue not set"}</span>
+              </div>
+              {m.description && (
+                <p className="meeting-card__description">{m.description}</p>
+              )}
+              {m.minutes && (
+                <div className="meeting-card__minutes">
+                  <FaFileAlt />
+                  <span>{m.minutes}</span>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>

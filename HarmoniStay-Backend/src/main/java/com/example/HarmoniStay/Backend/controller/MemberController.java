@@ -59,8 +59,13 @@ public class MemberController {
 
     // DELETE /api/members/{id}
     @DeleteMapping("/{id}")
-    public void deleteMember(@PathVariable String id) {
-        memberService.deleteMember(id);
+    public ResponseEntity<?> deleteMember(@PathVariable String id) {
+        try {
+            memberService.deleteMember(id);
+            return ResponseEntity.ok(Map.of("message", "Member deleted successfully."));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 
     @GetMapping("/{identifier}")

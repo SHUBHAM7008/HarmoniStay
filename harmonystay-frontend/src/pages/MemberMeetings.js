@@ -4,7 +4,6 @@ import axios from "axios";
 const MemberMeetings = () => {
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [view, setView] = useState("list");
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -28,7 +27,6 @@ const MemberMeetings = () => {
   const loadMeetings = async () => {
     try {
       setLoading(true);
-      setError("");
 
       const feedRes = await axios.get("http://localhost:8888/api/meetings/member-feed");
       const feed = Array.isArray(feedRes.data) ? feedRes.data : [];
@@ -41,7 +39,6 @@ const MemberMeetings = () => {
         setMeetings(items);
       } catch (fallbackErr) {
         console.error(fallbackErr);
-        setError("Unable to fetch meetings.");
       }
     } finally {
       setLoading(false);

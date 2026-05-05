@@ -12,19 +12,65 @@
   background: linear-gradient(180deg, var(--admin-bg-primary) 0%, #eef5ff 100%);
 }
 
-.admin-bills-container h2 {
+.admin-bills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--admin-bg-secondary);
+  padding: 1.5rem;
+  border-radius: var(--admin-radius-xl);
+  box-shadow: var(--admin-shadow-md);
+  border: 1px solid var(--admin-border-light);
+}
+
+.admin-bills-header h2 {
   font-size: 2.25rem;
   font-weight: 900;
   color: var(--admin-text-dark);
-  margin-bottom: 1.5rem;
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   letter-spacing: -0.02em;
 }
 
-.admin-bills-container h2 svg {
+.admin-bills-header p {
+  margin: 0.35rem 0 0;
+  color: var(--admin-text-medium);
+  font-weight: 600;
+}
+
+.admin-bills-header h2 svg {
   font-size: 2rem;
+}
+
+.admin-bills-export-actions,
+.month-bills__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.admin-bills-export-actions button,
+.month-bills__actions button {
+  border: none;
+  border-radius: var(--admin-radius-md);
+  background: linear-gradient(135deg, var(--admin-primary) 0%, var(--admin-primary-light) 100%);
+  color: #fff;
+  min-height: 38px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all var(--admin-transition-base);
+}
+
+.admin-bills-export-actions button:hover,
+.month-bills__actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
 }
 
 .loading {
@@ -93,9 +139,41 @@
   color: #b91c1c;
 }
 
+.status.unpaid {
+  background: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+
 .paid-label {
   color: var(--admin-success);
   font-weight: 700;
+}
+
+.notify-btn {
+  border: none;
+  border-radius: var(--admin-radius-md);
+  background: linear-gradient(135deg, var(--admin-info) 0%, #1d4ed8 100%);
+  color: #fff;
+  min-height: 36px;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  box-shadow: 0 8px 18px rgba(29, 78, 216, 0.16);
+  transition: all var(--admin-transition-base);
+}
+
+.notify-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.notify-btn:active {
+  transform: translateY(0);
 }
 
 .month-bills {
@@ -103,13 +181,22 @@
   animation: slideUp var(--admin-transition-base);
 }
 
+.month-bills__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--admin-border-light);
+}
+
 .month-bills h3 {
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--admin-primary);
-  margin-bottom: 1rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 2px solid var(--admin-border-light);
+  margin: 0;
 }
 
 .bills-action-btn {

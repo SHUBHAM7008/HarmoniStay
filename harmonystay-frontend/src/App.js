@@ -11,7 +11,6 @@ import AdminMembers from './pages/AdminMembers';
 import AdminMemberDetails from './pages/AdminMemberDetails';
 import AssignFlat from './pages/AssignFlat';
 import CreateFlat from './pages/CreateFlat';
-import AddMember from './pages/AddMember';
 import AdminBills from './pages/AdminBills';
 
 
@@ -32,7 +31,6 @@ function App() {
           <Route path="/admin/member/:id" element={<AdminMemberDetails />} />
            <Route path="/admin/assignflat" element={<AssignFlat />} />
           <Route path="/admin/createflat" element={<CreateFlat />} />
-          <Route path="/admin/addmember" element={<AddMember />} />
            <Route path="/admin-bills" element={<AdminBills />} />
           
 
