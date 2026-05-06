@@ -39,9 +39,9 @@ public class AuthService {
         String normalizedIdentifier = identifier.trim();
         String normalizedPassword = password.trim();
 
-        Member member = memberRepo.findByFlatId(normalizedIdentifier).orElse(null);
+        Member member = memberRepo.findFirstByFlatIdOrderByCreatedAtDesc(normalizedIdentifier).orElse(null);
         if (member == null) {
-            member = memberRepo.findByEmail(normalizedIdentifier).orElse(null);
+            member = memberRepo.findFirstByEmailOrderByCreatedAtDesc(normalizedIdentifier).orElse(null);
         }
 
         if (member == null || member.getPassword() == null || !member.getPassword().trim().equals(normalizedPassword)) {
@@ -72,7 +72,7 @@ public class AuthService {
             dummySecurity.setStatus("ACTIVE");
             return dummySecurity;
         }
-        Member member = memberRepo.findByEmail(normalizedEmail).orElse(null);
+        Member member = memberRepo.findFirstByEmailOrderByCreatedAtDesc(normalizedEmail).orElse(null);
         if (member == null || member.getPassword() == null || !member.getPassword().trim().equals(normalizedPassword)) {
             return null;
         }

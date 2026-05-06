@@ -158,7 +158,7 @@ public class MonthlyBillScheduler {
                 Member member = bill.getUserId() != null
                         ? memberRepository.findById(bill.getUserId()).orElse(null)
                         : (bill.getUserEmail() != null
-                                ? memberRepository.findByEmail(bill.getUserEmail()).orElse(null)
+                                ? memberRepository.findFirstByEmailOrderByCreatedAtDesc(bill.getUserEmail()).orElse(null)
                                 : null);
                 if (member == null || !StringUtils.hasText(member.getPhone())) {
                     log.warn("Skip reminder for bill {}: member/phone missing", bill.getId());
@@ -201,7 +201,7 @@ public class MonthlyBillScheduler {
                 Member member = bill.getUserId() != null
                         ? memberRepository.findById(bill.getUserId()).orElse(null)
                         : (bill.getUserEmail() != null
-                        ? memberRepository.findByEmail(bill.getUserEmail()).orElse(null)
+                        ? memberRepository.findFirstByEmailOrderByCreatedAtDesc(bill.getUserEmail()).orElse(null)
                         : null);
                 if (member == null || !StringUtils.hasText(member.getPhone())) {
                     log.warn("Skip overdue alert for bill {}: member/phone missing", bill.getId());

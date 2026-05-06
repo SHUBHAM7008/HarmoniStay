@@ -29,7 +29,7 @@ public class VisitorRequestService {
             return out;
         }
 
-        Member member = memberRepository.findByFlatId(flatNumber.trim()).orElse(null);
+        Member member = memberRepository.findFirstByFlatIdOrderByCreatedAtDesc(flatNumber.trim()).orElse(null);
         if (member == null) {
             out.put("valid", false);
             out.put("message", "No member found for this flat number");
@@ -59,7 +59,7 @@ public class VisitorRequestService {
             throw new RuntimeException("Purpose is required");
         }
 
-        Member owner = memberRepository.findByFlatId(flatNumber.trim())
+        Member owner = memberRepository.findFirstByFlatIdOrderByCreatedAtDesc(flatNumber.trim())
                 .orElseThrow(() -> new RuntimeException("No member found with this flat number"));
 
         VisitorRequest vr = new VisitorRequest();

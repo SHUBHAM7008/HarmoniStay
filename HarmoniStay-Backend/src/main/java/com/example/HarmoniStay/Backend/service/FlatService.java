@@ -3,6 +3,7 @@ package com.example.HarmoniStay.Backend.service;
 import com.example.HarmoniStay.Backend.model.Flat;
 import com.example.HarmoniStay.Backend.model.FlatOwnershipHistory;
 import com.example.HarmoniStay.Backend.model.Member;
+import com.example.HarmoniStay.Backend.repository.BillCollectionRepository;
 import com.example.HarmoniStay.Backend.repository.FlatRepository;
 import com.example.HarmoniStay.Backend.repository.FlatOwnershipHistoryRepository;
 import com.example.HarmoniStay.Backend.repository.MemberRepository;
@@ -27,6 +28,9 @@ public class FlatService {
     @Autowired
     private FlatOwnershipHistoryRepository flatOwnershipHistoryRepository;
 
+    @Autowired
+    private BillCollectionRepository billCollectionRepository;
+
     public List<Flat> getAllFlats() {
         return flatRepository.findAll();
     }
@@ -41,6 +45,7 @@ public class FlatService {
         return flatRepository.save(flat);
     }
 
+    @Transactional
     public Flat updateFlat(String id, Flat input) {
         Flat existing = flatRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Flat not found"));
@@ -54,11 +59,36 @@ public class FlatService {
         existing.setStatus(input.getStatus());
         existing.setUpdatedAt(new Date());
 
+        if (input.getOwner() != null && input.getOwner().getId() != null && !input.getOwner().getId().isBlank()) {
+            Member newOwner = memberRepository.findById(input.getOwner().getId().trim())
+                    .orElseThrow(() -> new IllegalArgumentException("Owner member not found"));
+            transferOwnership(existing, newOwner, LocalDate.now());
+        }
+
         return flatRepository.save(existing);
     }
 
+    @Transactional
     public void deleteFlat(String id) {
-        flatRepository.deleteById(id);
+        Flat flat = resolveFlatByIdOrNumber(id)
+                .orElseThrow(() -> new IllegalArgumentException("Flat not found"));
+
+        if (flat.getOwner() != null) {
+            flat.getOwner().setFlatId(null);
+            memberRepository.save(flat.getOwner());
+        }
+        if (flat.getTenant() != null) {
+            flat.getTenant().setFlatId(null);
+            memberRepository.save(flat.getTenant());
+        }
+        for (Member member : memberRepository.findAllByFlatId(flat.getFlatNumber())) {
+            member.setFlatId(null);
+            memberRepository.save(member);
+        }
+
+        billCollectionRepository.clearFlatReferences(flat.getId());
+        flatOwnershipHistoryRepository.deleteByFlatId(flat.getId());
+        flatRepository.delete(flat);
     }
 
     @Transactional
@@ -69,37 +99,7 @@ public class FlatService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new Exception("Member not found"));
 
-        // If member already owns another flat, close that ownership first.
-        Optional<Flat> previouslyOwnedFlat = flatRepository.findByOwnerId(member.getId());
-        if (previouslyOwnedFlat.isPresent() && !previouslyOwnedFlat.get().getId().equals(flat.getId())) {
-            Flat oldFlat = previouslyOwnedFlat.get();
-            closeActiveOwnershipHistory(oldFlat.getId(), LocalDate.now());
-            oldFlat.setOwner(null);
-            oldFlat.setStatus(Flat.Status.VACANT);
-            oldFlat.setUpdatedAt(new Date());
-            flatRepository.save(oldFlat);
-        }
-
-        Member previousOwner = flat.getOwner();
-        boolean ownerChanged = previousOwner == null || !previousOwner.getId().equals(member.getId());
-
-        if (ownerChanged) {
-            closeActiveOwnershipHistory(flat.getId(), LocalDate.now());
-
-            FlatOwnershipHistory newHistory = new FlatOwnershipHistory();
-            newHistory.setFlat(flat);
-            newHistory.setMember(member);
-            newHistory.setFirstDay(LocalDate.now());
-            newHistory.setLastDay(null);
-            flatOwnershipHistoryRepository.save(newHistory);
-        }
-
-        // Assign owner
-        flat.setOwner(member);
-        flat.setStatus(Flat.Status.OCCUPIED);
-        flat.setUpdatedAt(new Date());
-        member.setFlatId(flat.getFlatNumber());
-        memberRepository.save(member);
+        transferOwnership(flat, member, LocalDate.now());
 
         return flatRepository.save(flat);
     }
@@ -148,6 +148,47 @@ public class FlatService {
         String normalized = flatIdentifier.trim();
         Optional<Flat> byId = flatRepository.findById(normalized);
         return byId.isPresent() ? byId : flatRepository.findByFlatNumber(normalized);
+    }
+
+    private void transferOwnership(Flat flat, Member newOwner, LocalDate transferDate) {
+        // If the new owner already owns another flat, free that flat before assigning this one.
+        Optional<Flat> previouslyOwnedFlat = flatRepository.findByOwnerId(newOwner.getId());
+        if (previouslyOwnedFlat.isPresent() && !previouslyOwnedFlat.get().getId().equals(flat.getId())) {
+            Flat oldFlat = previouslyOwnedFlat.get();
+            closeActiveOwnershipHistory(oldFlat.getId(), transferDate);
+            oldFlat.setOwner(null);
+            oldFlat.setStatus(Flat.Status.VACANT);
+            oldFlat.setUpdatedAt(new Date());
+            flatRepository.save(oldFlat);
+        }
+
+        Member previousOwner = flat.getOwner();
+        boolean ownerChanged = previousOwner == null || !previousOwner.getId().equals(newOwner.getId());
+
+        if (ownerChanged) {
+            closeActiveOwnershipHistory(flat.getId(), transferDate);
+
+            if (previousOwner != null) {
+                previousOwner.setFlatId(null);
+                memberRepository.save(previousOwner);
+            }
+
+            FlatOwnershipHistory newHistory = new FlatOwnershipHistory();
+            newHistory.setFlat(flat);
+            newHistory.setMember(newOwner);
+            newHistory.setFirstDay(transferDate);
+            newHistory.setLastDay(null);
+            newHistory.setPreviousOwnerId(previousOwner != null ? previousOwner.getId() : null);
+            newHistory.setNewOwnerId(newOwner.getId());
+            newHistory.setTransferDate(transferDate);
+            flatOwnershipHistoryRepository.save(newHistory);
+        }
+
+        flat.setOwner(newOwner);
+        flat.setStatus(Flat.Status.OCCUPIED);
+        flat.setUpdatedAt(new Date());
+        newOwner.setFlatId(flat.getFlatNumber());
+        memberRepository.save(newOwner);
     }
 
     private void closeActiveOwnershipHistory(String flatId, LocalDate lastDay) {

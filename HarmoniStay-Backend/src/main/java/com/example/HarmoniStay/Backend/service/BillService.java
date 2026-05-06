@@ -26,7 +26,7 @@ public class BillService {
         private FlatRepository flatRepository;
 
         public Member getMemberByEmail(String email) {
-            return memberRepository.findByEmail(email)
+            return memberRepository.findFirstByEmailOrderByCreatedAtDesc(email)
                     .orElseThrow(() -> new RuntimeException("Member not found with email: " + email));
         }
 
@@ -36,7 +36,7 @@ public class BillService {
         }
 
     public Bill addBillWithEmailAndFlatNumber(Bill bill) {
-        Member member = memberRepository.findByEmail(bill.getUserEmail())
+        Member member = memberRepository.findFirstByEmailOrderByCreatedAtDesc(bill.getUserEmail())
                 .orElseThrow(() -> new RuntimeException("Member not found with email: " + bill.getUserEmail()));
 
         Flat flat = flatRepository.findByFlatNumber(bill.getFlatNumber())

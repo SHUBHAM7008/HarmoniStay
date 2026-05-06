@@ -71,7 +71,7 @@ public class MeetingService {
             }
 
             Optional<Member> creator = StringUtils.hasText(savedMeeting.getCreatedBy())
-                    ? memberRepository.findByEmail(savedMeeting.getCreatedBy())
+                    ? memberRepository.findFirstByEmailOrderByCreatedAtDesc(savedMeeting.getCreatedBy())
                     : Optional.empty();
             if (creator.isPresent() && StringUtils.hasText(creator.get().getPhone())) {
                 log.info("Meeting SMS step 2: resolved recipient phone={} for memberId={}",
