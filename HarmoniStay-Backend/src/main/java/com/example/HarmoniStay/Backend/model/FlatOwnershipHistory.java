@@ -28,6 +28,12 @@ public class FlatOwnershipHistory {
 
     private LocalDate lastDay;
 
+    private String previousOwnerId;
+
+    private String newOwnerId;
+
+    private LocalDate transferDate;
+
     @Column(nullable = false)
     private String createdAt;
 
@@ -60,6 +66,15 @@ public class FlatOwnershipHistory {
 
     public LocalDate getLastDay() { return lastDay; }
     public void setLastDay(LocalDate lastDay) { this.lastDay = lastDay; }
+
+    public String getPreviousOwnerId() { return previousOwnerId; }
+    public void setPreviousOwnerId(String previousOwnerId) { this.previousOwnerId = previousOwnerId; }
+
+    public String getNewOwnerId() { return newOwnerId; }
+    public void setNewOwnerId(String newOwnerId) { this.newOwnerId = newOwnerId; }
+
+    public LocalDate getTransferDate() { return transferDate; }
+    public void setTransferDate(LocalDate transferDate) { this.transferDate = transferDate; }
 
     public String getCreatedAt() { return createdAt; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }

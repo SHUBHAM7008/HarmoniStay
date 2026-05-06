@@ -88,7 +88,7 @@ public class MemberService {
             return Optional.empty();
         }
         return memberRepository.findById(identifier.trim())
-                .or(() -> memberRepository.findByEmail(identifier.trim()));
+                .or(() -> memberRepository.findFirstByEmailOrderByCreatedAtDesc(identifier.trim()));
     }
 
     @Transactional

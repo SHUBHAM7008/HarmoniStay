@@ -9,6 +9,7 @@ import MemberMeetings from "./MemberMeetings";
 import MemberFacilities from "./MemberFacilities";
 import MemberDocuments from "./MemberDocuments";
 import MemberNotices from "./MemberNotices";
+import MemberChat from "./MemberChat";
 
 const MemberDashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -164,6 +165,7 @@ const MemberDashboard = () => {
           <NavItem id="facilities" icon="apartment" label="Facilities" />
           <NavItem id="documents" icon="description" label="Documents" />
           <NavItem id="notice" icon="campaign" label="Notices" />
+          <NavItem id="chat" icon="chat" label="Chat" />
           <NavItem id="profile" icon="person" label="Profile" />
           
           <div className="pt-4 mt-4 border-t border-slate-50">
@@ -380,6 +382,7 @@ const MemberDashboard = () => {
           {activeMenu === "facilities" && <div className="transition-all duration-500"><MemberFacilities /></div>}
           {activeMenu === "documents" && <div className="transition-all duration-500"><MemberDocuments /></div>}
           {activeMenu === "notice" && <div className="transition-all duration-500"><MemberNotices /></div>}
+          {activeMenu === "chat" && <div className="transition-all duration-500"><MemberChat /></div>}
           {activeMenu === "profile" && <div className="transition-all duration-500"><MemberProfile user={user} /></div>}
         </main>
       </div>
